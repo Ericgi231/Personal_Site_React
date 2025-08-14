@@ -212,11 +212,6 @@ const Memes = () => {
       </ControlCheckbox>
     </ControlBar>);
 
-  const pagination = (fileCount) => (
-    <StyledStack spacing={2}>
-      <StyledPagination count={Math.ceil(fileCount/FILES_PER_PAGE)} page={page} onChange={handlePageChange} />
-    </StyledStack>);
-
   const filesGridCards = (files) =>
     files.map((file, index) => {
       const type = determineFileType(file.file_type);
@@ -273,11 +268,15 @@ const Memes = () => {
       )}
 
       {controls()}
-      {pagination(total_files)}
+      <StyledStack spacing={1} $top={true}>
+        <StyledPagination count={Math.ceil(total_files/FILES_PER_PAGE)} page={page} onChange={handlePageChange} variant="outlined" shape="rounded"/>
+      </StyledStack>
       <FilesGrid>
         {filesGridCards(files)}
       </FilesGrid>
-      {pagination(total_files)}
+      <StyledStack spacing={1} >
+        <StyledPagination count={Math.ceil(total_files/FILES_PER_PAGE)} page={page} onChange={handlePageChange} variant="outlined" shape="rounded"/>
+      </StyledStack>
     </>
   )
 }

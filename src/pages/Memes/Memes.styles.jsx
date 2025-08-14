@@ -77,6 +77,14 @@ export const VideoSource = styled.source`
 
 export const StyledStack = styled(Stack)`
   align-items: center;
+  ${({ $top, theme }) =>
+    $top &&
+    `
+      @media (min-width: ${theme.breakpoints.sm}) {
+        display: none !important;
+      }
+    `
+  }
 `;
 
 export const StyledPagination = styled(Pagination)`
