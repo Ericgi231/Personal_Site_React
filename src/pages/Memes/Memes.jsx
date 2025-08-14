@@ -1,27 +1,28 @@
 import { useState, useEffect, useRef } from 'react';
 
 import { 
-  FilesGrid, 
-  FileCard, 
-  ImageSource,
-  ControlBar,
-  VideoBox,
   AudioBox,
-  VideoSource,
-  StyledStack,
-  StyledPagination,
-  FileUploadButton,
-  HiddenFileInput,
-  SearchInput,
+  ControlBar,
   ControlBarDivider,
-  ControlCheckbox
+  ControlCheckbox,
+  FileCard,
+  FileUploadButton,
+  FilesGrid,
+  HiddenFileInput,
+  ImageSource,
+  SearchInput,
+  StyledPagination,
+  StyledStack,
+  UploadErrorPopup,
+  VideoBox,
+  VideoSource
 } from './Memes.styles'
 
-// Constants
-//
 const FILES_PER_ROW = 5;
 const ROWS = 2;
 const FILES_PER_PAGE = ROWS * FILES_PER_ROW;
+const MAX_FILE_SIZE = 150 * 1024 * 1024;
+const MAX_FILE_SIZE_MB = 150;
 const FileType = {
   IMAGE: 'image',
   VIDEO: 'video',
@@ -30,8 +31,6 @@ const FileType = {
   OTHER: 'other'
 };
 
-// Helper Functions
-//
 function determineFileType(fileType) {
   if (fileType.match(/(png|jpg|jpeg|gif|webp|ico)$/i)) {
     return FileType.IMAGE;
@@ -46,8 +45,6 @@ function determineFileType(fileType) {
   }
 }
 
-// Persistent state hook
-//
 function usePersistentState(key, initialValue) {
   const [value, setValue] = useState(() => {
     const stored = sessionStorage.getItem(key);
@@ -61,11 +58,7 @@ function usePersistentState(key, initialValue) {
   return [value, setValue];
 }
 
-// Main Component
-//
 const Memes = () => {
-  // State Management
-  //
   const [files, setFiles] = useState([]);
   const [total_files, setTotalFiles] = useState([]);
   const [page, setPage] = usePersistentState('currentPage', 1);
@@ -76,8 +69,8 @@ const Memes = () => {
   const [refreshFiles, setRefreshFiles] = useState(false);
   const [uploadError, setUploadError] = useState(null);
 
-  // Event Handlers
-  //
+  const maxPage = Math.ceil(total_files / FILES_PER_PAGE);
+
   const handleShowNsfwChange = (e) => {
     setShowNsfwChecked(e.target.checked);
   };
@@ -94,13 +87,17 @@ const Memes = () => {
     fileInputRef.current.click();
   };
 
+  const handlePageChange = (event, pageNum) => {
+    setPage(pageNum);
+  };
+
   const handleFileChange = (e) => {
     const files = e.target.files;
     if (!files.length) return;
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
-      if (files[i].size > 150 * 1024 * 1024) { // 150MB limit
-        setUploadError('File size exceeds 150MB limit');
+      if (files[i].size > MAX_FILE_SIZE) {
+        setUploadError(`File size exceeds ${MAX_FILE_SIZE_MB} limit`);
         fileInputRef.current.value = '';
         return;
       }
@@ -131,12 +128,6 @@ const Memes = () => {
     fileInputRef.current.value = '';
   };
 
-  // Handle page changes
-  const handlePageChange = (event, pageNum) => {
-    setPage(pageNum);
-  };
-
-  // Fetch files from the server every time the page changes
   useEffect(() => {
     const start = (page - 1) * FILES_PER_PAGE;
     var apiCall = `/api/getFilesAndCount.php?start=${start}&size=${FILES_PER_PAGE}`;
@@ -174,10 +165,77 @@ const Memes = () => {
     setPage(1);
   }, [search]);
 
-  // Dynamic components
-  //
-  const controls = () => (
+  const ErrorPopup = ({ error, onClose }) => (
+    error && (
+      <UploadErrorPopup>
+        <strong>Upload Error:</strong> {error}
+        <button onClick={onClose} style={{marginLeft: '1rem'}}>Close</button>
+      </UploadErrorPopup>
+    )
+  );
+
+  const PaginationBar = ({ count, page, onChange, siblings, ...props }) => (
+    <StyledStack spacing={1} {...props}>
+      <StyledPagination count={count} page={page} onChange={onChange} siblingCount={siblings} variant="outlined" shape="rounded"/>
+    </StyledStack>
+  );
+
+  const FilesGridCards = ({ files, showNSFW, determineFileType }) => (
+    <FilesGrid>
+      {files.map((file, index) => {
+        const type = determineFileType(file.file_type);
+        if (type == FileType.VIDEO) {
+          return (
+            <FileCard key={file.name}>
+              <VideoBox $blur={file.special & !showNSFW == true} controls >
+                <VideoSource src={file.url} />
+                Your browser does not support the video tag.
+              </VideoBox>
+            </FileCard>
+          );
+        } else if (type == FileType.IMAGE) {
+          return (
+            <FileCard key={index} href={file.url} rel="noopener noreferrer">
+              <ImageSource src={file.url} alt={file.url} $blur={file.special & !showNSFW == true}/>
+            </FileCard>
+          );
+        } else if (type == FileType.AUDIO) {
+          return (
+            <FileCard key={file.name + '.' + file.file_type}>
+              <AudioBox controls src={file.url}>
+                Your browser does not support the audio element.
+              </AudioBox>
+            </FileCard>
+          );
+        } else if (type == FileType.PDF) {
+          return <FileCard key={index}><iframe src={file.url} width="100%" height="100%"/></FileCard>;
+        } else {
+          return <FileCard key={index} href={file.url} rel="noopener noreferrer">{file.name+"."+file.file_type}</FileCard>;
+        }
+      })}
+    </FilesGrid>);
+
+  const ControlBarSection = ({
+      page,
+      handlePageChange,
+      search,
+      handleSearchChange,
+      showNSFW,
+      handleShowNsfwChange,
+      uploadNSFW,
+      handleUploadNsfwChange,
+      handleUploadClick,
+      fileInputRef,
+      handleFileChange
+    }) => (
     <ControlBar>
+      <PaginationBar
+        count={maxPage}
+        page={page}
+        onChange={handlePageChange}
+        siblings={2}
+        $bar={true}
+      />
       <SearchInput
         type="text"
         placeholder="Search..."
@@ -212,71 +270,40 @@ const Memes = () => {
       </ControlCheckbox>
     </ControlBar>);
 
-  const filesGridCards = (files) =>
-    files.map((file, index) => {
-      const type = determineFileType(file.file_type);
-      if (type == FileType.VIDEO) {
-        return (
-          <FileCard key={file.name}>
-            <VideoBox $blur={file.special & !showNSFW == true} controls >
-              <VideoSource src={file.url} />
-              Your browser does not support the video tag.
-            </VideoBox>
-          </FileCard>
-        );
-      } else if (type == FileType.IMAGE) {
-        return (
-          <FileCard key={index} href={file.url} rel="noopener noreferrer">
-            <ImageSource src={file.url} alt={file.url} $blur={file.special & !showNSFW == true}/>
-          </FileCard>
-        );
-      } else if (type == FileType.AUDIO) {
-        return (
-          <FileCard key={file.name + '.' + file.file_type}>
-            <AudioBox controls src={file.url}>
-              Your browser does not support the audio element.
-            </AudioBox>
-          </FileCard>
-        );
-      } else if (type == FileType.PDF) {
-        return <FileCard key={index}><iframe src={file.url} width="100%" height="100%"/></FileCard>;
-      } else {
-        return <FileCard key={index} href={file.url} rel="noopener noreferrer">{file.name+"."+file.file_type}</FileCard>;
-      }
-  });
-
-  // Render Final Component
-  //
   return (
     <>
-      {uploadError && (
-        <div style={{
-          position: 'fixed',
-          top: '20%',
-          left: '50%',
-          transform: 'translate(-50%, 0)',
-          background: 'white',
-          color: 'black',
-          padding: '1rem 2rem',
-          border: '2px solid red',
-          borderRadius: '8px',
-          zIndex: 1000
-        }}>
-          <strong>Upload Error:</strong> {uploadError}
-          <button onClick={() => setUploadError(null)} style={{marginLeft: '1rem'}}>Close</button>
-        </div>
-      )}
-
-      {controls()}
-      <StyledStack spacing={1} $top={true}>
-        <StyledPagination count={Math.ceil(total_files/FILES_PER_PAGE)} page={page} onChange={handlePageChange} variant="outlined" shape="rounded"/>
-      </StyledStack>
-      <FilesGrid>
-        {filesGridCards(files)}
-      </FilesGrid>
-      <StyledStack spacing={1} >
-        <StyledPagination count={Math.ceil(total_files/FILES_PER_PAGE)} page={page} onChange={handlePageChange} variant="outlined" shape="rounded"/>
-      </StyledStack>
+      <ErrorPopup error={uploadError} onClose={() => setUploadError(null)} />
+      <ControlBarSection
+        page={page}
+        handlePageChange={handlePageChange}
+        search={search}
+        handleSearchChange={handleSearchChange}
+        showNSFW={showNSFW}
+        handleShowNsfwChange={handleShowNsfwChange}
+        uploadNSFW={uploadNSFW}
+        handleUploadNsfwChange={handleUploadNsfwChange}
+        handleUploadClick={handleUploadClick}
+        fileInputRef={fileInputRef}
+        handleFileChange={handleFileChange}
+      />
+      <PaginationBar
+        count={maxPage}
+        page={page}
+        onChange={handlePageChange}
+        siblings={1}
+        $top={true}
+      />
+      <FilesGridCards
+        files={files}
+        showNSFW={showNSFW}
+        determineFileType={determineFileType}
+      />
+      <PaginationBar
+        count={maxPage}
+        page={page}
+        onChange={handlePageChange}
+        siblings={1}
+      />
     </>
   )
 }

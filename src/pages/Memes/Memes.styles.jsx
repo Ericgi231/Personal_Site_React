@@ -26,73 +26,9 @@ export const ControlBar = styled.div`
   }
 `
 
-export const FilesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, minmax(250px, 1fr));
-  margin: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs} 
-      ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs};
+export const PageNumberInput = styled.input`
 
-  @media (max-width: ${props => props.theme.breakpoints.lg}) {
-    grid-template-columns: repeat(2, minmax(250px, 1fr));
-  }
-
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    grid-template-columns: 1fr;
-  }
 `
-
-export const FileCard = styled.a`
-  ${flexColumn}
-  ${flexCenter}
-  aspect-ratio: 1 / 1;
-  background-color: ${props => props.theme.colors.background};
-  overflow: hidden;
-`
-
-export const ImageSource = styled.img`
-    width: 100%;
-    height: 100%;
-    filter: ${({ $blur }) => $blur ? 'blur(30px)' : 'none'};
-`
-
-export const VideoBox = styled.video`
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: black;
-    filter: ${({ $blur }) => $blur ? 'blur(30px)' : 'none'};
-`
-
-export const AudioBox = styled.audio`
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: black;
-`
-
-export const VideoSource = styled.source`
-    width: 100%;
-    height: 100%;
-`
-
-export const StyledStack = styled(Stack)`
-  align-items: center;
-  ${({ $top, theme }) =>
-    $top &&
-    `
-      @media (min-width: ${theme.breakpoints.sm}) {
-        display: none !important;
-      }
-    `
-  }
-`;
-
-export const StyledPagination = styled(Pagination)`
-  & .MuiPaginationItem-root {
-    color: ${props => props.theme.colors.primary};
-    font-weight: bold;
-  }
-`;
 
 export const HiddenFileInput = styled.input`
   display: none;
@@ -135,4 +71,98 @@ export const ControlCheckbox = styled.label`
     margin-right: 4px;
     accent-color: #d32f2f; /* Optional: red accent for NSFW */
   }
+`;
+
+export const StyledStack = styled(Stack)`
+  align-items: center;
+  ${({ $top, theme }) =>
+    $top &&
+    `
+      @media (min-width: ${theme.breakpoints.md}) {
+        display: none !important;
+      }
+    `
+  }
+
+  ${({ $bar, theme }) =>
+    $bar &&
+    `
+      margin-right: ${theme.spacing.sm};
+
+      @media (max-width: ${theme.breakpoints.md}) {
+        display: none !important;
+      }
+    `
+  }
+`;
+
+export const StyledPagination = styled(Pagination)`
+  & .MuiPaginationItem-root {
+    color: ${props => props.theme.colors.primary};
+    font-weight: bold;
+  }
+`;
+
+export const FilesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  min-height: calc((100vw - 2 * ${props => props.theme.spacing.xs}) / 5 * 2);
+  margin: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs} 
+      ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs};
+
+  @media (max-width: ${props => props.theme.breakpoints.md}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+    grid-template-columns: 1fr;
+  }
+`
+
+export const FileCard = styled.a`
+  ${flexColumn}
+  ${flexCenter}
+  aspect-ratio: 1 / 1;
+  background-color: ${props => props.theme.colors.background};
+  overflow: hidden;
+`
+
+export const ImageSource = styled.img`
+    width: 100%;
+    height: 100%;
+    filter: ${({ $blur }) => $blur ? 'blur(30px)' : 'none'};
+`
+
+export const VideoBox = styled.video`
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: black;
+    filter: ${({ $blur }) => $blur ? 'blur(30px)' : 'none'};
+`
+
+export const AudioBox = styled.audio`
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: black;
+`
+
+export const VideoSource = styled.source`
+    width: 100%;
+    height: 100%;
+`
+
+export const UploadErrorPopup = styled.div`
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: white;
+  color: black;
+  padding: 1rem 2rem;
+  border: 2px solid red;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
 `;

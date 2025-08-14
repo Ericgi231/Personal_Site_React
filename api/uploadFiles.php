@@ -1,16 +1,9 @@
 <?php
-set_time_limit(10);
+require_once __DIR__ . '/constants.php';
+set_time_limit(seconds: TIMEOUT_SECONDS);
 header('Content-Type: application/json');
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-
-// Database connection parameters
-$servername = "localhost";
-$sqlUserName = getenv('GOD_DB_USER');
-$sqlPassword = getenv('GOD_DB_PASS');
-$dbname = getenv('GOD_DB_NAME');
-
-// Fail non POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode([
@@ -20,11 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$servername = SERVER;
+$sqlUserName = getenv(DB_USER_ENV);
+$sqlPassword = getenv(DB_PASS_ENV);
+$dbname = getenv(DB_NAME_ENV);
+
 try {
-    // Connect to the database
     $conn = new mysqli($servername, $sqlUserName, $sqlPassword, $dbname);
 
-    // Check connection
     if ($conn->connect_error) {
         die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
     }
@@ -36,11 +32,11 @@ try {
     if (!empty($_FILES['files']['name'][0])) {
         foreach ($_FILES['files']['name'] as $idx => $name) {
             $size = $_FILES['files']['size'][$idx];
-            if ($size > 150 * 1024 * 1024) { // 150MB limit
+            if ($size > MAX_FILE_SIZE) {
                 http_response_code(response_code: 413);
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'File size exceeds the maximum allowed size of 150MB.'
+                    'message' => 'File size exceeds the maximum allowed size of '.MAX_FILE_SIZE_MB.'Mb.'
                 ]);
                 exit;
             }
@@ -76,10 +72,9 @@ try {
         }
     }
 
-    //close connection
     $conn->close();
-
     echo json_encode(['results' => $results]);
+
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([

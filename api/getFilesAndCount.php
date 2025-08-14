@@ -1,12 +1,8 @@
 <?php
-set_time_limit(10);
+require_once __DIR__ . '/constants.php';
+set_time_limit(TIMEOUT_SECONDS);
 header('Content-Type: application/json');
-
-// Database connection parameters
-$servername = "localhost";
-$sqlUserName = getenv('GOD_DB_USER');
-$sqlPassword = getenv('GOD_DB_PASS');
-$dbname = getenv('GOD_DB_NAME');
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $DEFAULT_START = 0;
 $MAX_FILES_PER_REQUEST = 10;
@@ -37,52 +33,62 @@ if ($size > 10 || $size < 0) {
     $size = $MAX_FILES_PER_REQUEST; // Default to max if invalid size
 }
 
-// Connect to the database
-$conn = new mysqli($servername, $sqlUserName, $sqlPassword, $dbname);
+$servername = SERVER;
+$sqlUserName = getenv(DB_USER_ENV);
+$sqlPassword = getenv(DB_PASS_ENV);
+$dbname = getenv(DB_NAME_ENV);
 
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
-}
+try {
+    $conn = new mysqli($servername, $sqlUserName, $sqlPassword, $dbname);
 
-$sql = "SELECT COUNT(*) as count FROM files";
-if (!is_null($search)) {
-    $sql .= " WHERE name LIKE '%" . $conn->real_escape_string($search) . "%'";
-}
-$result = $conn->query($sql);
-
-$count = 0;
-if ($result) {
-    $row = $result->fetch_assoc();
-    $files[] = ['total_files' => $row['count']];
-}
-
-$sql = "SELECT name, file_type, special, created FROM files";
-if (!is_null($search)) {
-    $normalizedSearch = preg_replace('/[^a-zA-Z0-9]/', '', $search);
-    $sql .= " WHERE REGEXP_REPLACE(name, '[^a-zA-Z0-9]', '') LIKE '%" . $conn->real_escape_string($normalizedSearch) . "%'";
-}
-if ($random == 1) {
-    $sql .= " ORDER BY RAND()";
-} else {
-    $sql .= " ORDER BY created DESC, name DESC";
-}
-$sql .= " LIMIT $size OFFSET $start";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $files[] = [
-            'url' => $baseUrl.$FILE_DIRECTORY.$row['name'].".".$row['file_type'],
-            'special' => $row['special'],
-            'name' => $row['name'],
-            'file_type' => $row['file_type'],
-            'created' => $row['created']];
+    if ($conn->connect_error) {
+        die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
     }
+
+    $sql = "SELECT COUNT(*) as count FROM files";
+    if (!is_null($search)) {
+        $sql .= " WHERE name LIKE '%" . $conn->real_escape_string($search) . "%'";
+    }
+    $result = $conn->query($sql);
+
+    $count = 0;
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $files[] = ['total_files' => $row['count']];
+    }
+
+    $sql = "SELECT name, file_type, special, created FROM files";
+    if (!is_null($search)) {
+        $normalizedSearch = preg_replace('/[^a-zA-Z0-9]/', '', $search);
+        $sql .= " WHERE REGEXP_REPLACE(name, '[^a-zA-Z0-9]', '') LIKE '%" . $conn->real_escape_string($normalizedSearch) . "%'";
+    }
+    if ($random == 1) {
+        $sql .= " ORDER BY RAND()";
+    } else {
+        $sql .= " ORDER BY created DESC, name DESC";
+    }
+    $sql .= " LIMIT $size OFFSET $start";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $files[] = [
+                'url' => $baseUrl.$FILE_DIRECTORY.$row['name'].".".$row['file_type'],
+                'special' => $row['special'],
+                'name' => $row['name'],
+                'file_type' => $row['file_type'],
+                'created' => $row['created']];
+        }
+    }
+
+    $conn->close();
+    echo json_encode($files);
+    
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Server error: ' . $e->getMessage()
+    ]);
 }
-
-//close connection
-$conn->close();
-
-echo json_encode($files);
 ?>
