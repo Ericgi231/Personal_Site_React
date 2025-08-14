@@ -1,14 +1,11 @@
 import { Navigate, Routes, Route } from "react-router-dom";
-import Home from '/src/pages/Home/Home';
-import Memes from '/src/pages/Memes/Memes';
-import NotFound from '/src/pages/NotFound/NotFound';
-// import Header from '/src/components/Header/Header';
-// import Footer from '/src/components/Footer/Footer';
+import Home from './pages/Home/Home';
+import Memes from './pages/Memes/Memes';
+import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   return (
     <>
-      {/* <Header /> */}
       <main>
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -18,7 +15,6 @@ function App() {
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </main>
-      {/* <Footer /> */}
     </>
   )
 }

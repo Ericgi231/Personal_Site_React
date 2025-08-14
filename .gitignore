@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 /collection
+/api/extra
+/api/info.php

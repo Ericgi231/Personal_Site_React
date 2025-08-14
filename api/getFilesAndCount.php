@@ -1,16 +1,15 @@
 <?php
+set_time_limit(10);
 header('Content-Type: application/json');
 
 // Database connection parameters
-// TODO: Extract these to a configuration file or environment variables
-$servername = "";
-$sqlUserName = "";
-$sqlPassword = "";
-$dbname = "";
+$servername = "localhost";
+$sqlUserName = getenv('GOD_DB_USER');
+$sqlPassword = getenv('GOD_DB_PASS');
+$dbname = getenv('GOD_DB_NAME');
 
 $DEFAULT_START = 0;
 $MAX_FILES_PER_REQUEST = 10;
-// TODO: Extract these to a configuration file or environment variables
 $FILE_DIRECTORY = "/collection/";
 
 // Fail non GET requests
@@ -29,21 +28,26 @@ $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" :
 $baseUrl = $scheme . "://" . $frontendHost;
 
 // Get arguments
-$start = isset($_GET['start']) ? $_GET['start'] : $DEFAULT_START;
-$size = isset($_GET['size']) ? $_GET['size'] : $MAX_FILES_PER_REQUEST;
-$query = isset($_GET['query']) ? $_GET['query'] : null;
+$start = $_GET['start'] ?? $DEFAULT_START;
+$size = $_GET['size'] ?? $MAX_FILES_PER_REQUEST;
+$random = $_GET['random'] ?? 0;
+$search = $_GET['search'] ?? null;
+
+if ($size > 10 || $size < 0) {
+    $size = $MAX_FILES_PER_REQUEST; // Default to max if invalid size
+}
 
 // Connect to the database
 $conn = new mysqli($servername, $sqlUserName, $sqlPassword, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: $conn->connect_error");
+    die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
 }
 
 $sql = "SELECT COUNT(*) as count FROM files";
-if (!is_null($query)) {
-    $sql .= " WHERE name LIKE '%" . $conn->real_escape_string($query) . "%'";
+if (!is_null($search)) {
+    $sql .= " WHERE name LIKE '%" . $conn->real_escape_string($search) . "%'";
 }
 $result = $conn->query($sql);
 
@@ -54,14 +58,19 @@ if ($result) {
 }
 
 $sql = "SELECT name, file_type, special, created FROM files";
-if (!is_null($query)) {
-    $sql .= " WHERE name LIKE '%" . $conn->real_escape_string($query) . "%'";
+if (!is_null($search)) {
+    $normalizedSearch = preg_replace('/[^a-zA-Z0-9]/', '', $search);
+    $sql .= " WHERE REGEXP_REPLACE(name, '[^a-zA-Z0-9]', '') LIKE '%" . $conn->real_escape_string($normalizedSearch) . "%'";
 }
-$sql .= " ORDER BY created ASC LIMIT $size OFFSET $start";
+if ($random == 1) {
+    $sql .= " ORDER BY RAND()";
+} else {
+    $sql .= " ORDER BY created DESC, name DESC";
+}
+$sql .= " LIMIT $size OFFSET $start";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
         $files[] = [
             'url' => $baseUrl.$FILE_DIRECTORY.$row['name'].".".$row['file_type'],
@@ -75,8 +84,5 @@ if ($result->num_rows > 0) {
 //close connection
 $conn->close();
 
-if (empty($files)) {
-    $files = [];
-}
 echo json_encode($files);
 ?>
