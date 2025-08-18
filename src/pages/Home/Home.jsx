@@ -29,10 +29,10 @@ const Home = () => {
           
           <NavigationGrid>
               <NavigationBox href="/memes">
-              Public File Database (tbd)
+              Public File Database
               </NavigationBox>
-              <NavigationBox href="/t2">
-              Discord random image bot (tbd)
+              <NavigationBox href="https://github.com/Ericgi231/DiscordBot_Jarvis_Java/tree/master">
+              Discord random image bot
               </NavigationBox>
               <NavigationBox href="/t3">
               Horse races (tbd)

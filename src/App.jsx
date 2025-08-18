@@ -9,7 +9,8 @@ function App() {
       <main>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/Memes" element={<Memes />} />
+          <Route path="/memes" element={<Memes />} />
+          <Route path="/god" element={<Memes />} />
           <Route path="/collection" />
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" replace />} />
