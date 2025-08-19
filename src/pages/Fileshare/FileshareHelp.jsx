@@ -81,7 +81,7 @@ const FileshareHelp = () => (
           The rest are file objects:
           <ExampleBox>
             {`{
-  "url": "https://yourdomain.com/collection/filename.ext",
+  "url": "https://ericgi231.me/collection/filename.ext",
   "special": 0,
   "name": "filename",
   "file_type": "ext",
@@ -152,7 +152,7 @@ const FileshareHelp = () => (
         <SectionTitle>Example Request (cURL)</SectionTitle>
         <SectionText>
           <ExampleBox>
-            {`curl -X POST -F "files[]=@/path/to/file1.jpg" -F "files[]=@/path/to/file2.mp4" -F "nsfw=1" https://yourdomain.com/api/uploadFiles.php`}
+            {`curl -X POST -F "files[]=@/path/to/file1.jpg" -F "files[]=@/path/to/file2.mp4" -F "nsfw=1" https://ericgi231.me/api/uploadFiles.php`}
           </ExampleBox>
         </SectionText>
       </Section>
@@ -200,5 +200,7 @@ const FileshareHelp = () => (
     </ApiCard>
   </HelpContainer>
 );
+
+// TODO: Make domain in examples dynamic
 
 export default FileshareHelp;
