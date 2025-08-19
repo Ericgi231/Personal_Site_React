@@ -16,13 +16,13 @@ import {
   UploadErrorPopup,
   VideoBox,
   VideoSource
-} from './Memes.styles'
+} from './Fileshare.styles'
 
 const FILES_PER_ROW = 5;
 const ROWS = 2;
 const FILES_PER_PAGE = ROWS * FILES_PER_ROW;
 const MAX_FILE_SIZE = 150 * 1024 * 1024;
-const MAX_FILE_SIZE_MB = 150;
+export const MAX_FILE_SIZE_MB = 150;
 const FileType = {
   IMAGE: 'image',
   VIDEO: 'video',
@@ -58,7 +58,11 @@ function usePersistentState(key, initialValue) {
   return [value, setValue];
 }
 
-const Memes = () => {
+const Fileshare = () => {
+  useEffect(() => {
+    document.title = "Fileshare Is Me";
+  }, []);
+
   const [files, setFiles] = useState([]);
   const [total_files, setTotalFiles] = useState([]);
   const [page, setPage] = usePersistentState('currentPage', 1);
@@ -308,4 +312,4 @@ const Memes = () => {
   )
 }
 
-export default Memes
+export default Fileshare;

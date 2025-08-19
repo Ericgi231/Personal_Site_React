@@ -3,7 +3,8 @@ import { flexCenter, flexColumn } from '/src/styles/Mixins'
 
 export const HomeContainer = styled.div`
   ${flexColumn}
-  ${flexCenter}
+  align-items: center;
+  justify-content: top;
   min-height: calc(100vh - 120px);
   padding: ${props => props.theme.spacing.xl};
   gap: ${props => props.theme.spacing.lg};
@@ -19,7 +20,7 @@ export const Name = styled.h1`
 export const Description = styled.p`
   font-size: ${props => props.theme.fontSizes.xl};
   color: ${props => props.theme.colors.textLight};
-  max-width: 800px;
+  max-width: 80%;
   text-align: center;
   margin: 0;
 `
@@ -43,11 +44,14 @@ export const SocialIcon = styled.a`
 
 export const NavigationGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: ${props => props.theme.spacing.md};
   width: 100%;
-  max-width: 800px;
-  margin-top: ${props => props.theme.spacing.xl};
+  max-width: 80%;
+
+  @media (max-width: ${props => props.theme.breakpoints.lg}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     grid-template-columns: 1fr;
@@ -56,6 +60,8 @@ export const NavigationGrid = styled.div`
 
 export const NavigationBox = styled.a`
   ${flexCenter}
+  flex-direction: column; 
+  text-align: center;
   background-color: ${props => props.theme.colors.background};
   border: 2px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.borderRadius.lg};
@@ -64,6 +70,7 @@ export const NavigationBox = styled.a`
   font-size: ${props => props.theme.fontSizes.xl};
   font-weight: ${props => props.theme.fontWeights.semibold};
   color: ${props => props.theme.colors.text};
+  background-color: ${props => props.theme.colors.card};
   text-decoration: none;
   transition: ${props => props.theme.transitions.base};
 
