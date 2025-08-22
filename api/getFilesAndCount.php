@@ -54,7 +54,7 @@ try {
     $count = 0;
     if ($result) {
         $row = $result->fetch_assoc();
-        $files[] = ['total_files' => $row['count']];
+        $files[] = ['total_files' => (int)$row['count']];
     }
 
     $sql = "SELECT name, file_type, special, created FROM files";
@@ -74,7 +74,7 @@ try {
         while($row = $result->fetch_assoc()) {
             $files[] = [
                 'url' => $baseUrl.$FILE_DIRECTORY.$row['name'].".".$row['file_type'],
-                'special' => $row['special'],
+                'special' => (bool)$row['special'],
                 'name' => $row['name'],
                 'file_type' => $row['file_type'],
                 'created' => $row['created']];
