@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { flexCenter, flexColumn } from '/src/styles/Mixins'
+import { styled } from 'styled-components'
+import { flexCenter, flexColumn } from '@styles/Mixins.js'
 
 export const NotFoundContainer = styled.div`
   ${flexColumn}

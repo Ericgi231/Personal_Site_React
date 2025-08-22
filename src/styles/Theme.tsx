@@ -1,5 +1,100 @@
-export const theme = {
-  // Color palette
+import type { DefaultTheme } from 'styled-components';
+
+import 'styled-components';
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    colors: {
+      primary: string;
+      primaryHover: string;
+      secondary: string;
+      background: string;
+      backgroundDark: string;
+      text: string;
+      textLight: string;
+      textDark: string;
+      border: string;
+      success: string;
+      warning: string;
+      error: string;
+      info: string;
+      card: string;
+    };
+    fonts: {
+      primary: string;
+      mono: string;
+    };
+    fontSizes: {
+      xs: string;
+      sm: string;
+      base: string;
+      lg: string;
+      xl: string;
+      '2xl': string;
+      '3xl': string;
+      '4xl': string;
+      '5xl': string;
+      '6xl': string;
+      '7xl': string;
+    };
+    fontWeights: {
+      light: number;
+      normal: number;
+      medium: number;
+      semibold: number;
+      bold: number;
+    };
+    spacing: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      '2xl': string;
+      '3xl': string;
+      '4xl': string;
+    };
+    borderRadius: {
+      none: string;
+      sm: string;
+      base: string;
+      md: string;
+      lg: string;
+      xl: string;
+      '2xl': string;
+      full: string;
+    };
+    shadows: {
+      sm: string;
+      base: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
+    breakpoints: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+    };
+    transitions: {
+      fast: string;
+      base: string;
+      slow: string;
+    };
+    zIndex: {
+      dropdown: number;
+      sticky: number;
+      fixed: number;
+      modal: number;
+      popover: number;
+      tooltip: number;
+    };
+  }
+}
+
+export const theme: DefaultTheme = {
   colors: {
     primary: '#646cff',
     primaryHover: '#535bf2',
@@ -17,13 +112,11 @@ export const theme = {
     card: '#ffffff',
   },
 
-  // Typography settings
   fonts: {
     primary: 'system-ui, Avenir, Helvetica, Arial, sans-serif',
     mono: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
   },
 
-  // Font sizes for different text elements
   fontSizes: {
     xs: '0.75rem',
     sm: '0.875rem',
@@ -38,7 +131,6 @@ export const theme = {
     '7xl': '8rem',
   },
 
-  // Font weights for different text styles
   fontWeights: {
     light: 300,
     normal: 400,
@@ -47,7 +139,6 @@ export const theme = {
     bold: 700
   },
 
-  // Spacing scale for margins and paddings
   spacing: {
     xs: '0.25rem',
     sm: '0.5rem',
@@ -59,7 +150,6 @@ export const theme = {
     '4xl': '6rem'
   },
 
-  // Border radius for rounded corners
   borderRadius: {
     none: '0',
     sm: '0.125rem',
@@ -71,7 +161,6 @@ export const theme = {
     full: '9999px'
   },
 
-  // Box shadows for depth effects
   shadows: {
     sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
     base: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
@@ -80,7 +169,6 @@ export const theme = {
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
   },
 
-  // Breakpoints for responsive design
   breakpoints: {
     xs: '480px',
     sm: '768px',
@@ -89,14 +177,12 @@ export const theme = {
     xl: '1536px'
   },
 
-  // Transition durations and easing functions
   transitions: {
     fast: '150ms ease-in-out',
     base: '200ms ease-in-out',
     slow: '300ms ease-in-out'
   },
 
-  // Z-index values for layering elements
   zIndex: {
     dropdown: 1000,
     sticky: 1020,
@@ -105,4 +191,4 @@ export const theme = {
     popover: 1050,
     tooltip: 1060
   }
-}
+};

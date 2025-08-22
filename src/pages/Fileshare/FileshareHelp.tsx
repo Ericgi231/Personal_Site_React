@@ -1,8 +1,8 @@
 import {
   HelpContainer, ApiCard, ApiHeader, Section, SectionTitle, SectionText,
   Table, TableRow, TableHeader, TableCell, ExampleBox
-} from "./FileshareHelp.styles";
-import { MAX_FILE_SIZE_MB } from './Fileshare';
+} from "@pages/Fileshare/FileshareHelp.styles.js";
+import { MAX_FILE_SIZE_MB } from '@pages/Fileshare/Fileshare.js';
 
 const FileshareHelp = () => (
   <HelpContainer>
@@ -110,7 +110,7 @@ const FileshareHelp = () => (
     </ApiCard>
 
     <ApiCard>
-      <ApiHeader $post>
+      <ApiHeader>
         Upload Files API <span style={{fontSize: "0.95rem", fontWeight: 400, marginLeft: "auto"}}>POST /api/uploadFiles.php</span>
       </ApiHeader>
       <Section>

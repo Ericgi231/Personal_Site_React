@@ -1,4 +1,4 @@
-import { css } from 'styled-components'
+import { css, type Interpolation } from 'styled-components';
 
 // Flexbox utilities
 //
@@ -175,21 +175,21 @@ export const cardHover = css`
 //
 
 // Applies styles for mobile screens (max-width: sm)
-export const mobile = (styles) => css`
+export const mobile = (styles: Interpolation<any>) => css`
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
     ${styles}
   }
 `
 
 // Applies styles for tablet screens (max-width: md)
-export const tablet = (styles) => css`
+export const tablet = (styles: Interpolation<any>) => css`
   @media (max-width: ${props => props.theme.breakpoints.md}) {
     ${styles}
   }
 `
 
 // Applies styles for desktop screens (min-width: md)
-export const desktop = (styles) => css`
+export const desktop = (styles: Interpolation<any>) => css`
   @media (min-width: ${props => props.theme.breakpoints.md}) {
     ${styles}
   }

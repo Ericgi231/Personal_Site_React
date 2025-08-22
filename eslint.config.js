@@ -1,29 +1,42 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
+import react from 'eslint-plugin-react';
 
-export default defineConfig([
-  globalIgnores(['dist']),
+export default [
+  js.configs.recommended,
   {
-    files: ['**/*.{js,jsx}'],
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      parser: tsparser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
+        project: './tsconfig.json',
+        ecmaVersion: 2020,
         sourceType: 'module',
+        ecmaFeatures: { jsx: true },
       },
     },
+    plugins: {
+      '@typescript-eslint': tseslint,
+      react,
+    },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      ...tseslint.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      // Add or override rules below
+      // '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
-])
+  {
+    files: ['**/*.jsx', '**/*.tsx'],
+    plugins: { react },
+    rules: {
+      ...react.configs.recommended.rules,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+];

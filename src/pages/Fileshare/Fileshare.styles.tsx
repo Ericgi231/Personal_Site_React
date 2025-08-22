@@ -1,7 +1,14 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { flexCenter, flexColumn } from '/src/styles/Mixins'
+import { mobile, tablet, desktop } from '@styles/Mixins.js';
+import { flexCenter, flexColumn } from '@styles/Mixins.js'
+
+interface StyleProps {
+  $blur?: boolean;
+  $top?: boolean;
+  $bar?: boolean;
+}
 
 export const ControlBar = styled.div`
   display: flex;
@@ -14,7 +21,7 @@ export const ControlBar = styled.div`
   width: 100%;
   box-sizing: border-box;
 
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+  ${mobile(`
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 8px;
@@ -23,7 +30,7 @@ export const ControlBar = styled.div`
       min-width: 0;
       width: 100%;
     }
-  }
+  `)}
 `
 
 export const PageNumberInput = styled.input`
@@ -55,9 +62,9 @@ export const ControlBarDivider = styled.div`
   background: black;
   margin: 0 16px;
   border-radius: 1px;
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+  ${mobile(`
     display: none;
-  }
+  `)}
 `;
 
 export const ControlCheckbox = styled.label`
@@ -73,26 +80,20 @@ export const ControlCheckbox = styled.label`
   }
 `;
 
-export const StyledStack = styled(Stack)`
+export const StyledStack = styled(Stack)<StyleProps>`
   align-items: center;
-  ${({ $top, theme }) =>
+  ${({ $top }) =>
     $top &&
-    `
-      @media (min-width: ${theme.breakpoints.md}) {
-        display: none !important;
-      }
-    `
+    desktop(`
+      display: none !important;
+    `)
   }
 
   ${({ $bar, theme }) =>
-    $bar &&
-    `
-      margin-right: ${theme.spacing.sm};
-
-      @media (max-width: ${theme.breakpoints.md}) {
-        display: none !important;
-      }
-    `
+    $bar && [
+      `margin-right: ${theme.spacing.sm};`,
+      tablet(`display: none !important;`)
+    ]
   }
 `;
 
@@ -110,13 +111,13 @@ export const FilesGrid = styled.div`
   margin: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs} 
       ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs};
 
-  @media (max-width: ${props => props.theme.breakpoints.md}) {
+  ${tablet(`
     grid-template-columns: repeat(2, 1fr);
-  }
+  `)}
 
-  @media (max-width: ${props => props.theme.breakpoints.sm}) {
+  ${mobile(`
     grid-template-columns: 1fr;
-  }
+  `)}
 `
 
 export const FileCard = styled.a`
@@ -127,13 +128,13 @@ export const FileCard = styled.a`
   overflow: hidden;
 `
 
-export const ImageSource = styled.img`
+export const ImageSource = styled.img<StyleProps>`
     width: 100%;
     height: 100%;
     filter: ${({ $blur }) => $blur ? 'blur(30px)' : 'none'};
 `
 
-export const VideoBox = styled.video`
+export const VideoBox = styled.video<StyleProps>`
     width: 100%;
     height: 100%;
     display: block;
