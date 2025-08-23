@@ -1,55 +1,90 @@
 import { styled } from 'styled-components';
-import { flexCenter } from '@styles/Mixins.js';
+import { flexCenter, mobile, tablet } from '@styles/Mixins.js';
 import { Realm } from '@pages/MoraJai/MoraJai.helper.js';
 
 export const GridContainer = styled.div`
   ${flexCenter}
   flex-direction: column;
   min-height: 100vh;
-  background: #312829;
+  background: #756365;
 `;
 
 export const ControlBar = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
   display: flex;
   align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  ${tablet`
+    gap: 16px;
+  `}
+  ${mobile`
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
+    max-width: 98vw;
+  `}
 `;
 
 export const NavButton = styled.button`
   height: 48px;
-  width: 160px;
-  flex-shrink: 0;
+  min-width: 140px;
   padding: 0 32px;
-  border: 5px solid #563013;
-  border-radius: 10px;
+  border-radius: 6px;
+  border: 3px solid #563013;
   font-size: 1.2rem;
   font-weight: bold;
   margin-right: 16px;
   cursor: pointer;
-  color: #fff;
   background: ${Realm.Grey};
-  transition: background 0.2s;
+  color: #fff;
+  transition: background 0.2s, font-size 0.2s, padding 0.2s;
   box-shadow: 0 2px 8px #0002;
+  ${tablet`
+    font-size: 1.05rem;
+    padding: 0 20px;
+    min-width: 110px;
+    height: 42px;
+  `}
+  ${mobile`
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 0 10px;
+    margin-right: 0;
+    height: 38px;
+  `}
 `;
 
 export const SolvedTracker = styled.div<{ $active?: boolean }>`
   height: 48px;
   min-width: 140px;
-  padding: 0 32px;
-  border: 5px solid #563013;
-  border-radius: 10px;
+  border-radius: 6px;
+  border: 3px solid #563013;
   font-size: 1.2rem;
   font-weight: bold;
-  margin-right: 16px;
   background: ${({ $active }) => $active ? Realm.Blue : Realm.Red};
   color: #fff;
-  transition: background 0.2s;
+  transition: background 0.2s, font-size 0.2s, padding 0.2s;
   box-shadow: 0 2px 8px #0002;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  ${tablet`
+    font-size: 1.05rem;
+    padding: 0 20px;
+    min-width: 110px;
+    height: 42px;
+  `}
+  ${mobile`
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 0 10px;
+    height: 38px;
+  `}
 `;
 
 export const OuterBox = styled.div`
@@ -133,29 +168,144 @@ export const CornerButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br'; 
   }
 `;
 
+export const MenuOuterBox = styled.div`
+  ${flexCenter}
+  flex-direction: column;
+  margin: 48px auto;
+  padding: 2.5rem 2rem;
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
+  width: 80vw;
+  max-width: 80%;
+  min-width: 0;
+  color: ${({ theme }) => theme.colors.text};
+  word-break: break-word;
+  text-align: center;
+
+  ${tablet`
+    width: 95vw;
+    padding: 1.5rem 0.5rem;
+    margin: 24px auto;
+    max-width: 100%;
+  `}
+  ${mobile`
+    width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    padding: 1rem 0.25rem;
+    max-width: 100%;
+  `}
+`;
+
 export const LevelGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 110px);
-  gap: 15px;
-  margin: 40px 0;
-  justify-content: center;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin: 0.75rem 0 1.5rem 0;
+  width: 100%;
+
+  ${tablet`
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 1rem 0;
+  `}
+  ${mobile`
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.75rem;
+    margin: 1rem 0 0.5rem 0;
+  `}
 `;
 
 export const LevelSquare = styled.button<{ $solved?: boolean }>`
-  width: 110px;
-  height: 110px;
-  border-radius: 18px;
-  font-weight: bold;
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  min-width: 0;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  border: 2px solid ${({ $solved }) => $solved ? Realm.Blue : ({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.1rem;
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  text-align: center;
+  word-break: break-word;
+  white-space: normal;
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   cursor: pointer;
-  outline: none;
-  border: 3px solid ${({ $solved }) => $solved ? Realm.Blue : "#3a2b22"};
-  color: #2d1c1e;
-  box-shadow: 0 4px 16px #0002, 0 1.5px 0 #fff4 inset;
   transition: border 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+
   &:hover, &:focus {
-    border-color: #1E71BF;
-    color: #1E71BF;
-    box-shadow: 0 6px 24px #1e71bf33, 0 1.5px 0 #fff4 inset;
+    border-color: ${Realm.Blue};
+    background: ${Realm.Blue + 22};
+    color: ${Realm.Blue};
+    box-shadow: ${({ theme }) => theme.shadows.md};
+    outline: none;
   }
+
+  ${tablet`
+    font-size: 1rem;
+    padding: 0.75rem 0.25rem;
+    min-height: 56px;
+  `}
+  ${mobile`
+    font-size: 0.98rem;
+    padding: 0.5rem 0.15rem;
+    min-height: 48px;
+  `}
+`;
+
+export const LocationSection = styled.section`
+  width: 100%;
+  margin-bottom: 2.5rem;
+  padding: 0rem 1rem 0rem 1rem;
+  background: ${({ theme }) => theme.colors.card};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+  transition: background 0.2s;
+  ${tablet`
+    padding: 1rem 0.5rem;
+  `}
+  ${mobile`
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 1.2rem;
+  `}
+`;
+
+export const MenuTitle = styled.h1`
+  margin-bottom: 0.5em;
+  font-size: ${({ theme }) => theme.fontSizes['2xl']};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  color: ${Realm.Blue};
+  letter-spacing: 0.01em;
+`;
+
+export const MenuDescription = styled.p`
+  margin-bottom: 1.5em;
+  font-size: 1.1em;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.text};
+  word-break: break-word;
+`;
+
+export const LocationHeader = styled.h2`
+  margin: 10px 0 0 0;
+  color: ${Realm.Blue};
+  font-weight: 700;
+  font-size: 1.3em;
+  letter-spacing: 0.02em;
+`;
+
+export const ScaledGameWrapper = styled.div<{ $scale: number }>`
+  transform: scale(${props => props.$scale});
+  transform-origin: top left;
+  height: auto;
+  ${tablet`
+    width: 100%;
+    max-width: 100vw;
+  `}
 `;
