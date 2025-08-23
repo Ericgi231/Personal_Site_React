@@ -1,4 +1,24 @@
-import { Realm, GRID_SIZE } from "@pages/MoraJai/MoraJai.js";
+export const GRID_SIZE = 3;
+export const GRID_CORNERS = {
+  'tl': 0,
+  'tr': GRID_SIZE - 1,
+  'bl': GRID_SIZE * (GRID_SIZE - 1),
+  'br': GRID_SIZE * GRID_SIZE - 1,
+} as const;
+export const CORNER_KEYS = ['tl', 'tr', 'bl', 'br'] as const;
+
+export enum Realm {
+  Grey = "#5e6b73",
+  Black = "#12171a",
+  Green = "#1ec82d",
+  Pink = "#e05be7",
+  Yellow = "#d1c800",
+  Violet = "#a100c7",
+  White = "#e7ebec",
+  Red = "#c41d3a",
+  Orange = "#ff8c1a",
+  Blue = "#0084ff"
+}
 
 export function handleButtonAction(
   color: Realm, 
@@ -182,16 +202,15 @@ export const handleWhite = (
   setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
 ) => {
   const orthogonalDirs = [
-    -GRID_SIZE, // up
-    1,          // right
-    GRID_SIZE,  // down
-    -1          // left
+    -GRID_SIZE, 
+    1,          
+    GRID_SIZE,  
+    -1          
   ];
 
   const neighbors = orthogonalDirs
     .map(dir => {
       const neighbor = buttonIndex + dir;
-      // Prevent wrapping across rows
       if (
         neighbor < 0 ||
         neighbor >= buttons.length ||
@@ -206,9 +225,7 @@ export const handleWhite = (
 
   setButtons(prev => {
     const copy = [...prev];
-    // 1. Pressed tile turns gray
     copy[buttonIndex] = Realm.Grey;
-    // 2. Any gray neighbors turn white, any white neighbors turn gray
     neighbors.forEach(idx => {
       if (prev[idx] === Realm.Grey) {
         copy[idx] = buttons[buttonIndex]!;
@@ -225,12 +242,8 @@ const handleBlue = (
   buttonIndex: number,
   setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
 ) => {
-  console.log("Blue pressed");
   const middleIndex = Math.floor(buttons.length / 2);
-  console.log(`Middle index: ${middleIndex}`);
   const middleColor = buttons[middleIndex];
-  console.log(`Middle color: ${middleColor}`);
-  if (middleColor === Realm.Blue) return; // Do nothing if middle is blue
-  console.log(`Calling handleButtonAction with middleColor: ${middleColor}`);
+  if (middleColor === Realm.Blue) return;
   handleButtonAction(middleColor!, buttonIndex, buttons, setButtons);
 };
