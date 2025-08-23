@@ -141,7 +141,7 @@ export const LevelGrid = styled.div`
   justify-content: center;
 `;
 
-export const LevelSquare = styled.button`
+export const LevelSquare = styled.button<{ $solved?: boolean }>`
   width: 110px;
   height: 110px;
   border-radius: 18px;
@@ -149,7 +149,7 @@ export const LevelSquare = styled.button`
   font-size: 1.25rem;
   cursor: pointer;
   outline: none;
-  border: 3px solid #3a2b22;
+  border: 3px solid ${({ $solved }) => $solved ? Realm.Blue : "#3a2b22"};
   color: #2d1c1e;
   box-shadow: 0 4px 16px #0002, 0 1.5px 0 #fff4 inset;
   transition: border 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;

@@ -28,14 +28,13 @@ const MoraJai = () => {
       {page === MoraJaiPage.Game && (
         <MoraJaiGame onBack={() => setPage(MoraJaiPage.Menu) } box={selectedBox}/>
       )}
-      {/* {page === MoraJaiPage.Editor && (
-        <MoraJaiEditor onBack={() => setPage(MoraJaiPage.Menu)} />
-      )} */}
     </GridContainer>
   );
 };
 
-//TODO clean code
+//TODO Improve styling
+//TODO add mobile support
+//TODO Add graphics
 //TODO add custom levels
 //TODO finish adding all standard levels
 

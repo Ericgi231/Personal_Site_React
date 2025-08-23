@@ -9,8 +9,11 @@ interface MoraJaiMenuProps {
 const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) => {
   return (
     <OuterBox>
-      <h1>Mora Jai Boxes</h1>
-      <p>Fun for the family! (Custom boxes coming soon)</p>
+      <h1>Mora Jai Boxes Online</h1>
+      <p>The magnificent puzzle game Blue Prince by Dogubomb contains many a secret and convoluted puzzle.<br/>
+      Among them are the clear and concise Mora Jai boxes which require no explination.<br/>
+      Select a box below to enjoy fun for the whole family!
+      </p>
       <button hidden disabled onClick={onCreateLevel}>Level Editor (Coming Soon)</button>
       {MORA_JAI_BOXES.map((group) => (
         <div key={group.location} style={{ marginBottom: 32 }}>
@@ -19,6 +22,7 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
             {group.boxes.map((box) => (
               <LevelSquare
                 key={box.id}
+                $solved={localStorage.getItem(box.id) === "true"}
                 onClick={() => onLevelSelected(box)}
                 title={box.name}
               >
