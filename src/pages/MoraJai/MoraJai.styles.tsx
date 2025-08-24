@@ -7,6 +7,12 @@ export const GridContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   background: #756365;
+
+  ${mobile`
+    min-height: 100dvh;
+    justify-content: flex-start;
+    padding-top: 4px;
+  `}
 `;
 
 export const ControlBar = styled.div`
