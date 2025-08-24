@@ -88,36 +88,56 @@ export const SolvedTracker = styled.div<{ $active?: boolean }>`
 `;
 
 export const OuterBox = styled.div`
-  color: ${props => props.theme.colors.textDark};
-  display: inline-block;
-  padding: 48px;
+  background: #2d1c1e;
   border: 6px solid #a67c52;
   border-radius: 24px;
-  background: #2d1c1e;
   box-shadow: 0 4px 24px rgba(0,0,0,0.25);
   position: relative;
+  width: 90vw;
+  max-width: 700px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  padding: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  ${mobile`
+    width: 98vw;
+    max-width: 98vw;
+    border-radius: 0;
+    border-width: 3px;
+  `}
 `;
 
 export const GridBoxWrapper = styled.div`
-  position: relative;
-  display: inline-block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const GridBox = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 12px;
+  gap: 3%;
+  width: 90%;
+  height: 90%;
   border: 5px solid #563013;
   border-radius: 12px;
-  padding: 24px;
+  padding: 4%;
   background: #442f31;
+  box-sizing: border-box;
 `;
 
 export const GridButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br' | 'none'; $pressed?: boolean }>`
-  width: 150px;
-  height: 150px;
-  font-size: 1.2rem;
+  width: 100%;
+  height: 100%;
+  font-size: 2.2vw;
+  border-radius: 10px;
+  border: none;
   cursor: pointer;
   transition: box-shadow 0.15s, transform 0.15s;
   ${({ $pressed }) =>
@@ -127,7 +147,6 @@ export const GridButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br' | '
       : `box-shadow: 0 4px 12px #0006, 0 1.5px 0 #fff4 inset;
       transform: none;`
   }
-
   ${({ $corner }) =>
     $corner === 'tl' ? 'clip-path: polygon(55px 0, 100% 0, 100% 100%, 0 100%, 0 55px);' :
     $corner === 'tr' ? 'clip-path: polygon(0 0, calc(100% - 55px) 0, 100% 55px, 100% 100%, 0 100%);' :
@@ -138,21 +157,21 @@ export const GridButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br' | '
 
 export const CornerButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br'; $pressed?: boolean; $solved: boolean }>`
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 18%;
+  height: 18%;
   border-radius: 50%;
   border: 5px solid #563013;
+  margin: 2%;
   background: #2E2926;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.1em;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   ${({ $corner }) =>
-    $corner === 'tl' ? 'top: -40px; left: -40px;' :
-    $corner === 'tr' ? 'top: -40px; right: -40px;' :
-    $corner === 'bl' ? 'bottom: -40px; left: -40px;' :
-    'bottom: -40px; right: -40px;'}
-
+    $corner === 'tl' ? 'top: 0; left: 0;' :
+    $corner === 'tr' ? 'top: 0; right: 0;' :
+    $corner === 'bl' ? 'bottom: 0; left: 0;' :
+    'bottom: 0; right: 0;'}
   ${({ $pressed }) =>
     $pressed
       ? `box-shadow: 0 1px 2px #0008 inset;
@@ -160,7 +179,6 @@ export const CornerButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br'; 
       : `box-shadow: 0 4px 12px #0006, 0 1.5px 0 #fff4 inset;
       transform: none;`
   }
-  
   ${({ $solved }) =>
     !$solved
       ? `filter: saturate(0.55);`
@@ -298,14 +316,4 @@ export const LocationHeader = styled.h2`
   font-weight: 700;
   font-size: 1.3em;
   letter-spacing: 0.02em;
-`;
-
-export const ScaledGameWrapper = styled.div<{ $scale: number }>`
-  transform: scale(${props => props.$scale});
-  transform-origin: top left;
-  height: auto;
-  ${tablet`
-    width: 100%;
-    max-width: 100vw;
-  `}
 `;
