@@ -1,3 +1,4 @@
+import { yellow } from "@mui/material/colors";
 import { Realm } from "@pages/MoraJai/MoraJai.helper.js";
 
 export type MoraJaiBox = {
@@ -24,214 +25,141 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
   {
     location: Location.Sanctum,
     boxes: [
-      {
-        name: "Orinda Aries",
-        id: '',
-        grid: [
-          Realm.Green, Realm.Black, Realm.Green,
-          Realm.Black, Realm.Black, Realm.Black,
-          Realm.Green, Realm.Yellow, Realm.Green
-        ],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Fenn Aries",
-        id: '',
-        grid: [
-          Realm.Grey, Realm.Green, Realm.Grey,
-          Realm.Orange, Realm.Red, Realm.Orange,
-          Realm.White, Realm.Green, Realm.Black
-        ],
-        corners: Array(4).fill(Realm.Red),
-      },
-      {
-        name: "Arch Aries",
-        id: '',
-        grid: [
-          Realm.Black, Realm.Yellow, Realm.Grey,
-          Realm.Yellow, Realm.Green, Realm.Yellow,
-          Realm.Grey, Realm.Yellow, Realm.Black
-        ],
-        corners: Array(4).fill(Realm.Yellow),
-      },
-      {
-        name: "Eraja",
-        id: '',
-        grid: [
-          Realm.Yellow, Realm.Violet, Realm.Yellow,
-          Realm.Green, Realm.Red, Realm.Black,
-          Realm.Violet, Realm.Violet, Realm.Violet
-        ],
-        corners: Array(4).fill(Realm.Violet),
-      },
-      {
-        name: "Corarica",
-        id: '',
-        grid: [
-          Realm.Orange, Realm.Black, Realm.Orange,
-          Realm.Orange, Realm.Orange, Realm.Orange,
-          Realm.Violet, Realm.Green, Realm.Violet
-        ],
-        corners: Array(4).fill(Realm.Orange),
-      },
-      {
-        name: "Mora Jai",
-        id: '',
-        grid: [
-          Realm.Yellow, Realm.Yellow, Realm.Yellow,
-          Realm.White, Realm.Pink, Realm.White,
-          Realm.Grey, Realm.Grey, Realm.Grey
-        ],
-        corners: Array(4).fill(Realm.White),
-      },
-      {
-        name: "Verra",
-        id: '',
-        grid: [
-          Realm.Pink, Realm.Pink, Realm.Grey,
-          Realm.Grey, Realm.Grey, Realm.Grey,
-          Realm.Orange, Realm.Orange, Realm.Orange
-        ],
-        corners: Array(4).fill(Realm.Pink),
-      },
-      {
-        name: "Nuance",
-        id: '',
-        grid: [
-          Realm.Green, Realm.Grey, Realm.Green,
-          Realm.Grey, Realm.Orange, Realm.Orange,
-          Realm.Grey, Realm.Black, Realm.Violet
-        ],
-        corners: Array(4).fill(Realm.Green),
-      },
+      { name: "Orinda Aries", id: '', grid: [
+        Realm.Green, Realm.Black, Realm.Green,
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Green, Realm.Yellow, Realm.Green
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Fenn Aries", id: '', grid: [
+        Realm.Grey, Realm.Green, Realm.Grey,
+        Realm.Orange, Realm.Red, Realm.Orange,
+        Realm.White, Realm.Green, Realm.Black
+      ], corners: Array(4).fill(Realm.Red) },
+      { name: "Arch Aries", id: '', grid: [
+        Realm.Black, Realm.Yellow, Realm.Grey,
+        Realm.Yellow, Realm.Green, Realm.Yellow,
+        Realm.Grey, Realm.Yellow, Realm.Black
+      ], corners: Array(4).fill(Realm.Yellow) },
+      { name: "Eraja", id: '', grid: [
+        Realm.Yellow, Realm.Violet, Realm.Yellow,
+        Realm.Green, Realm.Red, Realm.Black,
+        Realm.Violet, Realm.Violet, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Corarica", id: '', grid: [
+        Realm.Orange, Realm.Black, Realm.Orange,
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Violet, Realm.Green, Realm.Violet
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Mora Jai", id: '', grid: [
+        Realm.Yellow, Realm.Yellow, Realm.Yellow,
+        Realm.White, Realm.Pink, Realm.White,
+        Realm.Grey, Realm.Grey, Realm.Grey
+      ], corners: Array(4).fill(Realm.White) },
+      { name: "Verra", id: '', grid: [
+        Realm.Pink, Realm.Pink, Realm.Grey,
+        Realm.Grey, Realm.Grey, Realm.Grey,
+        Realm.Orange, Realm.Orange, Realm.Orange
+      ], corners: Array(4).fill(Realm.Pink) },
+      { name: "Nuance", id: '', grid: [
+        Realm.Green, Realm.Grey, Realm.Green,
+        Realm.Grey, Realm.Orange, Realm.Orange,
+        Realm.Grey, Realm.Black, Realm.Violet
+      ], corners: Array(4).fill(Realm.Green) },
     ],
   },
   {
     location: Location.Estate,
     boxes: [
-      {
-        name: "Tunnel",
-        id: '',
-        grid: [
-          Realm.Black, Realm.Orange, Realm.Pink,
-          Realm.Orange, Realm.Orange, Realm.Orange,
-          Realm.Pink, Realm.Orange, Realm.Orange
-        ],
-        corners: Array(4).fill(Realm.Orange),
-      },
-      {
-        name: "Master Bedroom",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Closed Exhibit",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Underpass",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Tomb",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Trading Post",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Solarium",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Lost & Found",
-        id: '',
-        grid: [],
-        corners: [],
-      },
-      {
-        name: "Throne Room",
-        id: '',
-        grid: [],
-        corners: [],
-      },
+      { name: "Tunnel", id: '', grid: [
+        Realm.Black, Realm.Orange, Realm.Pink,
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Pink, Realm.Orange, Realm.Orange
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Master Bedroom", id: '', grid: [
+        Realm.White, Realm.Grey, Realm.White,
+        Realm.White, Realm.Grey, Realm.Grey,
+        Realm.Grey, Realm.Grey, Realm.White
+      ], corners: Array(4).fill(Realm.White) },
+      { name: "Closed Exhibit", id: '', grid: [
+        Realm.Orange, Realm.Black, Realm.Orange,
+        Realm.Orange, Realm.Red, Realm.Orange,
+        Realm.Orange, Realm.Black, Realm.Orange
+      ], corners: Array(4).fill(Realm.Red) },
+      { name: "Underpass", id: '', grid: [
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Grey, Realm.Black, Realm.Grey,
+        Realm.Yellow, Realm.Grey, Realm.Yellow
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Tomb", id: '', grid: [
+        Realm.Grey, Realm.Violet, Realm.Grey,
+        Realm.Grey, Realm.Pink, Realm.Grey,
+        Realm.Violet, Realm.Violet, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Trading Post", id: '', grid: [
+        Realm.Pink, Realm.Grey, Realm.Grey,
+        Realm.Grey, Realm.Yellow, Realm.Yellow,
+        Realm.Grey, Realm.Yellow, Realm.Yellow
+      ], corners: Array(4).fill(Realm.Yellow) },
+      { name: "Solarium", id: '', grid: [
+        Realm.Green, Realm.Grey, Realm.Yellow,
+        Realm.Green, Realm.Yellow, Realm.Green,
+        Realm.Yellow, Realm.Grey, Realm.Green
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Lost & Found", id: '', grid: [
+        Realm.Pink, Realm.Pink, Realm.Pink,
+        Realm.Pink, Realm.Grey, Realm.Pink,
+        Realm.Grey, Realm.Grey, Realm.Grey
+      ], corners: Array(4).fill(Realm.Pink) },
+      { name: "Throne Room", id: '', grid: [
+        Realm.Black, Realm.Green, Realm.Blue,
+        Realm.Blue, Realm.Blue, Realm.Blue,
+        Realm.Violet, Realm.Grey, Realm.Grey
+      ], corners: Array(4).fill(Realm.Blue) },
     ],
   },
   {
     location: Location.AriesCourt,
     boxes: [
-      {
-        name: "Box 1",
-        id: '',
-        grid: [
-          Realm.Black, Realm.Black, Realm.Black,
-          Realm.Green, Realm.Black, Realm.Grey,
-          Realm.Grey, Realm.Grey, Realm.Pink
-        ],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 2",
-        id: '',
-        grid: [
-          Realm.Orange, Realm.Grey, Realm.Violet,
-          Realm.Orange, Realm.Grey, Realm.Violet,
-          Realm.Black, Realm.Black, Realm.Black
-        ],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 3",
-        id: '',
-        grid: [
-          Realm.Black, Realm.Black, Realm.Black,
-          Realm.Grey, Realm.Grey, Realm.Grey,
-          Realm.Pink, Realm.Violet, Realm.Orange
-        ],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 4",
-        id: '',
-        grid: [],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 5",
-        id: '',
-        grid: [],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 6",
-        id: '',
-        grid: [],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 7",
-        id: '',
-        grid: [],
-        corners: Array(4).fill(Realm.Black),
-      },
-      {
-        name: "Box 8",
-        id: '',
-        grid: [],
-        corners: Array(4).fill(Realm.Black),
-      },
+      { name: "Box 1", id: '', grid: [
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Green, Realm.Black, Realm.Grey,
+        Realm.Grey, Realm.Grey, Realm.Pink
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 2", id: '', grid: [
+        Realm.Orange, Realm.Grey, Realm.Violet,
+        Realm.Orange, Realm.Grey, Realm.Violet,
+        Realm.Black, Realm.Black, Realm.Black
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 3", id: '', grid: [
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Grey, Realm.Grey, Realm.Grey,
+        Realm.Pink, Realm.Violet, Realm.Orange
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 4", id: '', grid: [
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Orange, Realm.Grey, Realm.Orange,
+        Realm.Yellow, Realm.Grey, Realm.Yellow
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 5", id: '', grid: [
+        Realm.Orange, Realm.Grey, Realm.Pink,
+        Realm.Black, Realm.Grey, Realm.Black,
+        Realm.Green, Realm.Grey, Realm.Orange
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 6", id: '', grid: [
+        Realm.Black, Realm.Violet, Realm.Black,
+        Realm.Grey, Realm.Grey, Realm.Grey,
+        Realm.Orange, Realm.Green, Realm.Orange
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 7", id: '', grid: [
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Black, Realm.Green, Realm.Black,
+        Realm.Violet, Realm.Green, Realm.Violet
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Box 8", id: '', grid: [
+        Realm.Black, Realm.Green, Realm.Yellow,
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Grey, Realm.Grey, Realm.Grey
+      ], corners: Array(4).fill(Realm.Black) },
     ],
   },
   {
@@ -241,7 +169,7 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
         Realm.Red, Realm.Grey, Realm.Black, 
         Realm.Orange, Realm.Orange, Realm.Orange, 
         Realm.Green, Realm.Grey, Realm.Violet
-      ], corners: [Realm.Orange, Realm.Red, Realm.Orange, Realm.Red] },
+      ], corners: [Realm.Orange, Realm.Red, Realm.Red, Realm.Orange] },
       { name: "Chapel", id: '', grid: [
         Realm.Blue, Realm.Orange, Realm.Blue, 
         Realm.Black, Realm.Black, Realm.Orange, 
@@ -252,52 +180,216 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
         Realm.Orange, Realm.Black, Realm.Red, 
         Realm.Black, Realm.White, Realm.Violet
       ], corners: [Realm.Black, Realm.Violet, Realm.Orange, Realm.Red] },
-      { name: "Coat Check", id: '', grid: [], corners: [] },
-      { name: "Aquarium", id: '', grid: [], corners: [] },
-      { name: "Foyer", id: '', grid: [], corners: [] },
-      { name: "Pool", id: '', grid: [], corners: [] },
-      { name: "Servants Quarters", id: '', grid: [], corners: [] },
-      { name: "Pump Room", id: '', grid: [], corners: [] },
-      { name: "Furnace", id: '', grid: [], corners: [] },
-      { name: "Gymnasium", id: '', grid: [], corners: [] },
-      { name: "Laundry", id: '', grid: [], corners: [] },
-      { name: "Guest Bedroom", id: '', grid: [], corners: [] },
-      { name: "Conference", id: '', grid: [], corners: [] },
-      { name: "Den", id: '', grid: [], corners: [] },
-      { name: "West Wing Hall", id: '', grid: [], corners: [] },
-      { name: "Passageway", id: '', grid: [], corners: [] },
-      { name: "Dark Room", id: '', grid: [], corners: [] },
-      { name: "Closet", id: '', grid: [], corners: [] },
-      { name: "Parlor", id: '', grid: [], corners: [] },
-      { name: "Billiard Room", id: '', grid: [], corners: [] },
-      { name: "Trophy Room", id: '', grid: [], corners: [] },
-      { name: "The Foundation", id: '', grid: [], corners: [] },
-      { name: "Ballroom", id: '', grid: [], corners: [] },
-      { name: "Spare Room", id: '', grid: [], corners: [] },
-      { name: "Nook", id: '', grid: [], corners: [] },
-      { name: "Kitchen", id: '', grid: [], corners: [] },
-      { name: "Corridor", id: '', grid: [], corners: [] },
-      { name: "Music Room", id: '', grid: [], corners: [] },
-      { name: "Lavatory", id: '', grid: [], corners: [] },
-      { name: "Solarium", id: '', grid: [], corners: [] },
-      { name: "Hallway", id: '', grid: [], corners: [] },
-      { name: "Dining Room", id: '', grid: [], corners: [] },
-      { name: "Observatory", id: '', grid: [], corners: [] },
-      { name: "East Wing Hall", id: '', grid: [], corners: [] },
-      { name: "Bedroom", id: '', grid: [], corners: [] },
-      { name: "Drawing Room", id: '', grid: [], corners: [] },
-      { name: "Gallery", id: '', grid: [], corners: [] },
-      { name: "Library", id: '', grid: [], corners: [] },
-      { name: "Cloister", id: '', grid: [], corners: [] },
+      { name: "Coat Check", id: '', grid: [
+        Realm.Yellow, Realm.Green, Realm.Yellow,
+        Realm.Black, Realm.Black, Realm.Blue,
+        Realm.Green, Realm.Blue
+      ], corners: [Realm.Blue, Realm.Black, Realm.Black, Realm.Blue] },
+      { name: "Aquarium", id: '', grid: [
+        Realm.Pink, Realm.Grey, Realm.Yellow,
+        Realm.Red, Realm.Yellow, Realm.White,
+        Realm.Orange, Realm.Blue, Realm.Black
+      ], corners: Array(4).fill(Realm.Yellow) },
+      { name: "Foyer", id: '', grid: [
+        Realm.Green, Realm.Green, Realm.Green,
+        Realm.Grey, Realm.Orange, Realm.Orange,
+        Realm.Blue, Realm.Grey, Realm.Violet
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Pool", id: '', grid: [
+        Realm.Red, Realm.White, Realm.Yellow,
+        Realm.Blue, Realm.Green, Realm.Blue,
+        Realm.Blue, Realm.Yellow, Realm.Blue
+      ], corners: Array(4).fill(Realm.Red) },
+      { name: "Servants Quarters", id: '', grid: [
+        Realm.Grey, Realm.Grey, Realm.Grey,
+        Realm.Black, Realm.Red, Realm.Black,
+        Realm.White, Realm.Grey, Realm.Yellow
+      ], corners: Array(4).fill(Realm.Black) },
+      { name: "Pump Room", id: '', grid: [
+        Realm.Violet, Realm.Blue, Realm.Violet,
+        Realm.Black, Realm.Green, Realm.Orange,
+        Realm.Black, Realm.Green, Realm.Orange
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Furnace", id: '', grid: [
+        Realm.Black, Realm.Grey, Realm.Grey,
+        Realm.White, Realm.Green, Realm.White,
+        Realm.Blue, Realm.Yellow, Realm.Orange
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Gymnasium", id: '', grid: [
+        Realm.Pink, Realm.White, Realm.Pink,
+        Realm.Black, Realm.Red, Realm.Black,
+        Realm.Grey, Realm.Grey, Realm.Grey
+      ], corners: Array(4).fill(Realm.Red) },
+      { name: "Laundry", id: '', grid: [
+        Realm.Pink, Realm.Orange, Realm.Violet,
+        Realm.Orange, Realm.Grey, Realm.Grey,
+        Realm.Pink, Realm.Blue, Realm.Violet
+      ], corners: Array(4).fill(Realm.Pink) },
+      { name: "Guest Bedroom", id: '', grid: [
+        Realm.Yellow, Realm.Yellow, Realm.Yellow,
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Grey, Realm.Green, Realm.Grey
+      ], corners: [Realm.Black, Realm.Yellow, Realm.Yellow, Realm.Black] },
+      { name: "Conference", id: '', grid: [
+        Realm.Yellow, Realm.Yellow, Realm.Yellow,
+        Realm.Black, Realm.Grey, Realm.Black,
+        Realm.Orange, Realm.Green, Realm.Orange
+      ], corners: Array(4).fill(Realm.Yellow) },
+      { name: "Den", id: '', grid: [
+        Realm.Grey, Realm.Pink, Realm.Grey,
+        Realm.Orange, Realm.Green, Realm.Orange,
+        Realm.Violet, Realm.Grey, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "West Wing Hall", id: '', grid: [
+        Realm.Black, Realm.Green, Realm.Black,
+        Realm.Grey, Realm.Orange, Realm.Grey,
+        Realm.Violet, Realm.Violet, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Passageway", id: '', grid: [
+        Realm.Pink, Realm.White, Realm.Pink,
+        Realm.Orange, Realm.Red, Realm.Orange,
+        Realm.Violet, Realm.White, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Dark Room", id: '', grid: [
+        Realm.Yellow, Realm.Orange, Realm.Yellow,
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Pink, Realm.Orange, Realm.Pink
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Closet", id: '', grid: [
+        Realm.Pink, Realm.Orange, Realm.Pink,
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Green, Realm.Orange, Realm.Green
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Parlor", id: '', grid: [
+        Realm.Black, Realm.Blue, Realm.Black,
+        Realm.Black, Realm.Green, Realm.Orange,
+        Realm.Blue, Realm.Green, Realm.Blue
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Billiard Room", id: '', grid: [
+        Realm.Pink, Realm.White, Realm.Pink,
+        Realm.Blue, Realm.Grey, Realm.Blue,
+        Realm.Pink, Realm.Red, Realm.Pink
+      ], corners: Array(4).fill(Realm.Red) },
+      { name: "Trophy Room", id: '', grid: [
+        Realm.White, Realm.Red, Realm.Grey,
+        Realm.Grey, Realm.Pink, Realm.Grey,
+        Realm.Black, Realm.Red, Realm.White
+      ], corners: Array(4).fill(Realm.White) },
+      { name: "The Foundation", id: '', grid: [
+        Realm.Grey, Realm.Orange, Realm.Orange,
+        Realm.Yellow, Realm.Orange, Realm.Black,
+        Realm.Blue, Realm.Blue, Realm.Orange
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Ballroom", id: '', grid: [
+        Realm.Green, Realm.White, Realm.White,
+        Realm.Black, Realm.White, Realm.Black,
+        Realm.Blue, Realm.White, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Spare Room", id: '', grid: [
+        Realm.Black, Realm.Blue, Realm.Grey,
+        Realm.Blue, Realm.Orange, Realm.Blue,
+        Realm.Black, Realm.Orange, Realm.Yellow
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Nook", id: '', grid: [
+        Realm.Red, Realm.Green, Realm.Orange,
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Violet, Realm.Blue, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Kitchen", id: '', grid: [
+        Realm.Orange, Realm.Green, Realm.Orange,
+        Realm.Yellow, Realm.Orange, Realm.Orange,
+        Realm.Blue, Realm.Yellow, Realm.Orange
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Corridor", id: '', grid: [
+        Realm.Green, Realm.Yellow, Realm.Green,
+        Realm.Blue, Realm.Orange, Realm.Blue,
+        Realm.Blue, Realm.Orange, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Music Room", id: '', grid: [
+        Realm.Pink, Realm.Blue, Realm.Blue,
+        Realm.Blue, Realm.Blue, Realm.Violet,
+        Realm.Green, Realm.Grey, Realm.Pink
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Lavatory", id: '', grid: [
+        Realm.Orange, Realm.Yellow, Realm.Orange,
+        Realm.Green, Realm.Yellow, Realm.Green,
+        Realm.Black, Realm.Yellow, Realm.Black
+      ], corners: [Realm.Green, Realm.Yellow, Realm.Yellow, Realm.Green] },
+      { name: "Solarium", id: '', grid: [
+        Realm.Black, Realm.Green, Realm.Black,
+        Realm.Orange, Realm.Violet, Realm.Orange,
+        Realm.Blue, Realm.Green, Realm.Blue
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Hallway", id: '', grid: [
+        Realm.White, Realm.White, Realm.White,
+        Realm.Yellow, Realm.White, Realm.Black,
+        Realm.Blue, Realm.Blue, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Dining Room", id: '', grid: [
+        Realm.Pink, Realm.Orange, Realm.Pink,
+        Realm.Orange, Realm.Blue, Realm.Orange,
+        Realm.Pink, Realm.Orange, Realm.Pink
+      ], corners: Array(4).fill(Realm.Orange) },
+      { name: "Observatory", id: '', grid: [
+        Realm.Green, Realm.Blue, Realm.Grey,
+        Realm.Black, Realm.Blue, Realm.Grey,
+        Realm.Violet, Realm.Blue, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "East Wing Hall", id: '', grid: [
+        Realm.Violet, Realm.White, Realm.Violet,
+        Realm.White, Realm.White, Realm.White,
+        Realm.Blue, Realm.Pink, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Bedroom", id: '', grid: [
+        Realm.Orange, Realm.Yellow, Realm.Orange,
+        Realm.Green, Realm.Grey, Realm.Green,
+        Realm.Blue, Realm.Green, Realm.Blue
+      ], corners: Array(4).fill(Realm.Green) },
+      { name: "Drawing Room", id: '', grid: [
+        Realm.Violet, Realm.Violet, Realm.Violet,
+        Realm.Black, Realm.Grey, Realm.Grey,
+        Realm.Orange, Realm.Blue, Realm.Orange
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Gallery", id: '', grid: [
+        Realm.Grey, Realm.Yellow, Realm.Grey,
+        Realm.Black, Realm.Blue, Realm.Black,
+        Realm.Blue, Realm.Blue, Realm.Blue
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Library", id: '', grid: [
+        Realm.Pink, Realm.Orange, Realm.Orange,
+        Realm.Blue, Realm.Blue, Realm.Pink,
+        Realm.Orange, Realm.Orange, Realm.Pink
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Cloister", id: '', grid: [
+        Realm.Pink, Realm.Black, Realm.Pink,
+        Realm.Orange, Realm.Grey, Realm.Orange,
+        Realm.Pink, Realm.Red, Realm.Pink
+      ], corners: [Realm.Orange, Realm.Red, Realm.Red, Realm.Orange] },
       { name: "Conservatory", id: '', grid: [
         Realm.Black, Realm.Grey, Realm.Orange,
         Realm.Orange, Realm.Green, Realm.Orange,
         Realm.Orange, Realm.Green, Realm.Yellow
       ], corners: Array(4).fill(Realm.Green) },
-      { name: "Maid’s Chamber", id: '', grid: [], corners: [] },
-      { name: "Entrance Hall", id: '', grid: [], corners: [] },
-      { name: "Pantry", id: '', grid: [], corners: [] },
-      { name: "Storeroom", id: '', grid: [], corners: [] },
+      { name: "Maid’s Chamber", id: '', grid: [
+        Realm.Pink, Realm.Pink, Realm.Pink,
+        Realm.Orange, Realm.Orange, Realm.Orange,
+        Realm.Violet, Realm.Violet, Realm.Violet
+      ], corners: Array(4).fill(Realm.Violet) },
+      { name: "Entrance Hall", id: '', grid: [
+        Realm.Yellow, Realm.Green, Realm.Grey,
+        Realm.Yellow, Realm.Yellow, Realm.Blue,
+        Realm.Yellow, Realm.Black, Realm.Grey
+      ], corners: Array(4).fill(Realm.Yellow) },
+      { name: "Pantry", id: '', grid: [
+        Realm.Blue, Realm.Violet, Realm.Blue,
+        Realm.Black, Realm.Blue, Realm.Violet,
+        Realm.Blue, Realm.Violet, Realm.Violet
+      ], corners: Array(4).fill(Realm.Blue) },
+      { name: "Storeroom", id: '', grid: [
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Grey, Realm.Orange, Realm.Grey,
+        Realm.Pink, Realm.Red, Realm.Pink
+      ], corners: Array(4).fill(Realm.Red) },
     ],
   },
 ] as const;
