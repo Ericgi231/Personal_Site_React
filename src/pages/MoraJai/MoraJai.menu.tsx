@@ -1,5 +1,6 @@
 import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader } from "@pages/MoraJai/MoraJai.styles.js";
 import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
+import { useEffect } from "react";
 
 interface MoraJaiMenuProps {
   onLevelSelected: (selected: MoraJaiBox) => void;
@@ -7,6 +8,22 @@ interface MoraJaiMenuProps {
 }
 
 const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) => {
+  const handleLevelSelected = (box: MoraJaiBox) => {
+    localStorage.setItem("moraJaiMenuScroll", window.scrollY.toString());
+    onLevelSelected(box);
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("moraJaiMenuScroll");
+    if (saved) {
+      const html = document.documentElement;
+      const prevScrollBehavior = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      window.scrollTo({ top: parseInt(saved, 10), behavior: "auto" });
+      html.style.scrollBehavior = prevScrollBehavior;
+    }
+  }, []);
+
   return (
     <MenuOuterBox>
       <MenuTitle>Mora Jai Boxes Online</MenuTitle>
@@ -24,7 +41,7 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
               <LevelSquare
                 key={box.id}
                 $solved={localStorage.getItem(box.id) === "true"}
-                onClick={() => onLevelSelected(box)}
+                onClick={() => handleLevelSelected(box)}
                 title={box.name}
               >
                 {box.name}
