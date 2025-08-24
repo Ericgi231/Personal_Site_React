@@ -9,9 +9,11 @@ export const GridContainer = styled.div`
   background: #756365;
 
   ${mobile`
-    min-height: 100dvh;
+    height: 100dvh;
+    min-height: unset;
     justify-content: flex-start;
     padding-top: 4px;
+    overflow: hidden;
   `}
 `;
 
