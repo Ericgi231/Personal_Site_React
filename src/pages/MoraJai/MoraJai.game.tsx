@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GridContainer, OuterBox, GridBoxWrapper, GridBox, GridButton, CornerButton, ControlBar, NavButton, SolvedTracker } from "@pages/MoraJai/MoraJai.styles.js";
+import { GridContainer, OuterBox, GridBoxWrapper, GridBox, GridButton, CornerButton, ControlBar, NavButton, SolvedTracker, BoxTitle } from "@pages/MoraJai/MoraJai.styles.js";
 import { handleButtonAction, Realm, GRID_CORNERS, CORNER_KEYS, GRID_SIZE } from "@/pages/MoraJai/MoraJai.helper.js";
 import type { MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
 
@@ -70,6 +70,9 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
         <NavButton onClick={onBack}>
           &larr; Back
         </NavButton>
+        <BoxTitle >
+          {box.name}
+        </BoxTitle>
         <SolvedTracker $active={solvedActive}>
           {solvedActive ? "+2 Allowance" : "Unsolved"}
         </SolvedTracker>

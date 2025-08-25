@@ -44,6 +44,7 @@ const MoraJai = () => {
 };
 
 //TODO Improve styling
+//TODO Standardize style hex codes
 //TODO add custom levels
 
 export default MoraJai;

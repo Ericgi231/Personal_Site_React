@@ -10,8 +10,11 @@ export const GridContainer = styled.div`
 
   ${mobile`
     min-height: 100dvh;
-    justify-content: flex-start;
-    padding-top: 4px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+    padding-left: 4px;
+    padding-right: 4px;
   `}
 `;
 
@@ -55,7 +58,7 @@ export const ControlBar = styled.div`
     gap: 16px;
   `}
   ${mobile`
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
     gap: 10px;
     margin-bottom: 16px;
@@ -63,10 +66,30 @@ export const ControlBar = styled.div`
   `}
 `;
 
-export const NavButton = styled.button`
+export const BoxTitle = styled.div`
+  flex: 0 0 35%;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.2em;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 48px;
-  min-width: 140px;
-  padding: 0 32px;
+  ${mobile`
+    font-size: 1rem;
+    height: 38px;
+  `}
+`;
+
+export const NavButton = styled.button`
+  flex: 0 0 20%;
+  height: 48px;
+  min-width: 0;
+  padding: 0 12px;
   border-radius: 6px;
   border: 3px solid #563013;
   font-size: 1.2rem;
@@ -79,23 +102,22 @@ export const NavButton = styled.button`
   box-shadow: 0 2px 8px #0002;
   ${tablet`
     font-size: 1.05rem;
-    padding: 0 20px;
-    min-width: 110px;
+    padding: 0 8px;
     height: 42px;
   `}
   ${mobile`
     width: 100%;
-    min-width: 0;
     font-size: 1rem;
-    padding: 0 10px;
+    padding: 0 6px;
     margin-right: 0;
     height: 38px;
   `}
 `;
 
 export const SolvedTracker = styled.div<{ $active?: boolean }>`
+  flex: 1 1 45%;
   height: 48px;
-  min-width: 140px;
+  min-width: 0;
   border-radius: 6px;
   border: 3px solid #563013;
   font-size: 1.2rem;
@@ -108,17 +130,17 @@ export const SolvedTracker = styled.div<{ $active?: boolean }>`
   align-items: center;
   justify-content: center;
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   ${tablet`
     font-size: 1.05rem;
-    padding: 0 20px;
-    min-width: 110px;
+    padding: 0 8px;
     height: 42px;
   `}
   ${mobile`
     width: 100%;
-    min-width: 0;
     font-size: 1rem;
-    padding: 0 10px;
+    padding: 0 6px;
     height: 38px;
   `}
 `;
@@ -193,7 +215,7 @@ export const GridButton = styled.button<{
     $corner === 'br' ? 'clip-path: polygon(0 0, 100% 0, 100% calc(100% - 55px), calc(100% - 55px) 100%, 0 100%);' :
     'clip-path: none;'}
   background: ${({ $realm }) => $realm};
-  ${({ $accessible, $realm }) => $accessible ? realmPattern($realm, 0.5) : ""};
+  ${({ $accessible, $realm }) => $accessible ? realmPattern($realm, $realm, 0.5, false) : ""};
 `;
 
 export const CornerButton = styled.button<{ 
@@ -225,12 +247,11 @@ export const CornerButton = styled.button<{
       : `box-shadow: 0 4px 12px #0006, 0 1.5px 0 #fff4 inset;
       transform: none;`
   }
-  ${({ $solved }) =>
-    !$solved
-      ? `filter: saturate(0.55);`
-      : `filter: saturate(1.55);`
+  ${({ $solved, $realm }) =>
+    $solved
+      ? realmPattern($realm, $realm, 0, true)
+      : realmPattern($realm, Realm.Grey, 0, true)
   }
-  ${({ $realm }) => realmPattern($realm)};
 `;
 
 export const MenuOuterBox = styled.div`

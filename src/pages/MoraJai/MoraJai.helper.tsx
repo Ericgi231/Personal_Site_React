@@ -20,7 +20,7 @@ export enum Realm {
   Blue = "#0084ff"
 }
 
-const SHARED_BG = "background-size: 90% 90%; background-repeat: no-repeat; background-position: center;";
+const SHARED_BG = "background-size: 100% 100%; background-repeat: no-repeat; background-position: center;";
 
 function applyShade(hex: string, amount: number) {
   const m = hex.match(/[a-f\d]{2}/gi);
@@ -29,94 +29,114 @@ function applyShade(hex: string, amount: number) {
   return `rgba(${to(0)},${to(1)},${to(2)},1)`;
 }
 
-export const realmPattern = (realm: Realm, shade = 0) => {
-  const color = applyShade(realm, shade);
+/**
+ * Returns the CSS pattern for a given realm.
+ * @param realm The realm symbol
+ * @param baseColor The base color in hex
+ * @param shade A number from -1 to 1 for shading.
+ * @param border If true, adds a border to the SVG.
+ * @returns A CSS string for the background pattern.
+ */
+export const realmPattern = (realm: Realm, baseColor: string, shade: number, border = false) => {
+  const color = applyShade(baseColor, shade);
   let css: string[] = [];
   css.push(SHARED_BG);
 
   switch (realm) {
     case Realm.Blue:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="200" height="228" viewBox="0 0 200 228" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="
-          M100,40
-          Q106.0,60 120,70
-          Q100,110 140,152
-          Q130,152 130,196
-          Q110,158 100,194
-          Q90,158 70,196
-          Q70,152 60,152
-          Q100,110 80,70
-          Q94.6,60 100,40
-          Z" fill="${encodeURIComponent(color)}"/></svg>');`
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="
+          M50,10
+          Q53,23 60,26
+          Q50,60 70,70
+          Q65,72 62,90
+          Q55,77 50,90
+          Q45,77 38,90
+          Q35,72 30,70
+          Q50,60 40,26
+          Q47,23 50,10
+          Z" fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Red:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
           points="
             50,10 
-            90,40 
+            90,45 
             73,85 
-            27,85 
-            10,40
-          " fill="${encodeURIComponent(color)}"/></svg>');`
+            27,85
+            10,45
+          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Green:
       css.push(
         `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
           points="
-            50,15 
+            50,10 
             85,50 
-            50,85 
+            50,90 
             15,50
-          " fill="${encodeURIComponent(color)}"/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Yellow:
       css.push(
         `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
           points="
-            15,75 
-            38,45 
-            48,55 
-            62,20 
-            85,75
-          " fill="${encodeURIComponent(color)}"/></svg>');`
+            20,80 
+            38,30 
+            48,45 
+            58,15 
+            80,80
+          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Orange:
       css.push(
         `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
           points="
-            12,32 
-            50,80 
-            88,32 
-            66,32 
-            50,55 
-            34,32
-          " fill="${encodeURIComponent(color)}"/></svg>');`
+            10,39 
+            50,84
+            90,39 
+            72,24 
+            50,39 
+            28,24
+          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Pink:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="70" height="100" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="0" width="40" height="100" fill="${encodeURIComponent(color)}"/>
-          <circle cx="20" cy="50" r="20" fill="${encodeURIComponent(color)}"/>
-        </svg>');`
+            `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="
+          M60,10
+          L85,35
+          L70,50
+          A10,10 1 0 1 55,75
+          L50,70
+          L35,85
+          L10,60
+          Z
+        "
+        fill="${encodeURIComponent(color)}"
+        ${border ? 'stroke="%23a67c52" stroke-width="3"' : ""}
+      />
+    </svg>');`
       );
       break;
     case Realm.Violet:
       css.push(
         `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
           points="
-            20,10 
-            80,10 
-            60,50 
-            80,90 
-            20,90 
-            40,50
-          " fill="${encodeURIComponent(color)}"/></svg>');`
+            25,15 
+            75,15 
+            65,50 
+            75,85 
+            25,85 
+            35,50
+          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
       );
       break;
     case Realm.Grey:
@@ -124,29 +144,37 @@ export const realmPattern = (realm: Realm, shade = 0) => {
       break;
     case Realm.Black:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <polygon 
             points="
-              40,13
-              50,13 
-              57,25 
-              32,25
-            " fill="${encodeURIComponent(color)}"/>
-          <rect x="25" y="22.5" width="40" height="55" fill="${encodeURIComponent(color)}"/>
-          <polygon 
-            points="
-              32,75 
-              57,75 
-              50,87 
-              40,87
-            " fill="${encodeURIComponent(color)}"/>
+              35,25
+              40,25
+              45,15
+              55,15
+              60,25
+              65,25
+              65,75
+              60,75
+              55,85
+              45,85
+              40,75
+              35,75
+            " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="3"' : ""}/>
         </svg>');`
       );
       break;
     case Realm.White:
       css.push(
         `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18,65 A32,32 0 0 1 82,65" stroke="${encodeURIComponent(color)}" stroke-width="24" fill="none"/>
+          <path 
+            d="
+              M10,65
+              A30,30 0 0 1 90,65
+              L60,70
+              C50,55 40,70 40,70
+              L10,65
+              Z
+            " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/>
         </svg>');`
       );
       break;
