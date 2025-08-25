@@ -1,35 +1,29 @@
+import { useEffect } from "react";
 import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader, AccessibleToggleButton } from "@pages/MoraJai/MoraJai.styles.js";
 import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
-import { useEffect, useState } from "react";
+import { LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP, useLocalStorageState } from "@pages/MoraJai/MoraJai.helper.js";
 
 interface MoraJaiMenuProps {
   onLevelSelected: (selected: MoraJaiBox) => void;
   onCreateLevel: () => void;
+  showPage: boolean;
 }
 
-const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) => {
-  const [accessibleMode, setAccessibleMode] = useState(() => {
-    const stored = localStorage.getItem("accessibleMode");
-    if (stored === null) {
-      localStorage.setItem("accessibleMode", "false");
-      return false;
-    }
-    return stored === "true";
-  });
+const LOCAL_STORAGE_KEY_MENU_SCROLL = "moraJaiMenuScroll";
+
+const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel, showPage }) => {
+  const [accessibleMode, setAccessibleMode] = useLocalStorageState(LOCAL_STORAGE_KEY_ACCESSIBLE, false);
+  const [solvedMap, setSolvedMap] = useLocalStorageState<Record<string, boolean>>(LOCAL_STORAGE_KEY_SOLVED_MAP, {});
+
+  const handleToggleAccessible = () => setAccessibleMode(!accessibleMode);
 
   const handleLevelSelected = (box: MoraJaiBox) => {
-    localStorage.setItem("moraJaiMenuScroll", window.scrollY.toString());
+    localStorage.setItem(LOCAL_STORAGE_KEY_MENU_SCROLL, window.scrollY.toString());
     onLevelSelected(box);
   };
 
-  const handleToggleAccessible = () => {
-    const newValue = !accessibleMode;
-    setAccessibleMode(newValue);
-    localStorage.setItem("accessibleMode", newValue ? "true" : "false");
-  };
-
   useEffect(() => {
-    const saved = localStorage.getItem("moraJaiMenuScroll");
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY_MENU_SCROLL);
     if (saved) {
       const html = document.documentElement;
       const prevScrollBehavior = html.style.scrollBehavior;
@@ -37,10 +31,16 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
       window.scrollTo({ top: parseInt(saved, 10), behavior: "auto" });
       html.style.scrollBehavior = prevScrollBehavior;
     }
-  }, []);
+    if (showPage) {
+      const stored = localStorage.getItem(LOCAL_STORAGE_KEY_SOLVED_MAP);
+      if (stored) {
+        setSolvedMap(JSON.parse(stored));
+      }
+    }
+  }, [showPage]);
 
   return (
-    <MenuOuterBox>
+    <MenuOuterBox style={showPage ? {} : { display: "none" }}>
       <AccessibleToggleButton
         onClick={handleToggleAccessible}
         aria-pressed={accessibleMode}
@@ -62,7 +62,7 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
             {group.boxes.map((box) => (
               <LevelSquare
                 key={box.id}
-                $solved={localStorage.getItem(box.id) === "true"}
+                $solved={!!solvedMap[box.id]}
                 onClick={() => handleLevelSelected(box)}
                 title={box.name}
               >

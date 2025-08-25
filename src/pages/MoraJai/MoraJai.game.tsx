@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react";
 import { GridContainer, OuterBox, GridBoxWrapper, GridBox, GridButton, CornerButton, ControlBar, NavButton, SolvedTracker, BoxTitle } from "@pages/MoraJai/MoraJai.styles.js";
-import { handleButtonAction, Realm, GRID_CORNERS, CORNER_KEYS, GRID_SIZE } from "@/pages/MoraJai/MoraJai.helper.js";
+import { handleButtonAction, Realm, GRID_CORNERS, CORNER_KEYS, useLocalStorageState, LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP } from "@/pages/MoraJai/MoraJai.helper.js";
 import type { MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
 
 interface MoraJaiGameProps {
   onBack: () => void;
   box: MoraJaiBox;
+  showPage: boolean
 }
 
-const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
+const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box, showPage }) => {
   const [buttons, setButtons] = useState<Realm[]>(box.grid);
   const [corners, setCorners] = useState<Realm[]>(box.corners);
   const [cornersSolved, setCornersSolved] = useState<boolean[]>([false, false, false, false]);
   const [buttonPressedIndex, setButtonPressedIndex] = useState<number | null>(null);
   const [cornerPressedIndex, setCornerPressedIndex] = useState<number | null>(null);
-  const [accessibleActive, setAccessibleActive] = useState(() => localStorage.getItem("accessibleMode") === "true");
-  const [solvedActive, setSolvedActive] = useState(() => {
-    const stored = localStorage.getItem(box.id);
-    return stored === "true";
-  });
+  const [accessibleActive, setAccessibleActive] = useState(() => localStorage.getItem(LOCAL_STORAGE_KEY_ACCESSIBLE) === "true");
+  const [solvedMap, setSolvedMap] = useLocalStorageState<Record<string, boolean>>(LOCAL_STORAGE_KEY_SOLVED_MAP, {});
 
   const handleClick = (color: Realm, buttonIndex: number) => {
     console.log(`Grid: ${color} pos ${buttonIndex}`);
@@ -47,6 +45,15 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
   };
 
   useEffect(() => {
+    setButtons(box.grid);
+    setCorners(box.corners);
+    setCornersSolved([false, false, false, false]);
+    setButtonPressedIndex(null);
+    setCornerPressedIndex(null);
+    setAccessibleActive(localStorage.getItem(LOCAL_STORAGE_KEY_ACCESSIBLE) === "true");
+  }, [showPage]);
+
+  useEffect(() => {
     setCornersSolved(prev =>
       prev.map((solved, idx) => 
         solved ? buttons[GRID_CORNERS[CORNER_KEYS[idx]!]] === corners[idx] : false
@@ -56,16 +63,15 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
 
   useEffect(() => {
     if (cornersSolved.every(solved => solved)) {
-      setSolvedActive(true);
+      setSolvedMap(prev => ({
+        ...prev,
+        [box.id]: true
+      }));
     }
   }, [cornersSolved]);
 
-  useEffect(() => {
-    localStorage.setItem(box.id, solvedActive ? "true" : "false");
-  }, [solvedActive]);
-
   return (
-    <GridContainer>
+    <GridContainer style={showPage ? {} : { display: "none" }}>
       <ControlBar>
         <NavButton onClick={onBack}>
           &larr; Back
@@ -73,8 +79,8 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
         <BoxTitle >
           {box.name}
         </BoxTitle>
-        <SolvedTracker $active={solvedActive}>
-          {solvedActive ? "+2 Allowance" : "Unsolved"}
+        <SolvedTracker $active={!!solvedMap[box.id]}>
+          {!!solvedMap[box.id] ? "+2 Allowance" : "Unsolved"}
         </SolvedTracker>
       </ControlBar>
       <OuterBox>

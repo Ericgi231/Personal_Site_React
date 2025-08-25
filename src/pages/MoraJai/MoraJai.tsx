@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { GridContainer } from "@pages/MoraJai/MoraJai.styles.js";
-import MoraJaiGame from "@pages/MoraJai/MoraJai.game.js";
-import MoraJaiMenu from "@pages/MoraJai/MoraJai.menu.js";
+import React, { useEffect, useState, Suspense } from "react";
+import { GridContainer, MoraJaiLoading } from "@pages/MoraJai/MoraJai.styles.js";
 import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
+const MoraJaiMenu = React.lazy(() => import("@pages/MoraJai/MoraJai.menu.js"));
+const MoraJaiGame = React.lazy(() => import("@pages/MoraJai/MoraJai.game.js"));
 
 enum MoraJaiPage {
   Menu = "menu",
@@ -15,7 +15,7 @@ const MoraJai = () => {
   const [selectedBox, setSelectedBox] = useState<MoraJaiBox>(MORA_JAI_BOXES[0]!.boxes[0]!);
 
   useEffect(() => {
-    const onPopState = (event: PopStateEvent) => {
+    const onPopState = () => {
       if (page === MoraJaiPage.Game) {
         setPage(MoraJaiPage.Menu);
       }
@@ -25,26 +25,21 @@ const MoraJai = () => {
   }, [page]);
 
   return (
-    <GridContainer>
-      {page === MoraJaiPage.Menu && (
-        <MoraJaiMenu
+    <Suspense fallback={<MoraJaiLoading>Loading...</MoraJaiLoading>}>
+      <GridContainer>
+        <MoraJaiMenu 
           onLevelSelected={(box: MoraJaiBox) => {
             setSelectedBox(box);
             setPage(MoraJaiPage.Game);
             window.history.pushState({ moraJai: "game" }, "Mora Jai Game");
-          }}
-          onCreateLevel={() => setPage(MoraJaiPage.Editor)}
+          }} onCreateLevel={() => setPage(MoraJaiPage.Editor)} showPage={page === MoraJaiPage.Menu}
         />
-      )}
-      {page === MoraJaiPage.Game && (
-        <MoraJaiGame onBack={() => setPage(MoraJaiPage.Menu) } box={selectedBox}/>
-      )}
-    </GridContainer>
+        <MoraJaiGame onBack={() => setPage(MoraJaiPage.Menu) } box={selectedBox} showPage={page === MoraJaiPage.Game} />
+      </GridContainer>
+    </Suspense>
   );
 };
 
-//TODO Improve styling
-//TODO Standardize style hex codes
 //TODO add custom levels
 
 export default MoraJai;

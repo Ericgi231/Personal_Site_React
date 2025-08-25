@@ -8,6 +8,19 @@ export const BOX_DARK_BROWN = '#2d1c1e';
 export const BOX_TRIM = '#563013';
 export const BOX_METAL = '#a67c52';
 
+export const MoraJaiLoading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: ${MORA_JAI_BACKGROUND};
+  color: ${({ theme }) => theme.colors.textDark};
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+`;
+
 export const GridContainer = styled.div`
   ${flexCenter}
   flex-direction: column;

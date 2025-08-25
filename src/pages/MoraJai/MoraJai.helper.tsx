@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { BOX_METAL } from "./MoraJai.styles.js";
 
 export const GRID_SIZE = 3;
@@ -8,6 +9,8 @@ export const GRID_CORNERS = {
   'br': GRID_SIZE * GRID_SIZE - 1,
 } as const;
 export const CORNER_KEYS = ['tl', 'tr', 'bl', 'br'] as const;
+export const LOCAL_STORAGE_KEY_ACCESSIBLE = "accessibleMode";
+export const LOCAL_STORAGE_KEY_SOLVED_MAP = "moraJaiSolved";
 
 export enum Realm {
   Grey = "#5e6b73",
@@ -29,6 +32,19 @@ function applyShade(hex: string, amount: number) {
   if (!m) throw new Error(`Invalid hex color: ${hex}`);
   const to = (i: number) => Math.round(parseInt(m[i]!, 16) + (255 - parseInt(m[i]!, 16)) * amount);
   return `rgba(${to(0)},${to(1)},${to(2)},1)`;
+}
+
+export function useLocalStorageState<T>(key: string, defaultValue: T) {
+  const [value, setValue] = useState<T>(() => {
+    const stored = localStorage.getItem(key);
+    return stored !== null ? JSON.parse(stored) : defaultValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
 }
 
 /**
