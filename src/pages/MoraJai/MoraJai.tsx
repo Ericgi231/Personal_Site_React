@@ -44,9 +44,6 @@ const MoraJai = () => {
 };
 
 //TODO Improve styling
-//TODO add mobile support
-//TODO Add graphics
 //TODO add custom levels
-//TODO finish adding all standard levels
 
 export default MoraJai;

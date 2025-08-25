@@ -14,6 +14,7 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
   const [cornersSolved, setCornersSolved] = useState<boolean[]>([false, false, false, false]);
   const [buttonPressedIndex, setButtonPressedIndex] = useState<number | null>(null);
   const [cornerPressedIndex, setCornerPressedIndex] = useState<number | null>(null);
+  const [accessibleActive, setAccessibleActive] = useState(() => localStorage.getItem("accessibleMode") === "true");
   const [solvedActive, setSolvedActive] = useState(() => {
     const stored = localStorage.getItem(box.id);
     return stored === "true";
@@ -76,13 +77,13 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
       <OuterBox>
         <GridBoxWrapper>
           <GridBox>
-            {/* ...corners and buttons as before... */}
             {corners.map((color, cornerIndex) => (
               <CornerButton 
                 key={cornerIndex}
                 $corner={CORNER_KEYS[cornerIndex]!} 
                 aria-label={`Corner button ${cornerIndex}, color ${color}`}
-                style={{ background: color }} 
+                $realm={color}
+                $accessible={accessibleActive}
                 $pressed={cornerPressedIndex === cornerIndex}
                 $solved={cornersSolved[cornerIndex]!}
                 onClick={() => handleCornerClick(color, cornerIndex)}/>
@@ -91,13 +92,10 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
               <GridButton
                 key={buttonIndex}
                 $corner={
-                  buttonIndex === 0 ? 'tl' :
-                  buttonIndex === GRID_SIZE - 1 ? 'tr' :
-                  buttonIndex === GRID_SIZE * (GRID_SIZE - 1) ? 'bl' :
-                  buttonIndex === GRID_SIZE * GRID_SIZE - 1 ? 'br' :
-                  'none'
+                  CORNER_KEYS.find((key, idx) => buttonIndex === GRID_CORNERS[key]) ?? 'none'
                 }
-                style={{ background: color }}
+                $realm={color}
+                $accessible={accessibleActive}
                 $pressed={buttonPressedIndex === buttonIndex}
                 onClick={() => handleClick(color, buttonIndex)}
                 aria-label={`Grid button ${buttonIndex}, color ${color}`}

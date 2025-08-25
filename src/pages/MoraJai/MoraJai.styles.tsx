@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { flexCenter, mobile, tablet } from '@styles/Mixins.js';
-import { Realm } from '@pages/MoraJai/MoraJai.helper.js';
+import { Realm, realmPattern } from '@pages/MoraJai/MoraJai.helper.js';
 
 export const GridContainer = styled.div`
   ${flexCenter}
@@ -12,6 +12,36 @@ export const GridContainer = styled.div`
     min-height: 100dvh;
     justify-content: flex-start;
     padding-top: 4px;
+  `}
+`;
+
+export const AccessibleToggleButton = styled.button`
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 20;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 2px solid #888;
+  background: #f8f8f8;
+  color: #222;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border 0.15s;
+  &:hover, &:focus {
+    background: #e0eaff;
+    color: #1a3a6b;
+    border-color: #1a3a6b;
+    outline: none;
+  }
+  ${mobile`
+    position: static;
+    margin-bottom: 12px;
+    width: 100%;
+    left: unset;
+    top: unset;
+    display: block;
   `}
 `;
 
@@ -138,7 +168,11 @@ export const GridBox = styled.div`
   box-sizing: border-box;
 `;
 
-export const GridButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br' | 'none'; $pressed?: boolean }>`
+export const GridButton = styled.button<{ 
+    $corner: 'tl' | 'tr' | 'bl' | 'br' | 'none'; 
+    $pressed: boolean; 
+    $realm: Realm;
+    $accessible: boolean;}>`
   width: 100%;
   height: 100%;
   font-size: 2.2vw;
@@ -151,24 +185,30 @@ export const GridButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br' | '
       ? `box-shadow: 0 1px 2px #0008 inset;
       transform: translateY(4px) scale(0.97);` 
       : `box-shadow: 0 4px 12px #0006, 0 1.5px 0 #fff4 inset;
-      transform: none;`
-  }
+      transform: none;`}
   ${({ $corner }) =>
     $corner === 'tl' ? 'clip-path: polygon(55px 0, 100% 0, 100% 100%, 0 100%, 0 55px);' :
     $corner === 'tr' ? 'clip-path: polygon(0 0, calc(100% - 55px) 0, 100% 55px, 100% 100%, 0 100%);' :
     $corner === 'bl' ? 'clip-path: polygon(0 0, 100% 0, 100% 100%, 55px 100%, 0 calc(100% - 55px));' :
     $corner === 'br' ? 'clip-path: polygon(0 0, 100% 0, 100% calc(100% - 55px), calc(100% - 55px) 100%, 0 100%);' :
     'clip-path: none;'}
+  background: ${({ $realm }) => $realm};
+  ${({ $accessible, $realm }) => $accessible ? realmPattern($realm, 0.5) : ""};
 `;
 
-export const CornerButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br'; $pressed?: boolean; $solved: boolean }>`
+export const CornerButton = styled.button<{ 
+    $corner: 'tl' | 'tr' | 'bl' | 'br'; 
+    $pressed: boolean; 
+    $solved: boolean;
+    $realm: Realm;
+    $accessible: boolean;}>`
   position: absolute;
   width: 18%;
   height: 18%;
   border-radius: 50%;
+  background: #442f31;
   border: 5px solid #563013;
   margin: 2%;
-  background: #2E2926;
   color: white;
   font-size: 1.1em;
   cursor: pointer;
@@ -190,6 +230,7 @@ export const CornerButton = styled.button<{ $corner: 'tl' | 'tr' | 'bl' | 'br'; 
       ? `filter: saturate(0.55);`
       : `filter: saturate(1.55);`
   }
+  ${({ $realm }) => realmPattern($realm)};
 `;
 
 export const MenuOuterBox = styled.div`
@@ -206,6 +247,7 @@ export const MenuOuterBox = styled.div`
   color: ${({ theme }) => theme.colors.text};
   word-break: break-word;
   text-align: center;
+  position: relative;
 
   ${tablet`
     width: 95vw;

@@ -182,8 +182,8 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
       ], corners: [Realm.Black, Realm.Violet, Realm.Orange, Realm.Red] },
       { name: "Coat Check", id: '', grid: [
         Realm.Yellow, Realm.Green, Realm.Yellow,
-        Realm.Black, Realm.Black, Realm.Blue,
-        Realm.Green, Realm.Blue
+        Realm.Black, Realm.Black, Realm.Black,
+        Realm.Blue, Realm.Green, Realm.Blue
       ], corners: [Realm.Blue, Realm.Black, Realm.Black, Realm.Blue] },
       { name: "Aquarium", id: '', grid: [
         Realm.Pink, Realm.Grey, Realm.Yellow,

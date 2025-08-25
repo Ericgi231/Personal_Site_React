@@ -20,6 +20,142 @@ export enum Realm {
   Blue = "#0084ff"
 }
 
+const SHARED_BG = "background-size: 90% 90%; background-repeat: no-repeat; background-position: center;";
+
+function applyShade(hex: string, amount: number) {
+  const m = hex.match(/[a-f\d]{2}/gi);
+  if (!m) throw new Error(`Invalid hex color: ${hex}`);
+  const to = (i: number) => Math.round(parseInt(m[i]!, 16) + (255 - parseInt(m[i]!, 16)) * amount);
+  return `rgba(${to(0)},${to(1)},${to(2)},1)`;
+}
+
+export const realmPattern = (realm: Realm, shade = 0) => {
+  const color = applyShade(realm, shade);
+  let css: string[] = [];
+  css.push(SHARED_BG);
+
+  switch (realm) {
+    case Realm.Blue:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="200" height="228" viewBox="0 0 200 228" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="
+          M100,40
+          Q106.0,60 120,70
+          Q100,110 140,152
+          Q130,152 130,196
+          Q110,158 100,194
+          Q90,158 70,196
+          Q70,152 60,152
+          Q100,110 80,70
+          Q94.6,60 100,40
+          Z" fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Red:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="90" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            50,10 
+            90,40 
+            73,85 
+            27,85 
+            10,40
+          " fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Green:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            50,15 
+            85,50 
+            50,85 
+            15,50
+          " fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Yellow:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            15,75 
+            38,45 
+            48,55 
+            62,20 
+            85,75
+          " fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Orange:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            12,32 
+            50,80 
+            88,32 
+            66,32 
+            50,55 
+            34,32
+          " fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Pink:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="70" height="100" viewBox="0 0 70 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="0" width="40" height="100" fill="${encodeURIComponent(color)}"/>
+          <circle cx="20" cy="50" r="20" fill="${encodeURIComponent(color)}"/>
+        </svg>');`
+      );
+      break;
+    case Realm.Violet:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            20,10 
+            80,10 
+            60,50 
+            80,90 
+            20,90 
+            40,50
+          " fill="${encodeURIComponent(color)}"/></svg>');`
+      );
+      break;
+    case Realm.Grey:
+      // No pattern
+      break;
+    case Realm.Black:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon 
+            points="
+              40,13
+              50,13 
+              57,25 
+              32,25
+            " fill="${encodeURIComponent(color)}"/>
+          <rect x="25" y="22.5" width="40" height="55" fill="${encodeURIComponent(color)}"/>
+          <polygon 
+            points="
+              32,75 
+              57,75 
+              50,87 
+              40,87
+            " fill="${encodeURIComponent(color)}"/>
+        </svg>');`
+      );
+      break;
+    case Realm.White:
+      css.push(
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18,65 A32,32 0 0 1 82,65" stroke="${encodeURIComponent(color)}" stroke-width="24" fill="none"/>
+        </svg>');`
+      );
+      break;
+    default:
+      return "";
+  }
+  return css.join(' ').replace(/\s+/g, ' ');
+};
+
 export function handleButtonAction(
   color: Realm, 
   buttonIndex: number, 

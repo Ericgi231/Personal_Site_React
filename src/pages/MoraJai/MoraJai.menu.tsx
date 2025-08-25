@@ -1,6 +1,6 @@
-import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader } from "@pages/MoraJai/MoraJai.styles.js";
+import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader, AccessibleToggleButton } from "@pages/MoraJai/MoraJai.styles.js";
 import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface MoraJaiMenuProps {
   onLevelSelected: (selected: MoraJaiBox) => void;
@@ -8,9 +8,24 @@ interface MoraJaiMenuProps {
 }
 
 const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) => {
+  const [accessibleMode, setAccessibleMode] = useState(() => {
+    const stored = localStorage.getItem("accessibleMode");
+    if (stored === null) {
+      localStorage.setItem("accessibleMode", "false");
+      return false;
+    }
+    return stored === "true";
+  });
+
   const handleLevelSelected = (box: MoraJaiBox) => {
     localStorage.setItem("moraJaiMenuScroll", window.scrollY.toString());
     onLevelSelected(box);
+  };
+
+  const handleToggleAccessible = () => {
+    const newValue = !accessibleMode;
+    setAccessibleMode(newValue);
+    localStorage.setItem("accessibleMode", newValue ? "true" : "false");
   };
 
   useEffect(() => {
@@ -26,6 +41,13 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
 
   return (
     <MenuOuterBox>
+      <AccessibleToggleButton
+        onClick={handleToggleAccessible}
+        aria-pressed={accessibleMode}
+        aria-label="Toggle accessible mode"
+      >
+        {accessibleMode ? "Accessible: On" : "Accessible: Off"}
+      </AccessibleToggleButton>
       <MenuTitle>Mora Jai Boxes Online</MenuTitle>
       <MenuDescription>
         The magnificent puzzle game Blue Prince by Dogubomb contains many a secret and convoluted puzzle.<br />
