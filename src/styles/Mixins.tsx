@@ -175,22 +175,22 @@ export const cardHover = css`
 //
 
 // Applies styles for mobile screens (max-width: sm)
-export const mobile = (styles: Interpolation<any>) => css`
+export const mobile = (...args: Parameters<typeof css>) => css`
   @media (max-width: ${props => props.theme.breakpoints.sm}) {
-    ${styles}
+    ${css(...args)}
   }
-`
+`;
 
 // Applies styles for tablet screens (max-width: md)
-export const tablet = (styles: Interpolation<any>) => css`
+export const tablet = (...args: Parameters<typeof css>) => css`
   @media (max-width: ${props => props.theme.breakpoints.md}) {
-    ${styles}
+    ${css(...args)}
   }
-`
+`;
 
 // Applies styles for desktop screens (min-width: md)
-export const desktop = (styles: Interpolation<any>) => css`
+export const desktop = (...args: Parameters<typeof css>) => css`
   @media (min-width: ${props => props.theme.breakpoints.md}) {
-    ${styles}
+    ${css(...args)}
   }
-`
+`;

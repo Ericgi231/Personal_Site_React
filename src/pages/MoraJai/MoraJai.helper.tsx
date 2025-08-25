@@ -1,3 +1,5 @@
+import { BOX_METAL } from "./MoraJai.styles.js";
+
 export const GRID_SIZE = 3;
 export const GRID_CORNERS = {
   'tl': 0,
@@ -55,7 +57,8 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
           Q35,72 30,70
           Q50,60 40,26
           Q47,23 50,10
-          Z" fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          Z
+        " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Red:
@@ -67,7 +70,7 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
             73,85 
             27,85
             10,45
-          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Green:
@@ -78,7 +81,7 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
             85,50 
             50,90 
             15,50
-          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Yellow:
@@ -90,7 +93,7 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
             48,45 
             58,15 
             80,80
-          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Orange:
@@ -103,27 +106,23 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
             72,24 
             50,39 
             28,24
-          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Pink:
       css.push(
-            `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="
-          M60,10
-          L85,35
-          L70,50
-          A10,10 1 0 1 55,75
-          L50,70
-          L35,85
-          L10,60
-          Z
-        "
-        fill="${encodeURIComponent(color)}"
-        ${border ? 'stroke="%23a67c52" stroke-width="3"' : ""}
-      />
-    </svg>');`
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="
+            M60,10
+            L85,35
+            L70,50
+            A10,10 1 0 1 55,75
+            L50,70
+            L35,85
+            L10,60
+            Z
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Violet:
@@ -136,7 +135,7 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
             75,85 
             25,85 
             35,50
-          " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/></svg>');`
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.Grey:
@@ -144,38 +143,34 @@ export const realmPattern = (realm: Realm, baseColor: string, shade: number, bor
       break;
     case Realm.Black:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon 
-            points="
-              35,25
-              40,25
-              45,15
-              55,15
-              60,25
-              65,25
-              65,75
-              60,75
-              55,85
-              45,85
-              40,75
-              35,75
-            " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="3"' : ""}/>
-        </svg>');`
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon 
+          points="
+            35,25
+            40,25
+            45,15
+            55,15
+            60,25
+            65,25
+            65,75
+            60,75
+            55,85
+            45,85
+            40,75
+            35,75
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     case Realm.White:
       css.push(
-        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path 
-            d="
-              M10,65
-              A30,30 0 0 1 90,65
-              L60,70
-              C50,55 40,70 40,70
-              L10,65
-              Z
-            " fill="${encodeURIComponent(color)}" ${border ? 'stroke="%23a67c52" stroke-width="4"' : ""}/>
-        </svg>');`
+        `background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path 
+          d="
+            M10,65
+            A30,30 0 0 1 90,65
+            L60,70
+            C50,55 40,70 40,70
+            L10,65
+            Z
+          " fill="${encodeURIComponent(color)}" ${border ? `stroke="${encodeURIComponent(BOX_METAL)}" stroke-width="4"` : ""}/></svg>');`
       );
       break;
     default:

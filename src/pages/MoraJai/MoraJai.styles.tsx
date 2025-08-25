@@ -2,17 +2,21 @@ import { styled } from 'styled-components';
 import { flexCenter, mobile, tablet } from '@styles/Mixins.js';
 import { Realm, realmPattern } from '@pages/MoraJai/MoraJai.helper.js';
 
+export const MORA_JAI_BACKGROUND = '#756365';
+export const BOX_LIGHT_BROWN = '#442f31';
+export const BOX_DARK_BROWN = '#2d1c1e';
+export const BOX_TRIM = '#563013';
+export const BOX_METAL = '#a67c52';
+
 export const GridContainer = styled.div`
   ${flexCenter}
   flex-direction: column;
   min-height: 100vh;
-  background: #756365;
-
+  background: ${MORA_JAI_BACKGROUND};
   ${mobile`
     min-height: 100dvh;
     justify-content: center;
     align-items: center;
-    padding-top: 0;
     padding-left: 4px;
     padding-right: 4px;
   `}
@@ -23,24 +27,24 @@ export const AccessibleToggleButton = styled.button`
   top: 12px;
   left: 12px;
   z-index: 20;
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 2px solid #888;
-  background: #f8f8f8;
-  color: #222;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.card};
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border 0.15s;
+  transition: background ${({ theme }) => theme.transitions.fast}, color ${({ theme }) => theme.transitions.fast}, border ${({ theme }) => theme.transitions.fast};
   &:hover, &:focus {
-    background: #e0eaff;
-    color: #1a3a6b;
-    border-color: #1a3a6b;
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.textDark};
+    border-color: ${({ theme }) => theme.colors.primary};
     outline: none;
   }
   ${mobile`
     position: static;
-    margin-bottom: 12px;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
     width: 100%;
     left: unset;
     top: unset;
@@ -62,22 +66,21 @@ export const ControlBar = styled.div`
     align-items: stretch;
     gap: 10px;
     margin-bottom: 16px;
-    max-width: 98vw;
   `}
 `;
 
 export const BoxTitle = styled.div`
   flex: 0 0 35%;
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.2em;
-  color: #fff;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.2em;
+  color: ${({ theme }) => theme.colors.textDark};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   height: 48px;
   ${mobile`
     font-size: 1rem;
@@ -88,18 +91,16 @@ export const BoxTitle = styled.div`
 export const NavButton = styled.button`
   flex: 0 0 20%;
   height: 48px;
-  min-width: 0;
   padding: 0 12px;
   border-radius: 6px;
-  border: 3px solid #563013;
+  border: 3px solid ${BOX_TRIM};
   font-size: 1.2rem;
   font-weight: bold;
   margin-right: 16px;
   cursor: pointer;
   background: ${Realm.Grey};
-  color: #fff;
-  transition: background 0.2s, font-size 0.2s, padding 0.2s;
-  box-shadow: 0 2px 8px #0002;
+  color: ${({ theme }) => theme.colors.textDark};
+  transition: background ${({ theme }) => theme.transitions.base}, font-size ${({ theme }) => theme.transitions.base}, padding ${({ theme }) => theme.transitions.base};
   ${tablet`
     font-size: 1.05rem;
     padding: 0 8px;
@@ -117,21 +118,16 @@ export const NavButton = styled.button`
 export const SolvedTracker = styled.div<{ $active?: boolean }>`
   flex: 1 1 45%;
   height: 48px;
-  min-width: 0;
   border-radius: 6px;
-  border: 3px solid #563013;
+  border: 3px solid ${BOX_TRIM};
   font-size: 1.2rem;
   font-weight: bold;
   background: ${({ $active }) => $active ? Realm.Blue : Realm.Red};
-  color: #fff;
-  transition: background 0.2s, font-size 0.2s, padding 0.2s;
-  box-shadow: 0 2px 8px #0002;
+  color: ${({ theme }) => theme.colors.textDark};
+  transition: background ${({ theme }) => theme.transitions.base}, font-size ${({ theme }) => theme.transitions.base}, padding ${({ theme }) => theme.transitions.base};
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
   ${tablet`
     font-size: 1.05rem;
     padding: 0 8px;
@@ -146,9 +142,9 @@ export const SolvedTracker = styled.div<{ $active?: boolean }>`
 `;
 
 export const OuterBox = styled.div`
-  background: #2d1c1e;
-  border: 6px solid #a67c52;
-  border-radius: 24px;
+  background: ${BOX_DARK_BROWN};
+  border: 6px solid ${BOX_TRIM};
+  border-radius: 70px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.25);
   position: relative;
   width: 90vw;
@@ -159,11 +155,10 @@ export const OuterBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
   ${mobile`
     width: 98vw;
     max-width: 98vw;
-    border-radius: 0;
+    border-radius: 30px;
     border-width: 3px;
   `}
 `;
@@ -183,11 +178,10 @@ export const GridBox = styled.div`
   gap: 3%;
   width: 90%;
   height: 90%;
-  border: 5px solid #563013;
+  border: 5px solid ${BOX_TRIM};
   border-radius: 12px;
   padding: 4%;
-  background: #442f31;
-  box-sizing: border-box;
+  background: ${BOX_LIGHT_BROWN};
 `;
 
 export const GridButton = styled.button<{ 
@@ -198,10 +192,10 @@ export const GridButton = styled.button<{
   width: 100%;
   height: 100%;
   font-size: 2.2vw;
-  border-radius: 10px;
+  border-radius: 1px;
   border: none;
   cursor: pointer;
-  transition: box-shadow 0.15s, transform 0.15s;
+  transition: box-shadow ${({ theme }) => theme.transitions.fast}, transform ${({ theme }) => theme.transitions.fast};
   ${({ $pressed }) =>
     $pressed
       ? `box-shadow: 0 1px 2px #0008 inset;
@@ -228,10 +222,9 @@ export const CornerButton = styled.button<{
   width: 18%;
   height: 18%;
   border-radius: 50%;
-  background: #442f31;
-  border: 5px solid #563013;
+  background: ${BOX_DARK_BROWN};
+  border: 5px solid ${BOX_TRIM};
   margin: 2%;
-  color: white;
   font-size: 1.1em;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -264,12 +257,9 @@ export const MenuOuterBox = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.lg};
   width: 80vw;
   max-width: 80%;
-  min-width: 0;
   color: ${({ theme }) => theme.colors.text};
-  word-break: break-word;
   text-align: center;
   position: relative;
-
   ${tablet`
     width: 95vw;
     padding: 1.5rem 0.5rem;
@@ -292,7 +282,6 @@ export const LevelGrid = styled.div`
   gap: 1.5rem;
   margin: 0.75rem 0 1.5rem 0;
   width: 100%;
-
   ${tablet`
     grid-template-columns: repeat(3, minmax(120px, 1fr));
     gap: 1rem;
@@ -310,7 +299,6 @@ export const LevelSquare = styled.button<{ $solved?: boolean }>`
   align-items: center;
   justify-content: center;
   min-height: 64px;
-  min-width: 0;
   width: 100%;
   padding: 1rem 0.5rem;
   border-radius: ${({ theme }) => theme.borderRadius.lg};
@@ -320,12 +308,9 @@ export const LevelSquare = styled.button<{ $solved?: boolean }>`
   font-size: 1.1rem;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   text-align: center;
-  word-break: break-word;
-  white-space: normal;
   box-shadow: ${({ theme }) => theme.shadows.sm};
   cursor: pointer;
-  transition: border 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
-
+  transition: border ${({ theme }) => theme.transitions.base}, background ${({ theme }) => theme.transitions.base}, color ${({ theme }) => theme.transitions.base}, box-shadow ${({ theme }) => theme.transitions.base};
   &:hover, &:focus {
     border-color: ${Realm.Blue};
     background: ${Realm.Blue + 22};
@@ -333,7 +318,6 @@ export const LevelSquare = styled.button<{ $solved?: boolean }>`
     box-shadow: ${({ theme }) => theme.shadows.md};
     outline: none;
   }
-
   ${tablet`
     font-size: 1rem;
     padding: 0.75rem 0.25rem;
@@ -353,7 +337,7 @@ export const LocationSection = styled.section`
   background: ${({ theme }) => theme.colors.card};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   box-shadow: ${({ theme }) => theme.shadows.sm};
-  transition: background 0.2s;
+  transition: background ${({ theme }) => theme.transitions.base};
   ${tablet`
     padding: 1rem 0.5rem;
   `}
@@ -376,7 +360,6 @@ export const MenuDescription = styled.p`
   font-size: 1.1em;
   line-height: 1.5;
   color: ${({ theme }) => theme.colors.text};
-  word-break: break-word;
 `;
 
 export const LocationHeader = styled.h2`

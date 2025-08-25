@@ -224,7 +224,7 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
         Realm.Pink, Realm.Orange, Realm.Violet,
         Realm.Orange, Realm.Grey, Realm.Grey,
         Realm.Pink, Realm.Blue, Realm.Violet
-      ], corners: Array(4).fill(Realm.Pink) },
+      ], corners: Array(4).fill(Realm.Violet) },
       { name: "Guest Bedroom", id: '', grid: [
         Realm.Yellow, Realm.Yellow, Realm.Yellow,
         Realm.Black, Realm.Black, Realm.Black,
@@ -299,7 +299,7 @@ const RAW_MORA_JAI_BOXES: MoraJaiBoxGroup[] = [
         Realm.Orange, Realm.Green, Realm.Orange,
         Realm.Yellow, Realm.Orange, Realm.Orange,
         Realm.Blue, Realm.Yellow, Realm.Orange
-      ], corners: Array(4).fill(Realm.Green) },
+      ], corners: Array(4).fill(Realm.Orange) },
       { name: "Corridor", id: '', grid: [
         Realm.Green, Realm.Yellow, Realm.Green,
         Realm.Blue, Realm.Orange, Realm.Blue,
