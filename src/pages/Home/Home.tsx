@@ -46,6 +46,5 @@ const Home = () => (
 
 // TODO: Horse races game
 // TODO: Daily DLE
-// TODO: Mara Jai box game
 
 export default Home;
