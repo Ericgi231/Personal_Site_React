@@ -21,7 +21,7 @@ export const ControlBar = styled.div`
   width: 100%;
   box-sizing: border-box;
 
-  ${mobile(`
+  ${mobile`
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 8px;
@@ -30,7 +30,7 @@ export const ControlBar = styled.div`
       min-width: 0;
       width: 100%;
     }
-  `)}
+  `}
 `
 
 export const PageNumberInput = styled.input`
@@ -62,9 +62,9 @@ export const ControlBarDivider = styled.div`
   background: black;
   margin: 0 16px;
   border-radius: 1px;
-  ${mobile(`
+  ${mobile`
     display: none;
-  `)}
+  `}
 `;
 
 export const ControlCheckbox = styled.label`
@@ -84,15 +84,15 @@ export const StyledStack = styled(Stack)<StyleProps>`
   align-items: center;
   ${({ $top }) =>
     $top &&
-    desktop(`
+    desktop`
       display: none !important;
-    `)
+    `
   }
 
   ${({ $bar, theme }) =>
     $bar && [
       `margin-right: ${theme.spacing.sm};`,
-      tablet(`display: none !important;`)
+      tablet`display: none !important;`
     ]
   }
 `;
@@ -111,13 +111,13 @@ export const FilesGrid = styled.div`
   margin: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs} 
       ${props => props.theme.spacing.xs} ${props => props.theme.spacing.xs};
 
-  ${tablet(`
+  ${tablet`
     grid-template-columns: repeat(2, 1fr);
-  `)}
+  `}
 
-  ${mobile(`
+  ${mobile`
     grid-template-columns: 1fr;
-  `)}
+  `}
 `
 
 export const FileCard = styled.a`

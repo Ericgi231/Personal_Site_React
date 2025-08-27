@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/node",
+    "rootDir": "./node",
+    "module": "commonjs",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+  },
+  "include": ["node/**/*.ts"]
+}
