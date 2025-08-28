@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "homepage": "https://ericgi231.me",
   "scripts": {
-    "dev": "concurrently \"vite\" \"ts-node --project tsconfig.node.json node/server.ts\" \"php -S localhost:8000 -t api\"",
+    "dev": "concurrently \"vite\" \"ts-node --project tsconfig.node.json node/server.ts\" \"php -S localhost:8000\"",
     "build": "vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"api/**/*\" dist/api",
     "deploy": "npm run build && node deploy.js",
     "lint": "eslint .",
