@@ -5,8 +5,7 @@
   "homepage": "https://ericgi231.me",
   "scripts": {
     "generate-exports": "node scripts/generate-exports.js",
-    "dev": "npm run generate-exports && concurrently \"vite\" \"ts-node --project tsconfig.node.json node-api/server.ts\" \"php -S localhost:8000\"",
-    "vite": "vite",
+    "dev": "npm run generate-exports && concurrently \"ts-node --project tsconfig.node.json node-api/server.ts\" \"wait-on tcp:3001 && vite\" \"php -S localhost:8000\"",
     "build": "npm run generate-exports && vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"php-api/**/*\" dist/php-api && copyfiles package.json package-lock.json dist/node-api",
     "deploy": "npm run build && node scripts/deploy.js",
     "lint": "eslint .",
@@ -19,10 +18,12 @@
     "axios": "^1.11.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "eslint-plugin-react": "^7.37.5",
     "express": "^5.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "7.7.1",
+    "ssh2": "^1.17.0",
     "ssh2-sftp-client": "^12.0.1",
     "styled-components": "6.1.19"
   },
@@ -45,6 +46,7 @@
     "globals": "^16.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "wait-on": "^8.0.4"
   }
 }

@@ -94,7 +94,7 @@ setInterval(() => {
       }
     }
   }
-}, 100);
+}, 1000);
 
 // API endpoint to get box states
 app.get("/node-api/boxes", (req, res) => {
