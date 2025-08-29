@@ -1,0 +1,5 @@
+export { default as AnimalRaceBets } from "@pages/AnimalRaceBets/AnimalRaceBets.js";
+export { default as Fileshare } from "@pages/Fileshare/Fileshare.js";
+export { default as Home } from "@pages/Home/Home.js";
+export { default as MoraJai } from "@pages/MoraJai/MoraJai.js";
+export { default as NotFound } from "@pages/NotFound/NotFound.js";

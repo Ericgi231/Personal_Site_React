@@ -1,9 +1,6 @@
 import { Navigate, Routes, Route } from "react-router-dom";
-import Home from '@pages/Home/Home.js';
-import Fileshare from '@pages/Fileshare/Fileshare.js';
+import { Home, Fileshare, MoraJai, NotFound, AnimalRaceBets } from '@/index.js';
 import FileshareHelp from '@pages/Fileshare/FileshareHelp.js';
-import MoraJai from '@pages/MoraJai/MoraJai.js';
-import NotFound from '@pages/NotFound/NotFound.js';
 
 const App = () => (
   <>
@@ -14,6 +11,7 @@ const App = () => (
         <Route path="/help" element={<FileshareHelp />} />
         <Route path="/god" element={<Fileshare />} />
         <Route path="/morajai" element={<MoraJai />} />
+        <Route path="/animal-race-bets" element={<AnimalRaceBets />} />
         <Route path="/collection" />
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

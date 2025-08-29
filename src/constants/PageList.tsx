@@ -20,6 +20,11 @@ export const HOME_NAVIGATION_PAGES: Record<string, NavigationPage> = {
     title: "Mora Jai Boxes",
     description: "A re-creation of the Mora Jai boxes from the game Blue Prince written in Typescript"
   },
+  horses: {
+    url: "/animal-race-bets",
+    title: "Animal Race Betting Game",
+    description: "Watch and bet on horse races with other online players in real-time, made with node.js and websockets"
+  },
   discord_bot: {
     url: "https://github.com/Ericgi231/DiscordBot_Jarvis_Java/tree/master",
     title: "Discord Bot",

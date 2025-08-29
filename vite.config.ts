@@ -20,7 +20,8 @@ export default defineConfig({
   server: {
     host: true,
     proxy: {
-      '/api': 'http://localhost:8000'
+      '/php-api': 'http://localhost:8000',
+      '/node-api': 'http://localhost:3001'
     }
   }
 })

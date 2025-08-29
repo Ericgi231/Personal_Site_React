@@ -11,6 +11,10 @@ enum MoraJaiPage {
 }
 
 const MoraJai = () => {
+  useEffect(() => {
+    document.title = "Mora Jai Is Me";
+  }, []);
+
   const [page, setPage] = useState<MoraJaiPage>(MoraJaiPage.Menu);
   const [selectedBox, setSelectedBox] = useState<MoraJaiBox>(MORA_JAI_BOXES[0]!.boxes[0]!);
 

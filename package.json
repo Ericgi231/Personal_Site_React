@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "homepage": "https://ericgi231.me",
   "scripts": {
-    "dev": "concurrently \"vite\" \"ts-node --project tsconfig.node.json node/server.ts\" \"php -S localhost:8000\"",
-    "build": "vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"api/**/*\" dist/api",
-    "deploy": "npm run build && node deploy.js",
+    "generate-exports": "node scripts/generate-exports.js",
+    "dev": "npm run generate-exports && concurrently \"vite\" \"ts-node --project tsconfig.node.json node-api/server.ts\" \"php -S localhost:8000\"",
+    "vite": "vite",
+    "build": "npm run generate-exports && vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"php-api/**/*\" dist/php-api && copyfiles package.json package-lock.json dist/node-api",
+    "deploy": "npm run build && node scripts/deploy.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -15,6 +17,8 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.1",
     "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -25,6 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^9.30.1",
     "@types/axios": "^0.9.36",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.11",

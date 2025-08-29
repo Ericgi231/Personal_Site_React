@@ -269,7 +269,7 @@ const Fileshare = () => {
     }
     formData.append('nsfw', uploadNSFW ? '1' : '0');
 
-    fetch('/api/uploadFiles.php', {
+    fetch('/php-api/uploadFiles.php', {
       method: 'POST',
       body: formData,
     })
@@ -292,7 +292,7 @@ const Fileshare = () => {
 
   useEffect(() => {
     const start = (page - 1) * FILES_PER_PAGE;
-    let apiCall = `/api/getFilesAndCount.php?start=${start}&size=${FILES_PER_PAGE}`;
+    let apiCall = `/php-api/getFilesAndCount.php?start=${start}&size=${FILES_PER_PAGE}`;
     if (search) {
       apiCall += `&search=${encodeURIComponent(search)}`;
     }

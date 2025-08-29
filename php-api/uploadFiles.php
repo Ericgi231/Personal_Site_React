@@ -26,7 +26,7 @@ try {
     }
 
     $nsfw = isset($_POST['nsfw']) && $_POST['nsfw'] == 1 ? 1 : 0;
-    $uploadDir = __DIR__ . '/../collection/';
+    $uploadDir = '/var/www/html/collection/';
     $results = [];
 
     if (!empty($_FILES['files']['name'][0])) {
