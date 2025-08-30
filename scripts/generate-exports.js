@@ -13,7 +13,7 @@ const header = `// AUTO-GENERATED FILE. DO NOT EDIT.
 `;
 
 const lines = dirs.map(
-  name => `export { default as ${name} } from "@pages/${name}/${name}.js";`
+  name => `export { default as ${name} } from "@pages/${name}/${name}";`
 );
 
 fs.writeFileSync(indexFile, header + lines.join('\n') + '\n');

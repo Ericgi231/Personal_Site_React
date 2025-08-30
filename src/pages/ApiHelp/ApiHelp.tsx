@@ -1,13 +1,13 @@
 import {
   HelpContainer, ApiCard, ApiHeader, Section, SectionTitle, SectionText,
   Table, TableRow, TableHeader, TableCell, ExampleBox
-} from "@pages/Fileshare/FileshareHelp.styles.js";
+} from "@pages/ApiHelp/ApiHelp.styles.js";
 import { MAX_FILE_SIZE_MB } from '@pages/Fileshare/Fileshare.js';
 import { useEffect } from "react";
 
-const FileshareHelp = () => {
+const ApiHelp = () => {
   useEffect(() => {
-    document.title = "Fileshare Is Me";
+    document.title = "Api Is Me";
   }, []);
 
   return (
@@ -210,4 +210,4 @@ const FileshareHelp = () => {
 
 // TODO: Make domain in examples dynamic
 
-export default FileshareHelp;
+export default ApiHelp;

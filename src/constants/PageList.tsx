@@ -10,11 +10,6 @@ export const HOME_NAVIGATION_PAGES: Record<string, NavigationPage> = {
     title: "Public Fileshare UI",
     description: "Upload and view files with reactive search and previews (public and unmoderated)"
   },
-  api_help: {
-    url: "/help",
-    title: "Public Fileshare APIs",
-    description: "Documentation for the RESTful php APIs used to upload and retreive from my public fileshare"
-  },
   mora_jai: {
     url: "/morajai",
     title: "Mora Jai Boxes",
@@ -24,6 +19,11 @@ export const HOME_NAVIGATION_PAGES: Record<string, NavigationPage> = {
     url: "/animal-race-bets",
     title: "Animal Race Betting Game",
     description: "Watch and bet on horse races with other online players in real-time, made with node.js and websockets"
+  },
+  api_help: {
+    url: "/help",
+    title: "Public API Documentation",
+    description: "Documentation for the RESTful php APIs used to upload and retreive from my public fileshare"
   },
   discord_bot: {
     url: "https://github.com/Ericgi231/DiscordBot_Jarvis_Java/tree/master",
