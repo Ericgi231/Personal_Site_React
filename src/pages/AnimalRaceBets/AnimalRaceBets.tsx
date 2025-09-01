@@ -29,7 +29,7 @@ const pageComponents = Object.fromEntries(
 const WS_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3001"
-    : `http://${window.location.hostname}:3001`;
+    : `https://${window.location.hostname}`;
 
 const AnimalRaceBets: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.Connecting);

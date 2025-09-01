@@ -58,6 +58,14 @@ The goal is to learn how to setup and run a NodeJS backend with web sockets. I h
             SetEnv DB_NAME_ENV db_name
         </Directory>
 
+        RewriteEngine On
+        RewriteCond %{HTTP:Upgrade} =websocket [NC]
+        RewriteRule ^/socket.io/(.*)$ ws://localhost:3001/socket.io/$1 [P,L]
+
+        ProxyPreserveHost On
+        ProxyPass "/socket.io/" http://localhost:3001/socket.io/
+        ProxyPassReverse "/socket.io/" http://localhost:3001/socket.io/
+
         ProxyPass /node-api http://localhost:3001/node-api
         ProxyPassReverse /node-api http://localhost:3001/node-api
         ```
