@@ -112,3 +112,5 @@ The goal is to learn how to setup and run a NodeJS backend with web sockets. I h
     ```
     - Note you will need to generate an ssh key pair and add the public key to the known hosts on the server
 1. Run `npm run deploy`
+1. Run `node /var/www/node-api/server.js`
+    - You can automated the backend using pm2
