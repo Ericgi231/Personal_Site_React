@@ -6,9 +6,8 @@ import {
   SocialIcon, 
   NavigationGrid, 
   NavigationBox 
-} from '@pages/Home/Home.styles.js';
-
-import { HOME_NAVIGATION_PAGES } from '@constants/PageList.js';
+} from './Home.styles';
+import { HOME_NAVIGATION_PAGES } from './constants';
 
 const NavigationBoxes = () => (
   <>

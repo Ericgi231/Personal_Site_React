@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, type ChangeEvent } from 'react';
+import { useLocation } from "react-router-dom";
 
 import { 
   AudioBox,
@@ -16,7 +17,7 @@ import {
   UploadErrorPopup,
   VideoBox,
   VideoSource
-} from '@pages/Fileshare/Fileshare.styles.js'
+} from './FileShare.styles';
 
 const FILES_PER_ROW = 5;
 const ROWS = 2;
@@ -106,45 +107,48 @@ const FilesGridCards = ({
 }) => (
   <FilesGrid>
     {files.map((file, index) => {
-      const isBlurred = (file.special && !showNSFW);
+      const isBlurred = file.special && !showNSFW;
       const type = determineFileType(file.file_type);
-      if (type === FileTypeEnum.VIDEO) {
-        return (
-          <FileCard key={file.name}>
-            <VideoBox $blur={isBlurred} controls>
-              <VideoSource src={file.url} />
-              Your browser does not support the video tag.
-            </VideoBox>
-          </FileCard>
-        );
-      } else if (type === FileTypeEnum.IMAGE) {
-        return (
-          <FileCard key={index} href={file.url} rel="noopener noreferrer">
-            <ImageSource src={file.url} alt={file.url} $blur={isBlurred} />
-          </FileCard>
-        );
-      } else if (type === FileTypeEnum.AUDIO) {
-        return (
-          <FileCard key={file.name + '.' + file.file_type}>
-            <AudioBox controls src={file.url}>
-              Your browser does not support the audio element.
-            </AudioBox>
-          </FileCard>
-        );
-      } else if (type === FileTypeEnum.PDF) {
-        return (
-          <FileCard key={index}>
-            <iframe src={file.url} width="100%" height="100%" title={file.name} />
-          </FileCard>
-        );
-      } else {
-        return (
-          <FileCard key={index} href={file.url} rel="noopener noreferrer">
-            {file.name + "." + file.file_type}
-          </FileCard>
-        );
+
+      switch (type) {
+        case FileTypeEnum.VIDEO:
+          return (
+            <FileCard key={file.name}>
+              <VideoBox $blur={isBlurred} controls>
+                <VideoSource src={file.url} />
+                Your browser does not support the video tag.
+              </VideoBox>
+            </FileCard>
+          );
+        case FileTypeEnum.IMAGE:
+          return (
+            <FileCard key={index} href={file.url} rel="noopener noreferrer">
+              <ImageSource src={file.url} alt={file.url} $blur={isBlurred} />
+            </FileCard>
+          );
+        case FileTypeEnum.AUDIO:
+          return (
+            <FileCard key={file.name + '.' + file.file_type}>
+              <AudioBox controls src={file.url}>
+                Your browser does not support the audio element.
+              </AudioBox>
+            </FileCard>
+          );
+        case FileTypeEnum.PDF:
+          return (
+            <FileCard key={index}>
+              <iframe src={file.url} width="100%" height="100%" title={file.name} />
+            </FileCard>
+          );
+        default:
+          return (
+            <FileCard key={index} href={file.url} rel="noopener noreferrer">
+              {file.name + "." + file.file_type}
+            </FileCard>
+          );
+        }
       }
-    })}
+    )}
   </FilesGrid>
 );
 
@@ -218,7 +222,7 @@ const ControlBarSection = ({
   </ControlBar>
 );
 
-const Fileshare = () => {
+const FileShare = () => {
   useEffect(() => {
     document.title = "Fileshare Is Me";
   }, []);
@@ -363,4 +367,4 @@ const Fileshare = () => {
   )
 }
 
-export default Fileshare;
+export default FileShare;

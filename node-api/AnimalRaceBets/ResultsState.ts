@@ -3,6 +3,6 @@ export default class ResultsState {
     return "Results";
   }
   getDuration() {
-    return 30000; // 30 seconds
+    return 5000; // 30 seconds
   }
 }

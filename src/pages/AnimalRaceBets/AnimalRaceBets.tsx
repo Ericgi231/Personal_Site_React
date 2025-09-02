@@ -1,6 +1,9 @@
-import { lazy, useEffect, useState, Suspense, type ReactNode, type LazyExoticComponent, type ComponentType } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Header, Info, GameContext } from "@pages/AnimalRaceBets/shared";
 import { io, type Socket } from "socket.io-client";
+
+// Direct imports instead of lazy loading
+import { Intermission, Betting, Race, Results } from "@pages/AnimalRaceBets/components";
 
 enum GameState {
   Intermission = "Intermission",
@@ -15,16 +18,13 @@ enum ConnectionStatus {
   Disconnected = "disconnected",
 }
 
-const lazyPage = (name: GameState): LazyExoticComponent<ComponentType<any>> =>
-  lazy(() =>
-    import("@pages/AnimalRaceBets/index.js").then((mod) => ({
-      default: mod[name as keyof typeof mod] as ComponentType<any>,
-    }))
-  );
-
-const pageComponents = Object.fromEntries(
-  Object.values(GameState).map((state) => [state, lazyPage(state as GameState)])
-) as Record<GameState, LazyExoticComponent<ComponentType<any>>>;
+// Direct component mapping instead of lazy components
+const pageComponents = {
+  [GameState.Intermission]: Intermission,
+  [GameState.Betting]: Betting,
+  [GameState.Race]: Race,
+  [GameState.Results]: Results,
+} as const;
 
 const WS_URL =
   window.location.hostname === "localhost"
@@ -49,20 +49,21 @@ const AnimalRaceBets: React.FC = () => {
     socket.on("connect", () => setConnectionStatus(ConnectionStatus.Connected));
     socket.on("disconnect", () => setConnectionStatus(ConnectionStatus.Disconnected));
 
+    setSocket(socket);
+
     return () => {
       socket.disconnect();
     };
   }, []);
 
   const Page = pageComponents[gameState];
+
   return (
     <>
       <Header />
-      <Suspense fallback={<div>Loading page...</div>}>
-        <GameContext.Provider value={{ socket, gameData, bettingData }}>
-          <Page />
-        </GameContext.Provider>
-      </Suspense>
+      <GameContext.Provider value={{ socket, gameData, bettingData }}>
+        <Page />
+      </GameContext.Provider>
       <Info status={connectionStatus} />
     </>
   );

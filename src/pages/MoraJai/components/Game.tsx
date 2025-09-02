@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
-import { GridContainer, OuterBox, GridBoxWrapper, GridBox, GridButton, CornerButton, ControlBar, NavButton, SolvedTracker, BoxTitle } from "@pages/MoraJai/MoraJai.styles.js";
-import { handleButtonAction, Realm, GRID_CORNERS, CORNER_KEYS, useLocalStorageState, LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP } from "@/pages/MoraJai/MoraJai.helper.js";
-import type { MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
+import { GridContainer, OuterBox, GridBoxWrapper, GridBox, GridButton, CornerButton, ControlBar, NavButton, SolvedTracker, BoxTitle } from "../MoraJai.styles";
+import { handleButtonAction, Realm, GRID_CORNERS, CORNER_KEYS, useLocalStorageState, LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP } from "../helper";
+import type { MoraJaiBox } from "../boxes";
 
 interface MoraJaiGameProps {
   onBack: () => void;
   box: MoraJaiBox;
-  showPage: boolean
 }
 
-const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box, showPage }) => {
+const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
   const [buttons, setButtons] = useState<Realm[]>(box.grid);
   const [corners, setCorners] = useState<Realm[]>(box.corners);
   const [cornersSolved, setCornersSolved] = useState<boolean[]>([false, false, false, false]);
@@ -51,7 +50,7 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box, showPage }) => {
     setButtonPressedIndex(null);
     setCornerPressedIndex(null);
     setAccessibleActive(localStorage.getItem(LOCAL_STORAGE_KEY_ACCESSIBLE) === "true");
-  }, [showPage]);
+  }, []);
 
   useEffect(() => {
     setCornersSolved(prev =>
@@ -71,7 +70,7 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box, showPage }) => {
   }, [cornersSolved]);
 
   return (
-    <GridContainer style={showPage ? {} : { display: "none" }}>
+    <GridContainer>
       <ControlBar>
         <NavButton onClick={onBack}>
           &larr; Back
@@ -118,4 +117,4 @@ const MoraJaiGame: React.FC<MoraJaiGameProps> = ({ onBack, box, showPage }) => {
   );
 };
 
-export default MoraJaiGame;
+export default Game;

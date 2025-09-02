@@ -3,6 +3,6 @@ export default class RaceState {
     return "Race";
   }
   getDuration() {
-    return 600000; // 10 minutes
+    return 5000; // 10 minutes
   }
 }

@@ -1,8 +1,7 @@
-import React, { useEffect, useState, Suspense } from "react";
-import { GridContainer, MoraJaiLoading } from "@pages/MoraJai/MoraJai.styles.js";
-import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
-const MoraJaiMenu = React.lazy(() => import("@pages/MoraJai/MoraJai.menu.js"));
-const MoraJaiGame = React.lazy(() => import("@pages/MoraJai/MoraJai.game.js"));
+import { useEffect, useState } from "react";
+import { GridContainer } from "./MoraJai.styles";
+import { MORA_JAI_BOXES, type MoraJaiBox } from "./boxes";
+import { Menu, Game } from './components';
 
 enum MoraJaiPage {
   Menu = "menu",
@@ -28,19 +27,36 @@ const MoraJai = () => {
     return () => window.removeEventListener("popstate", onPopState);
   }, [page]);
 
+  const renderCurrentPage = () => {
+    switch (page) {
+      case MoraJaiPage.Menu:
+        return (
+          <Menu 
+            onLevelSelected={(box: MoraJaiBox) => {
+              setSelectedBox(box);
+              setPage(MoraJaiPage.Game);
+              window.history.pushState({ moraJai: "game" }, "Mora Jai Game");
+            }} 
+            onCreateLevel={() => setPage(MoraJaiPage.Editor)} 
+          />
+        );
+      case MoraJaiPage.Game:
+        return (
+          <Game 
+            onBack={() => setPage(MoraJaiPage.Menu)} 
+            box={selectedBox} 
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+
   return (
-    <Suspense fallback={<MoraJaiLoading>Loading...</MoraJaiLoading>}>
-      <GridContainer>
-        <MoraJaiMenu 
-          onLevelSelected={(box: MoraJaiBox) => {
-            setSelectedBox(box);
-            setPage(MoraJaiPage.Game);
-            window.history.pushState({ moraJai: "game" }, "Mora Jai Game");
-          }} onCreateLevel={() => setPage(MoraJaiPage.Editor)} showPage={page === MoraJaiPage.Menu}
-        />
-        <MoraJaiGame onBack={() => setPage(MoraJaiPage.Menu) } box={selectedBox} showPage={page === MoraJaiPage.Game} />
-      </GridContainer>
-    </Suspense>
+    <GridContainer>
+      {renderCurrentPage()}
+    </GridContainer>
   );
 };
 

@@ -1,17 +1,16 @@
 import { useEffect } from "react";
-import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader, AccessibleToggleButton } from "@pages/MoraJai/MoraJai.styles.js";
-import { MORA_JAI_BOXES, type MoraJaiBox } from "@pages/MoraJai/MoraJai.boxes.js";
-import { LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP, useLocalStorageState } from "@pages/MoraJai/MoraJai.helper.js";
+import { MenuOuterBox, LevelGrid, LevelSquare, LocationSection, MenuTitle, MenuDescription, LocationHeader, AccessibleToggleButton } from "../MoraJai.styles";
+import { MORA_JAI_BOXES, type MoraJaiBox } from "../boxes";
+import { LOCAL_STORAGE_KEY_ACCESSIBLE, LOCAL_STORAGE_KEY_SOLVED_MAP, useLocalStorageState } from "../helper";
 
 interface MoraJaiMenuProps {
   onLevelSelected: (selected: MoraJaiBox) => void;
   onCreateLevel: () => void;
-  showPage: boolean;
 }
 
 const LOCAL_STORAGE_KEY_MENU_SCROLL = "moraJaiMenuScroll";
 
-const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel, showPage }) => {
+const Menu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) => {
   const [accessibleMode, setAccessibleMode] = useLocalStorageState(LOCAL_STORAGE_KEY_ACCESSIBLE, false);
   const [solvedMap, setSolvedMap] = useLocalStorageState<Record<string, boolean>>(LOCAL_STORAGE_KEY_SOLVED_MAP, {});
 
@@ -31,16 +30,14 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
       window.scrollTo({ top: parseInt(saved, 10), behavior: "auto" });
       html.style.scrollBehavior = prevScrollBehavior;
     }
-    if (showPage) {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY_SOLVED_MAP);
-      if (stored) {
-        setSolvedMap(JSON.parse(stored));
-      }
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY_SOLVED_MAP);
+    if (stored) {
+      setSolvedMap(JSON.parse(stored));
     }
-  }, [showPage]);
+  }, []);
 
   return (
-    <MenuOuterBox style={showPage ? {} : { display: "none" }}>
+    <MenuOuterBox>
       <AccessibleToggleButton
         onClick={handleToggleAccessible}
         aria-pressed={accessibleMode}
@@ -77,4 +74,4 @@ const MoraJaiMenu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLeve
 };
 
 
-export default MoraJaiMenu;
+export default Menu;

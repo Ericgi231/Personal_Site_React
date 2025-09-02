@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BOX_METAL } from "./MoraJai.styles.js";
+import { BOX_METAL } from "./MoraJai.styles";
 
 export const GRID_SIZE = 3;
 export const GRID_CORNERS = {

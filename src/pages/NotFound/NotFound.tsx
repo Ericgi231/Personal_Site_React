@@ -4,7 +4,7 @@ import {
   ErrorMessage, 
   ErrorDescription, 
   HomeButton 
-} from '@pages/NotFound/NotFound.styles.js';
+} from './NotFound.styles';
 
 const NotFound = () => (
   <>

@@ -3,6 +3,6 @@ export default class IntermissionState {
     return "Intermission";
   }
   getDuration() {
-    return 60000; // 1 minute
+    return 5000; // 1 minute
   }
 }

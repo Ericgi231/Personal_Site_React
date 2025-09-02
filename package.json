@@ -4,9 +4,8 @@
   "version": "0.0.0",
   "homepage": "https://ericgi231.me",
   "scripts": {
-    "generate-exports": "node scripts/generate-exports.js",
-    "dev": "npm run generate-exports && concurrently \"ts-node --project tsconfig.node.json node-api/server.ts\" \"wait-on tcp:3001 && vite\" \"php -S localhost:8000\"",
-    "build": "npm run generate-exports && vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"php-api/**/*\" dist/php-api && copyfiles package.json package-lock.json dist/node-api",
+    "dev": "concurrently \"ts-node --project tsconfig.node.json node-api/server.ts\" \"wait-on tcp:3001 && vite\" \"php -S localhost:8000\"",
+    "build": "vite build && tsc -p tsconfig.node.json && copyfiles -u 1 \"php-api/**/*\" dist/php-api && copyfiles package.json package-lock.json dist/node-api",
     "deploy": "npm run build && node scripts/deploy.js",
     "lint": "eslint .",
     "preview": "vite preview"

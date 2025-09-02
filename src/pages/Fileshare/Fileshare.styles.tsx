@@ -1,8 +1,7 @@
 import { styled } from 'styled-components';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { mobile, tablet, desktop } from '@styles/Mixins.js';
-import { flexCenter, flexColumn } from '@styles/Mixins.js'
+import { mobile, tablet, desktop, flexCenter, flexColumn } from '@styles/Mixins';
 
 interface StyleProps {
   $blur?: boolean;

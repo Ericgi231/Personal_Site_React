@@ -1,5 +1,4 @@
-import { yellow } from "@mui/material/colors";
-import { Realm } from "@pages/MoraJai/MoraJai.helper.js";
+import { Realm } from "./helper";
 
 export type MoraJaiBox = {
   name: string;

@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
-import { flexCenter, mobile, tablet } from '@styles/Mixins.js';
-import { Realm, realmPattern } from '@pages/MoraJai/MoraJai.helper.js';
+import { flexCenter, mobile, tablet } from '@styles/Mixins';
+import { Realm, realmPattern } from './helper';
 
 export const MORA_JAI_BACKGROUND = '#756365';
 export const BOX_LIGHT_BROWN = '#442f31';

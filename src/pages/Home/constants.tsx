@@ -5,7 +5,7 @@ interface NavigationPage {
 }
 
 export const HOME_NAVIGATION_PAGES: Record<string, NavigationPage> = {
-  fileshare: {
+  file_share: {
     url: "/fileshare",
     title: "Public Fileshare UI",
     description: "Upload and view files with reactive search and previews (public and unmoderated)"

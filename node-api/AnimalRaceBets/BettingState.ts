@@ -3,6 +3,6 @@ export default class BettingState {
     return "Betting";
   }
   getDuration() {
-    return 180000; // 3 minutes
+    return 5000; // 3 minutes
   }
 }

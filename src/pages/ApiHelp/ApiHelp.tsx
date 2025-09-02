@@ -1,8 +1,8 @@
 import {
   HelpContainer, ApiCard, ApiHeader, Section, SectionTitle, SectionText,
   Table, TableRow, TableHeader, TableCell, ExampleBox
-} from "@pages/ApiHelp/ApiHelp.styles.js";
-import { MAX_FILE_SIZE_MB } from '@pages/Fileshare/Fileshare.js';
+} from "./ApiHelp.styles";
+import { MAX_FILE_SIZE_MB } from '@pages/FileShare/FileShare';
 import { useEffect } from "react";
 
 const ApiHelp = () => {
