@@ -18,6 +18,7 @@ import {
   VideoBox,
   VideoSource
 } from './FileShare.styles';
+import AdminModal from './modals/AdminModal';
 
 const FILES_PER_ROW = 5;
 const ROWS = 2;
@@ -39,6 +40,11 @@ interface FileData {
   url: string;
   special: boolean;
   created: string;
+}
+
+interface UploadResult {
+  status: string;
+  [key: string]: any;
 }
 
 function determineFileType(fileType: String): FileTypeEnum {
@@ -99,21 +105,32 @@ const PaginationBar = ({
 const FilesGridCards = ({
   files,
   showNSFW,
-  determineFileType
+  determineFileType,
+  isAdmin,
+  onFileClick
 }: {
   files: FileData[];
   showNSFW: boolean;
   determineFileType: (fileType: string) => FileTypeEnum;
+  isAdmin: boolean;
+  onFileClick?: (file: FileData) => void;
 }) => (
   <FilesGrid>
     {files.map((file, index) => {
       const isBlurred = file.special && !showNSFW;
       const type = determineFileType(file.file_type);
+      
+      const handleClick = (e: React.MouseEvent) => {
+        if (isAdmin && onFileClick) {
+          e.preventDefault();
+          onFileClick(file);
+        }
+      };
 
       switch (type) {
         case FileTypeEnum.VIDEO:
           return (
-            <FileCard key={file.name}>
+            <FileCard key={file.name} onClick={handleClick} style={{ cursor: isAdmin ? 'pointer' : 'default' }}>
               <VideoBox $blur={isBlurred} controls>
                 <VideoSource src={file.url} />
                 Your browser does not support the video tag.
@@ -122,13 +139,19 @@ const FilesGridCards = ({
           );
         case FileTypeEnum.IMAGE:
           return (
-            <FileCard key={index} href={file.url} rel="noopener noreferrer">
+            <FileCard 
+              key={index} 
+              href={isAdmin ? undefined : file.url} 
+              rel="noopener noreferrer"
+              onClick={handleClick}
+              style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+            >
               <ImageSource src={file.url} alt={file.url} $blur={isBlurred} />
             </FileCard>
           );
         case FileTypeEnum.AUDIO:
           return (
-            <FileCard key={file.name + '.' + file.file_type}>
+            <FileCard key={file.name + '.' + file.file_type} onClick={handleClick} style={{ cursor: isAdmin ? 'pointer' : 'default' }}>
               <AudioBox controls src={file.url}>
                 Your browser does not support the audio element.
               </AudioBox>
@@ -136,13 +159,19 @@ const FilesGridCards = ({
           );
         case FileTypeEnum.PDF:
           return (
-            <FileCard key={index}>
+            <FileCard key={index} onClick={handleClick} style={{ cursor: isAdmin ? 'pointer' : 'default' }}>
               <iframe src={file.url} width="100%" height="100%" title={file.name} />
             </FileCard>
           );
         default:
           return (
-            <FileCard key={index} href={file.url} rel="noopener noreferrer">
+            <FileCard 
+              key={index} 
+              href={isAdmin ? undefined : file.url} 
+              rel="noopener noreferrer"
+              onClick={handleClick}
+              style={{ cursor: isAdmin ? 'pointer' : 'default' }}
+            >
               {file.name + "." + file.file_type}
             </FileCard>
           );
@@ -223,6 +252,10 @@ const ControlBarSection = ({
 );
 
 const FileShare = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isAdmin = searchParams.get('admin') === 'true';
+
   useEffect(() => {
     document.title = "Fileshare Is Me";
   }, []);
@@ -236,6 +269,10 @@ const FileShare = () => {
   const [uploadNSFW, setUploadNsfwChecked] = useState<boolean>(false);
   const [refreshFiles, setRefreshFiles] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  
+  // Admin modal state
+  const [selectedFile, setSelectedFile] = useState<FileData | null>(null);
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
   const maxPage = Math.ceil(total_files / FILES_PER_PAGE);
 
@@ -259,8 +296,8 @@ const FileShare = () => {
     setPage(pageNum);
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const filesList = e.target.files;
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const filesList = event.target.files;
     if (!filesList || !filesList.length) return;
     const formData = new FormData();
     for (let i = 0; i < filesList.length; i++) {
@@ -273,24 +310,37 @@ const FileShare = () => {
     }
     formData.append('nsfw', uploadNSFW ? '1' : '0');
 
-    fetch('/php-api/uploadFiles.php', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(async res => {
-        const data = await res.json();
-        if (!res.ok || data.status === 'error') {
-          throw new Error(data.message || 'Upload failed');
-        }
-        return data;
-      })
-      .then(() => {
-        setRefreshFiles(r => !r);
-        setUploadError(null);
-      })
-      .catch(err => {
-        setUploadError(err.message || 'Unknown error');
+    try {
+      const response = await fetch('/php-api/uploadFiles.php', {
+        method: 'POST',
+        body: formData,
       });
+
+      const data = await response.json();
+      
+      // Check for actual upload failures
+      if (data.results) {
+        const failedUploads = (data.results as UploadResult[]).filter((result: UploadResult) => result.status === 'failed');
+        const dbErrors: UploadResult[] = (data.results as UploadResult[]).filter((result: UploadResult) => result.status === 'db error');
+        
+        if (failedUploads.length > 0) {
+          setUploadError(`${failedUploads.length} files failed to upload`);
+          return;
+        }
+        
+        if (dbErrors.length > 0) {
+          setUploadError(`Database errors occurred for ${dbErrors.length} files`);
+          return;
+        }
+      }
+
+      // Only refresh if all uploads actually succeeded
+      setRefreshFiles(r => !r);
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      setUploadError('Upload failed: ' + errorMessage);
+    }
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -328,6 +378,73 @@ const FileShare = () => {
     setPage(1);
   }, [search]);
 
+  const handleFileClick = (file: FileData) => {
+    if (isAdmin) {
+      setSelectedFile(file);
+      setShowAdminModal(true);
+    }
+  };
+
+  const handleAdminUpdate = async (updatedData: Partial<FileData>) => {
+    if (!selectedFile) return;
+
+    try {
+      const response = await fetch('/php-api/updateFile.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          originalName: selectedFile.name,
+          fileType: selectedFile.file_type,
+          newName: updatedData.name,
+          special: updatedData.special ? 1 : 0
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || data.status === 'error') {
+        throw new Error(data.message || 'Update failed');
+      }
+
+      setRefreshFiles(r => !r);
+      setUploadError(null);
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : 'Update failed');
+      throw error;
+    }
+  };
+
+  const handleAdminDelete = async () => {
+    if (!selectedFile) return;
+
+    try {
+      const response = await fetch('/php-api/deleteFile.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: selectedFile.name,
+          fileType: selectedFile.file_type
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || data.status === 'error') {
+        throw new Error(data.message || 'Delete failed');
+      }
+
+      setRefreshFiles(r => !r);
+      setUploadError(null);
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : 'Delete failed');
+      throw error;
+    }
+  };
+
   return (
     <>
       <ErrorPopup error={uploadError} onClose={() => setUploadError(null)} />
@@ -356,6 +473,8 @@ const FileShare = () => {
         files={files}
         showNSFW={showNSFW}
         determineFileType={determineFileType}
+        isAdmin={isAdmin}
+        onFileClick={handleFileClick}
       />
       <PaginationBar
         count={maxPage}
@@ -363,6 +482,18 @@ const FileShare = () => {
         onChange={handlePageChange}
         siblings={1}
       />
+      
+      {showAdminModal && selectedFile && (
+        <AdminModal
+          file={selectedFile}
+          onClose={() => {
+            setShowAdminModal(false);
+            setSelectedFile(null);
+          }}
+          onUpdate={handleAdminUpdate}
+          onDelete={handleAdminDelete}
+        />
+      )}
     </>
   )
 }

@@ -17,7 +17,7 @@ export const HOME_NAVIGATION_PAGES: Record<string, NavigationPage> = {
   },
   horses: {
     url: "/animal-race-bets",
-    title: "Animal Race Betting Game",
+    title: "Animal Race Betting Game (In Progress)",
     description: "Watch and bet on horse races with other online players in real-time, made with node.js and websockets"
   },
   api_help: {

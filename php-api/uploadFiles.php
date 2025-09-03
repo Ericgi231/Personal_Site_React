@@ -26,8 +26,13 @@ try {
     }
 
     $nsfw = isset($_POST['nsfw']) && $_POST['nsfw'] == 1 ? 1 : 0;
-    $uploadDir = '/var/www/html/collection/';
+    
+    // Use environment-aware path resolution
+    $uploadDir = COLLECTION_PATH . '/';
     $results = [];
+
+    // Debug logging
+    error_log("UploadFiles: Collection path is " . COLLECTION_PATH);
 
     if (!empty($_FILES['files']['name'][0])) {
         foreach ($_FILES['files']['name'] as $idx => $name) {
