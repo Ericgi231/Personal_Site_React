@@ -285,7 +285,11 @@ const FileShare = () => {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    const newSearch = e.target.value;
+    if (newSearch !== search) {
+      setPage(1);
+    }
+    setSearch(newSearch);
   };
 
   const handleUploadClick = () => {
@@ -373,10 +377,6 @@ const FileShare = () => {
         setUploadError(err.message || 'Unknown error');
       });
   }, [page, search, refreshFiles]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [search]);
 
   const handleFileClick = (file: FileData) => {
     if (isAdmin) {
