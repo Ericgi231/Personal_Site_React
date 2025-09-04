@@ -315,7 +315,7 @@ const FileShare = () => {
     formData.append('nsfw', uploadNSFW ? '1' : '0');
 
     try {
-      const response = await fetch('/php-api/uploadFiles.php', {
+      const response = await fetch('/php-api/fileshare/uploadFiles.php', {
         method: 'POST',
         body: formData,
       });
@@ -350,7 +350,7 @@ const FileShare = () => {
 
   useEffect(() => {
     const start = (page - 1) * FILES_PER_PAGE;
-    let apiCall = `/php-api/getFilesAndCount.php?start=${start}&size=${FILES_PER_PAGE}`;
+    let apiCall = `/php-api/fileshare/getFilesAndCount.php?start=${start}&size=${FILES_PER_PAGE}`;
     if (search) {
       apiCall += `&search=${encodeURIComponent(search)}`;
     }
@@ -389,7 +389,7 @@ const FileShare = () => {
     if (!selectedFile) return;
 
     try {
-      const response = await fetch('/php-api/updateFile.php', {
+      const response = await fetch('/php-api/fileshare/updateFile.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -420,7 +420,7 @@ const FileShare = () => {
     if (!selectedFile) return;
 
     try {
-      const response = await fetch('/php-api/deleteFile.php', {
+      const response = await fetch('/php-api/fileshare/deleteFile.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -14,7 +14,7 @@ const ApiHelp = () => {
     <HelpContainer>
       <ApiCard>
         <ApiHeader>
-          GET Files API <span style={{fontSize: "0.95rem", fontWeight: 400, marginLeft: "auto"}}>GET /php-api/getFilesAndCount.php</span>
+          GET Files API <span style={{fontSize: "0.95rem", fontWeight: 400, marginLeft: "auto"}}>GET /api/fileshare/getFilesAndCount</span>
         </ApiHeader>
         <Section>
           <SectionTitle>Description</SectionTitle>
@@ -67,13 +67,13 @@ const ApiHelp = () => {
           <SectionTitle>Example Requests</SectionTitle>
           <SectionText>
             <strong>Get the first 10 files:</strong>
-            <ExampleBox>/php-api/getFilesAndCount.php</ExampleBox>
+            <ExampleBox>/api/fileshare/getFilesAndCount</ExampleBox>
             <strong>Get files 20–29:</strong>
-            <ExampleBox>/php-api/getFilesAndCount.php?start=20&amp;size=10</ExampleBox>
+            <ExampleBox>/api/fileshare/getFilesAndCount?start=20&amp;size=10</ExampleBox>
             <strong>Get 5 random files:</strong>
-            <ExampleBox>/php-api/getFilesAndCount.php?size=5&amp;random=1</ExampleBox>
+            <ExampleBox>/api/fileshare/getFilesAndCount?size=5&amp;random=1</ExampleBox>
             <strong>Search for files with names like "onetwo":</strong>
-            <ExampleBox>/php-api/getFilesAndCount.php?search=onetwo</ExampleBox>
+            <ExampleBox>/api/fileshare/getFilesAndCount?search=onetwo</ExampleBox>
           </SectionText>
         </Section>
         <Section>
@@ -117,7 +117,7 @@ const ApiHelp = () => {
 
       <ApiCard>
         <ApiHeader>
-          Upload Files API <span style={{fontSize: "0.95rem", fontWeight: 400, marginLeft: "auto"}}>POST /php-api/uploadFiles.php</span>
+          Upload Files API <span style={{fontSize: "0.95rem", fontWeight: 400, marginLeft: "auto"}}>POST /api/fileshare/uploadFiles</span>
         </ApiHeader>
         <Section>
           <SectionTitle>Description</SectionTitle>
@@ -158,7 +158,7 @@ const ApiHelp = () => {
           <SectionTitle>Example Request (cURL)</SectionTitle>
           <SectionText>
             <ExampleBox>
-              {`curl -X POST -F "files[]=@/path/to/file1.jpg" -F "files[]=@/path/to/file2.mp4" -F "nsfw=1" https://ericgi231.me/php-api/uploadFiles.php`}
+              {`curl -X POST -F "files[]=@/path/to/file1.jpg" -F "files[]=@/path/to/file2.mp4" -F "nsfw=1" https://ericgi231.me/api/fileshare/uploadFiles`}
             </ExampleBox>
           </SectionText>
         </Section>

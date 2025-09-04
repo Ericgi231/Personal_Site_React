@@ -26,3 +26,6 @@ dist-ssr
 
 collection/
 /php-api/info.php
+/node-api/ecosystem.config.js
+/config/nodemon.json
+/config/php-dev.php

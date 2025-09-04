@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '../config.php';
+
 define('SERVER', 'localhost');
 define('DB_USER_ENV', 'DB_USER_ENV');
 define('DB_PASS_ENV', 'DB_PASS_ENV');

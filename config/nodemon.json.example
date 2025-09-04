@@ -3,6 +3,6 @@
   "ext": "ts,js,json", 
   "exec": "ts-node --project tsconfig.node.json node-api/server.ts",
   "env": {
-    "NODE_ENV": "development"
+    "EXAMPLE_VAR": "Dev env variable for nodejs-api"
   }
 }

@@ -4,7 +4,7 @@ module.exports = {
     script: './server.js',
     cwd: '/var/www/node-api',
     env: {
-        EXAMPLE_VAR: 'value',
+        EXAMPLE_VAR: 'Prod env var for nodejs-api',
     },
     instances: 1,
     autorestart: true,
