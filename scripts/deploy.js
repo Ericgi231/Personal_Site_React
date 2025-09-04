@@ -13,6 +13,15 @@ const config = {
   privateKey: fs.readFileSync(process.env.DEPLOY_KEY_PATH)
 };
 
+const PROTECTED_DIRECTORIES = [
+  '/var/www/html',
+  '/var/www/html/collection',
+  '/var/www', 
+  '/',
+  '/home',
+  '/etc'
+];
+
 async function uploadDir(localDir, remoteDir, exclude = []) {
   const files = fs.readdirSync(localDir);
   for (const file of files) {
@@ -29,24 +38,38 @@ async function uploadDir(localDir, remoteDir, exclude = []) {
   }
 }
 
-async function clearRemoteDir(remoteDir) {
+async function clearRemoteDir(remoteDir, exclude = ['node_modules']) {
+  // Safety check - never delete protected directories
+  const normalizedPath = path.posix.normalize(remoteDir);
+  if (PROTECTED_DIRECTORIES.includes(normalizedPath)) {
+    console.log(`SAFETY: Refusing to clear protected directory: ${remoteDir}`);
+    return;
+  }
+
   try {
     const list = await sftp.list(remoteDir);
     for (const item of list) {
+      // Skip excluded directories/files
+      if (exclude.includes(item.name)) {
+        console.log(`Skipping excluded item: ${item.name}`);
+        continue;
+      }
+
       const remotePath = path.posix.join(remoteDir, item.name);
       if (item.type === 'd') {
-        await clearRemoteDir(remotePath);
+        await clearRemoteDir(remotePath, exclude);
         await sftp.rmdir(remotePath, true);
       } else {
         await sftp.delete(remotePath);
       }
     }
-    console.log(`Cleared remote directory: ${remoteDir}`);
+    console.log(`Cleared remote directory: ${remoteDir} (excluding: ${exclude.join(', ')})`);
   } catch (err) {
-    // If the directory doesn't exist, ignore the error
     if (err.code !== 2) {
+      console.error(`Failed to clear ${remoteDir}:`, err.message);
       throw err;
     }
+    console.log(`Directory ${remoteDir} doesn't exist, skipping cleanup`);
   }
 }
 
@@ -55,7 +78,8 @@ function runRemoteCommand(command, cwd = null) {
     const ssh = new SSHClient();
     ssh
       .on('ready', () => {
-        ssh.exec(cwd ? `cd ${cwd} && ${command}` : command, (err, stream) => {
+        const fullCommand = cwd ? `cd ${cwd} && ${command}` : command;
+        ssh.exec(fullCommand, (err, stream) => {
           if (err) {
             ssh.end();
             return reject(err);
@@ -66,7 +90,7 @@ function runRemoteCommand(command, cwd = null) {
               if (code === 0) {
                 resolve();
               } else {
-                reject(new Error(`Remote command failed with code ${code}`));
+                reject(new Error(`Remote command failed with code ${code}: ${fullCommand}`));
               }
             })
             .on('data', data => process.stdout.write(data))
@@ -79,16 +103,24 @@ function runRemoteCommand(command, cwd = null) {
 
 async function main() {
   try {
+    console.log('Starting deployment...');
     await sftp.connect(config);
 
-    // Upload apis
-    await uploadDir('dist/node-api', '/var/www/node-api');
-    await uploadDir('dist/php-api', '/var/www/php-api');
-
-    // Delete old assets
+    // Clean target directories before upload (preserve node_modules)
+    console.log('Cleaning remote directories...');
+    await clearRemoteDir('/var/www/node-api', ['node_modules']);
+    await clearRemoteDir('/var/www/php-api'); 
     await clearRemoteDir('/var/www/html/assets');
 
-    // Upload dist (excluding apis) to /var/www/html
+    // Upload APIs
+    console.log('Uploading Node.js API...');
+    await uploadDir('dist/node-api', '/var/www/node-api');
+    
+    console.log('Uploading PHP API...');
+    await uploadDir('dist/php-api', '/var/www/php-api');
+
+    // Upload frontend (excluding APIs)
+    console.log('Uploading frontend...');
     const distFiles = fs.readdirSync('dist').filter(f => f !== 'node-api' && f !== 'php-api');
     for (const file of distFiles) {
       const localPath = path.join('dist', file);
@@ -104,13 +136,19 @@ async function main() {
 
     await sftp.end();
 
-    // Run npm install in /var/www/node-api on the server
-    console.log('Running npm install in /var/www/node-api...');
-    await runRemoteCommand('npm install', '/var/www/node-api');
+    // Install dependencies and restart services
+    console.log('Installing Node.js dependencies...');
+    await runRemoteCommand('npm ci --omit=dev', '/var/www/node-api');
 
-    console.log('Deploy complete!\n\nNOTE: If any new files were created you will need to ssh into the server and run:\nchown -R www-data:www-users /var/www/node /var/www/html\nchmod -R 775 /var/www/node /var/www/html');
+    console.log('Restarting Node.js API...');
+    await runRemoteCommand('pm2 restart ecosystem.config.js', '/var/www/node-api');
+
+    console.log('Deploy complete!');
+    console.log('\nNOTE: If any new files were created you may need to run:');
+    console.log('   chown -R www-data:www-users /var/www/node-api /var/www/php-api /var/www/html');
+    console.log('   chmod -R 775 /var/www/node-api /var/www/php-api /var/www/html');
   } catch (err) {
-    console.error('Deploy failed:', err);
+    console.error('Deploy failed:', err.message);
     process.exit(1);
   }
 }

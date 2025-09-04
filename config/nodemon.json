@@ -1,0 +1,8 @@
+{
+  "watch": ["node-api"],
+  "ext": "ts,js,json", 
+  "exec": "ts-node --project tsconfig.node.json node-api/server.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
