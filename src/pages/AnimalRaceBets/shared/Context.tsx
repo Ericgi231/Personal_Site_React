@@ -1,5 +1,5 @@
 // AnimalRaceBets.context.tsx
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 import { Socket } from "socket.io-client";
 
 interface GameContextType {

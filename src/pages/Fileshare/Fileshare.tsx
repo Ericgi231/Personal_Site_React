@@ -43,11 +43,14 @@ interface FileData {
 }
 
 interface UploadResult {
-  status: string;
-  [key: string]: any;
+  status: 'success' | 'failed' | 'db error';
+  filename?: string;
+  message?: string;
+  error?: string;
+  filesize?: number;
 }
 
-function determineFileType(fileType: String): FileTypeEnum {
+function determineFileType(fileType: string): FileTypeEnum {
   if (fileType.match(/(png|jpg|jpeg|gif|webp|ico)$/i)) {
     return FileTypeEnum.IMAGE;
   } else if (fileType.match(/(mp4|webm|ogg|mkv)$/i)) {
@@ -324,9 +327,13 @@ const FileShare = () => {
       
       // Check for actual upload failures
       if (data.results) {
-        const failedUploads = (data.results as UploadResult[]).filter((result: UploadResult) => result.status === 'failed');
-        const dbErrors: UploadResult[] = (data.results as UploadResult[]).filter((result: UploadResult) => result.status === 'db error');
-        
+        const failedUploads = data.results.filter((result: UploadResult) => 
+          result.status === 'failed'
+        );
+        const dbErrors = data.results.filter((result: UploadResult) => 
+          result.status === 'db error'
+        );
+
         if (failedUploads.length > 0) {
           setUploadError(`${failedUploads.length} files failed to upload`);
           return;

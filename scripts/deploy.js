@@ -1,9 +1,13 @@
-require('dotenv').config();
+import 'dotenv/config';
+import Client from 'ssh2-sftp-client';
+import { Client as SSHClient } from 'ssh2';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
-const Client = require('ssh2-sftp-client');
-const { Client: SSHClient } = require('ssh2');
-const path = require('path');
-const fs = require('fs');
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const sftp = new Client();
 
@@ -38,7 +42,7 @@ async function uploadDir(localDir, remoteDir, exclude = []) {
   }
 }
 
-async function clearRemoteDir(remoteDir, exclude = ['node_modules']) {
+async function clearRemoteDir(remoteDir, exclude = []) {
   // Safety check - never delete protected directories
   const normalizedPath = path.posix.normalize(remoteDir);
   if (PROTECTED_DIRECTORIES.includes(normalizedPath)) {

@@ -4,6 +4,8 @@
     "rootDir": "./node-api",
     "module": "commonjs",
     "target": "esnext",
+    "moduleResolution": "node",
+    "types": ["node"],
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,

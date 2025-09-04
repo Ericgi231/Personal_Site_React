@@ -4,6 +4,6 @@ return [
     'DB_PASS_ENV' => 'userpass',
     'DB_NAME_ENV' => 'dbname'
     'COLLECTION_PATH_ENV'=> 'path/to/collection',
-    'EXAMPLE_VAR' => 'dev only env variables'
+    'EXAMPLE_VAR_ENV' => 'Dev env variable for nodejs-api'
 ];
 ?>

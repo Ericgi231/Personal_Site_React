@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Header, Info, GameContext } from "@pages/AnimalRaceBets/shared";
 import { io, type Socket } from "socket.io-client";
 

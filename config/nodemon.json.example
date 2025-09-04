@@ -1,8 +1,13 @@
 {
   "watch": ["node-api"],
-  "ext": "ts,js,json", 
+  "ext": "ts,js,json",
   "exec": "ts-node --project tsconfig.node.json node-api/server.ts",
   "env": {
     "EXAMPLE_VAR": "Dev env variable for nodejs-api"
-  }
+  },
+  "ignore": [
+    "node_modules/*",
+    "dist/*",
+    "*.test.ts"
+  ]
 }

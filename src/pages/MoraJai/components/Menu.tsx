@@ -34,7 +34,7 @@ const Menu: React.FC<MoraJaiMenuProps> = ({ onLevelSelected, onCreateLevel }) =>
     if (stored) {
       setSolvedMap(JSON.parse(stored));
     }
-  }, []);
+  }, [setSolvedMap]);
 
   return (
     <MenuOuterBox>

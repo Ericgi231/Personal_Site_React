@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-
 const Intermission = () => (
   <div style={{ background: "#e0e0e0", padding: 40, textAlign: "center", fontSize: "2rem" }}>
     <h1>Intermission</h1>

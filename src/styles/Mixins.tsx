@@ -1,4 +1,4 @@
-import { css, type Interpolation } from 'styled-components';
+import { css } from 'styled-components';
 
 // Flexbox utilities
 //

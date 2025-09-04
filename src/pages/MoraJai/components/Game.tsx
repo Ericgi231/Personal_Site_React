@@ -50,7 +50,7 @@ const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
     setButtonPressedIndex(null);
     setCornerPressedIndex(null);
     setAccessibleActive(localStorage.getItem(LOCAL_STORAGE_KEY_ACCESSIBLE) === "true");
-  }, []);
+  }, [box.corners, box.grid]);
 
   useEffect(() => {
     setCornersSolved(prev =>
@@ -58,7 +58,7 @@ const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
         solved ? buttons[GRID_CORNERS[CORNER_KEYS[idx]!]] === corners[idx] : false
       )
     );
-  }, [buttons]);
+  }, [buttons, corners]);
 
   useEffect(() => {
     if (cornersSolved.every(solved => solved)) {
@@ -67,7 +67,7 @@ const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
         [box.id]: true
       }));
     }
-  }, [cornersSolved]);
+  }, [cornersSolved, box.id, setSolvedMap]);
 
   return (
     <GridContainer>
@@ -78,8 +78,8 @@ const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
         <BoxTitle >
           {box.name}
         </BoxTitle>
-        <SolvedTracker $active={!!solvedMap[box.id]}>
-          {!!solvedMap[box.id] ? "+2 Allowance" : "Unsolved"}
+        <SolvedTracker $active={Boolean(solvedMap[box.id])}>
+          {solvedMap[box.id] ? "+2 Allowance" : "Unsolved"}
         </SolvedTracker>
       </ControlBar>
       <OuterBox>
@@ -100,7 +100,7 @@ const Game: React.FC<MoraJaiGameProps> = ({ onBack, box }) => {
               <GridButton
                 key={buttonIndex}
                 $corner={
-                  CORNER_KEYS.find((key, idx) => buttonIndex === GRID_CORNERS[key]) ?? 'none'
+                  CORNER_KEYS.find((key) => buttonIndex === GRID_CORNERS[key]) ?? 'none'
                 }
                 $realm={color}
                 $accessible={accessibleActive}

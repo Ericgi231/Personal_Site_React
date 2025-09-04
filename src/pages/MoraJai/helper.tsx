@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { BOX_METAL } from "./MoraJai.styles";
 
 export const GRID_SIZE = 3;
@@ -199,7 +199,7 @@ export function handleButtonAction(
   color: Realm, 
   buttonIndex: number, 
   buttons: Realm[], 
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>)
+  setButtons: Dispatch<SetStateAction<Realm[]>>)
 {
   switch (color) {
     case Realm.Grey:
@@ -240,7 +240,7 @@ const handleGrey = () => {};
 const handleBlack = (
   buttons: Realm[],
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   const row = Math.floor(buttonIndex / GRID_SIZE);
   const start = row * GRID_SIZE;
@@ -257,7 +257,7 @@ const handleBlack = (
 const handleGreen = (
   buttons: Realm[],
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   if (buttonIndex === Math.floor(buttons.length / 2)) return;
   const oppositeIndex = buttons.length - 1 - buttonIndex;
@@ -270,7 +270,7 @@ const handleGreen = (
 
 const handlePink = (
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   const directions = [
     [-1, -1], [0, -1], [1, -1],
@@ -305,7 +305,7 @@ const handlePink = (
 
 const handleYellow = (
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   if (buttonIndex < GRID_SIZE) return;
   setButtons(prev => {
@@ -317,7 +317,7 @@ const handleYellow = (
 
 const handleViolet = (
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   if (buttonIndex >= (GRID_SIZE * GRID_SIZE) - GRID_SIZE) return;
   setButtons(prev => {
@@ -328,7 +328,7 @@ const handleViolet = (
 };
 
 const handleRed = (
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   setButtons(prev =>
     prev.map((color) => {
@@ -342,7 +342,7 @@ const handleRed = (
 const handleOrange = (
   buttons: Realm[],
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   const neighbors = [
     buttonIndex % GRID_SIZE !== 0 ? buttons[buttonIndex - 1] : null,
@@ -374,7 +374,7 @@ const handleOrange = (
 export const handleWhite = (
   buttons: Realm[],
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   const orthogonalDirs = [
     -GRID_SIZE, 
@@ -415,7 +415,7 @@ export const handleWhite = (
 const handleBlue = (
   buttons: Realm[],
   buttonIndex: number,
-  setButtons: React.Dispatch<React.SetStateAction<Realm[]>>
+  setButtons: Dispatch<SetStateAction<Realm[]>>
 ) => {
   const middleIndex = Math.floor(buttons.length / 2);
   const middleColor = buttons[middleIndex];

@@ -1,9 +1,16 @@
+import { Server as SocketIOServer } from 'socket.io';
 import IntermissionState from "./IntermissionState";
 import BettingState from "./BettingState";
 import RaceState from "./RaceState";
 import ResultsState from "./ResultsState";
 
-const STATES = [
+// Define interface for your state objects
+interface GameState {
+  getName(): string;
+  getDuration(): number;
+}
+
+const STATES: GameState[] = [
   new IntermissionState(),
   new BettingState(),
   new RaceState(),
@@ -13,22 +20,22 @@ const STATES = [
 export default class StateManager {
   private currentIndex = 0;
   private timer: NodeJS.Timeout | null = null;
-  private io: any;
+  private io: SocketIOServer;
 
-  constructor(io: any) {
+  constructor(io: SocketIOServer) {
     this.io = io;
   }
 
-  getState() {
+  getState(): string {
     return STATES[this.currentIndex].getName();
   }
 
-  start() {
+  start(): void {
     this.emitState();
     this.scheduleNext();
   }
 
-  private scheduleNext() {
+  private scheduleNext(): void {
     const duration = STATES[this.currentIndex].getDuration();
     this.timer = setTimeout(() => {
       this.currentIndex = (this.currentIndex + 1) % STATES.length;
@@ -37,7 +44,14 @@ export default class StateManager {
     }, duration);
   }
 
-  private emitState() {
+  private emitState(): void {
     this.io.emit("state", { state: this.getState() });
+  }
+
+  stop(): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
   }
 }

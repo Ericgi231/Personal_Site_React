@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import {
   HelpContainer, ApiCard, ApiHeader, Section, SectionTitle, SectionText,
   Table, TableRow, TableHeader, TableCell, ExampleBox
