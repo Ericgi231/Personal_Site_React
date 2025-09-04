@@ -28,9 +28,9 @@ $name = $input['name'];
 $fileType = $input['fileType'];
 
 $servername = SERVER;
-$sqlUserName = getenv(DB_USER_ENV);
-$sqlPassword = getenv(DB_PASS_ENV);
-$dbname = getenv(DB_NAME_ENV);
+$sqlUserName = DB_USER;
+$sqlPassword = DB_PASS;
+$dbname = DB_NAME;
 
 try {
     $conn = new mysqli($servername, $sqlUserName, $sqlPassword, $dbname);

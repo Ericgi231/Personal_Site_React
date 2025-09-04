@@ -3,6 +3,7 @@ return [
     'DB_USER_ENV' => 'username',
     'DB_PASS_ENV' => 'userpass',
     'DB_NAME_ENV' => 'dbname'
+    'COLLECTION_PATH_ENV'=> 'path/to/collection',
     'EXAMPLE_VAR' => 'dev only env variables'
 ];
 ?>
