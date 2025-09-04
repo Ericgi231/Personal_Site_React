@@ -5,7 +5,7 @@
   "homepage": "https://ericgi231.me",
   "scripts": {
     "dev": "concurrently \"npm run dev:node\" \"npm run dev:php\" \"npm run dev:react\"",
-    "dev:node": "nodemon -c config/nodemon.json",
+    "dev:node": "nodemon --config config/nodemon.json",
     "dev:php": "php -S localhost:8000",
     "dev:react": "wait-on tcp:3001 && vite",
     "build": "npm run clean && npm run build:frontend && npm run build:backend && npm run build:php && npm run build:configs",
