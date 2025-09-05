@@ -1,0 +1,15 @@
+{
+  "watch": ["node-api/animal-race-bets/"],
+  "ext": "ts,js,json",
+  "exec": "ts-node --project node-api/tsconfig.json node-api/animal-race-bets/animal-race-bets-server.ts",
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": "3002",
+    "DEBUG": "true"
+  },
+  "ignore": [
+    "node_modules/*",
+    "dist/*",
+    "*.test.ts"
+  ]
+}

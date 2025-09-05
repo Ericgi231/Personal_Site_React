@@ -125,18 +125,19 @@ async function main() {
 
     // Upload frontend (excluding APIs)
     console.log('Uploading frontend...');
-    const distFiles = fs.readdirSync('dist').filter(f => f !== 'node-api' && f !== 'php-api');
-    for (const file of distFiles) {
-      const localPath = path.join('dist', file);
-      const remotePath = path.posix.join('/var/www/html', file);
-      if (fs.statSync(localPath).isDirectory()) {
-        try { await sftp.mkdir(remotePath, true); } catch {}
-        await uploadDir(localPath, remotePath);
-      } else {
-        await sftp.put(localPath, remotePath);
-        console.log(`Uploaded: ${localPath} -> ${remotePath}`);
-      }
-    }
+    await uploadDir('dist', '/var/www/html', ['node-api', 'php-api']);
+    // const distFiles = fs.readdirSync('dist').filter(f => f !== 'node-api' && f !== 'php-api');
+    // for (const file of distFiles) {
+    //   const localPath = path.join('dist', file);
+    //   const remotePath = path.posix.join('/var/www/html', file);
+    //   if (fs.statSync(localPath).isDirectory()) {
+    //     try { await sftp.mkdir(remotePath, true); } catch {}
+    //     await uploadDir(localPath, remotePath);
+    //   } else {
+    //     await sftp.put(localPath, remotePath);
+    //     console.log(`Uploaded: ${localPath} -> ${remotePath}`);
+    //   }
+    // }
 
     await sftp.end();
 

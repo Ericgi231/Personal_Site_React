@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
-    "express": "^5.1.0",
     "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "socket.io": "^4.8.1"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/http-proxy-middleware": "^0.19.3"
   }
 }

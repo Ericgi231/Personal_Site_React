@@ -1,3 +1,4 @@
+// Add prod env variables on your web server
 <?php
 return [
     'DB_USER_ENV' => 'username',

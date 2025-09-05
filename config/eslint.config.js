@@ -58,7 +58,7 @@ export default [
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: './tsconfig.node.json',
+        project: './tsconfig.json',
         ecmaVersion: 2022,
         sourceType: 'script',
       },

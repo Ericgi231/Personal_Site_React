@@ -47,27 +47,26 @@ The goal is to learn how to setup and run a NodeJS backend with web sockets. I h
         - Your sites config must contain the following
         ```
         DocumentRoot /var/www/html
+        # Alias php to directory
         Alias /php-api /var/www/php-api
+        # Set PHP env variables
         <Directory /var/www/php-api>
             Options Indexes FollowSymLinks
             AllowOverride None
             Require all granted
-
-            SetEnv DB_USER_ENV db_usr_name
-            SetEnv DB_PASS_ENV db_usr_pass
-            SetEnv DB_NAME_ENV db_name
+            SetEnv DB_USER_ENV god
+            SetEnv DB_PASS_ENV HorseQueen17
+            SetEnv DB_NAME_ENV god
+            SetEnv COLLECTION_PATH /var/www/html/collection
         </Directory>
-
-        RewriteEngine On
-        RewriteCond %{HTTP:Upgrade} =websocket [NC]
-        RewriteRule ^/socket.io/(.*)$ ws://localhost:3001/socket.io/$1 [P,L]
-
-        ProxyPreserveHost On
-        ProxyPass "/socket.io/" http://localhost:3001/socket.io/
-        ProxyPassReverse "/socket.io/" http://localhost:3001/socket.io/
-
+        # Proxy node api connections
         ProxyPass /node-api http://localhost:3001/node-api
         ProxyPassReverse /node-api http://localhost:3001/node-api
+        # Proxy WebSocket connections
+        RewriteEngine On
+        RewriteCond %{HTTP:Upgrade} websocket [NC]
+        RewriteCond %{HTTP:Connection} upgrade [NC]
+        RewriteRule ^/node-api/(.*)$ ws://localhost:3001/node-api/$1 [P,L]
         ```
 1. PHP
     - Configured to allow environment variables by adding this line to your php.ini

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/node-api",
-    "rootDir": "./node-api",
+    "outDir": "../dist/node-api",
+    "rootDir": "./",
     "module": "commonjs",
     "target": "esnext",
     "moduleResolution": "node",
@@ -10,5 +10,5 @@
     "strict": true,
     "skipLibCheck": true,
   },
-  "include": ["node-api/**/*.ts"]
+  "include": ["./**/*.ts"]
 }

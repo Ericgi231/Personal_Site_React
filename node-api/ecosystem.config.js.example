@@ -1,14 +1,24 @@
 module.exports = {
-  apps: [{
-    name: 'node-api',
-    script: './server.js',
-    cwd: '/var/www/node-api',
-    env: {
-        EXAMPLE_VAR: 'Prod env var for nodejs-api',
+  apps: [
+    {
+      name: 'app-router',
+      script: './routing-server.js',
+      env: { PORT: 3001 },
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '512M'
     },
-    instances: 1,
-    autorestart: true,
-    watch: false,
-    max_memory_restart: '1G'
-  }]
+    {
+      name: 'animal-race-bets-server',
+      script: './animal-race-bets-server.js',
+      cwd: './animal-race-bets',
+      env: { PORT: 3002 },
+      ignore_watch: ['node_modules'],
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G'
+    }
+  ]
 };
