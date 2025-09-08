@@ -1,5 +1,5 @@
 {
-  "name": "my-site",
+  "name": "@my-site/app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,12 +10,13 @@
     "dev:node-races": "nodemon --config config/nodemon/races.json",
     "dev:php": "php -S localhost:8000",
     "dev:react": "wait-on tcp:3001 && vite",
-    "build": "npm run clean && npm run build:frontend && npm run build:backend && npm run build:php && npm run build:configs",
+    "build": "npm run clean && npm run build:shared && npm run copy:shared && npm run build:frontend && npm run build:backend && npm run copy:php && npm run copy:backend",
+    "build:shared": "tsc -p shared/tsconfig.json",
+    "copy:shared": "copyfiles -u 2 \"shared/dist/**/*\" dist/node-api/shared",
     "build:frontend": "vite build",
     "build:backend": "tsc -p node-api/tsconfig.json",
-    "build:php": "copyfiles -u 1 \"php-api/**/*\" dist/php-api",
-    "build:configs": "npm run generate:lockfile && copyfiles -f node-api/package.json node-api/package-lock.json node-api/ecosystem.config.js dist/node-api",
-    "generate:lockfile": "cd node-api && npm install --package-lock-only",
+    "copy:backend": "copyfiles -f node-api/package.json node-api/ecosystem.config.js dist/node-api",
+    "copy:php": "copyfiles -u 1 \"php-api/**/*\" dist/php-api",
     "clean": "rimraf dist",
     "deploy": "npm run build && node scripts/deploy.js",
     "lint": "eslint . -c config/eslint.config.js",
@@ -23,6 +24,10 @@
     "lint:backend": "eslint node-api -c config/eslint.config.js",
     "preview": "vite preview"
   },
+  "workspaces": [
+    "shared",
+    "node-api"
+  ],
   "dependencies": {
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.1",
@@ -60,7 +65,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
-    "rimraf": "^3.0.2",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
     "vite": "^7.0.4",

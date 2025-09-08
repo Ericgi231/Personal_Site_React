@@ -1,8 +1,9 @@
 {
-  "name": "node-api",
+  "name": "@my-site/api",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "@my-site/shared": "file:./shared",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-proxy-middleware": "^3.0.5",

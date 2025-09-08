@@ -33,11 +33,30 @@ async function uploadDir(localDir, remoteDir, exclude = []) {
     const localPath = path.join(localDir, file);
     const remotePath = path.posix.join(remoteDir, file);
     if (fs.statSync(localPath).isDirectory()) {
-      try { await sftp.mkdir(remotePath, true); } catch {}
+      await ensureRemoteDir(remotePath);
       await uploadDir(localPath, remotePath, exclude);
     } else {
-      await sftp.put(localPath, remotePath);
-      console.log(`Uploaded: ${localPath} -> ${remotePath}`);
+      try {
+        await sftp.put(localPath, remotePath);
+        console.log(`Uploaded: ${localPath} -> ${remotePath}`);
+      } catch (err) {
+        console.error(`Failed to upload ${localPath}:`, err.message);
+        throw err;
+      }
+    }
+  }
+}
+
+async function ensureRemoteDir(remotePath) {
+  const parts = remotePath.split('/').filter(Boolean);
+  let currentPath = '';
+  
+  for (const part of parts) {
+    currentPath += '/' + part;
+    try {
+      await sftp.mkdir(currentPath);
+    } catch (err) {
+      console.log(`Directory exists or error: ${currentPath}`);
     }
   }
 }
@@ -116,34 +135,20 @@ async function main() {
     await clearRemoteDir('/var/www/php-api'); 
     await clearRemoteDir('/var/www/html/assets');
 
-    // Upload APIs
     console.log('Uploading Node.js API...');
     await uploadDir('dist/node-api', '/var/www/node-api');
     
     console.log('Uploading PHP API...');
     await uploadDir('dist/php-api', '/var/www/php-api');
 
-    // Upload frontend (excluding APIs)
     console.log('Uploading frontend...');
-    await uploadDir('dist', '/var/www/html', ['node-api', 'php-api']);
-    // const distFiles = fs.readdirSync('dist').filter(f => f !== 'node-api' && f !== 'php-api');
-    // for (const file of distFiles) {
-    //   const localPath = path.join('dist', file);
-    //   const remotePath = path.posix.join('/var/www/html', file);
-    //   if (fs.statSync(localPath).isDirectory()) {
-    //     try { await sftp.mkdir(remotePath, true); } catch {}
-    //     await uploadDir(localPath, remotePath);
-    //   } else {
-    //     await sftp.put(localPath, remotePath);
-    //     console.log(`Uploaded: ${localPath} -> ${remotePath}`);
-    //   }
-    // }
+    await uploadDir('dist/html', '/var/www/html');
 
     await sftp.end();
 
     // Install dependencies and restart services
     console.log('Installing Node.js dependencies...');
-    await runRemoteCommand('npm ci --omit=dev', '/var/www/node-api');
+    await runRemoteCommand('npm install --omit=dev', '/var/www/node-api');
 
     console.log('Restarting Node.js API...');
     await runRemoteCommand('pm2 restart ecosystem.config.js', '/var/www/node-api');

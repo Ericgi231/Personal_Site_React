@@ -1,7 +1,7 @@
 {
-  "watch": ["node-api/routing-server.ts"],
+  "watch": ["node-api/src/routing-server.ts"],
   "ext": "ts,js,json",
-  "exec": "ts-node --project node-api/tsconfig.json node-api/routing-server.ts",
+  "exec": "ts-node --project node-api/tsconfig.json node-api/src/routing-server.ts",
   "env": {
     "NODE_ENV": "development",
     "PORT": "3001",

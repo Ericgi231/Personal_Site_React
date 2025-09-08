@@ -3,8 +3,7 @@ import { generateIntermissionData, INTERMISSION_DURATION } from './states/interm
 import { generateBettingData, BETTING_DURATION } from './states/betting';
 import { generateRaceData, RACE_DURATION } from './states/race';
 import { generateResultsData, RESULTS_DURATION } from './states/results';
-
-type GameState = 'intermission' | 'betting' | 'race' | 'results';
+import { GameState, GameUpdatePayload, TestEnum } from '@my-site/shared';
 
 interface StateConfig {
   name: GameState;
@@ -13,6 +12,10 @@ interface StateConfig {
 }
 
 export class GameCycle {
+  //temp
+  private payload: GameUpdatePayload | null = null;
+  private test: TestEnum | null = null;
+
   private io: SocketIOServer;
   private currentStateIndex = 0;
   private stateTimer: NodeJS.Timeout | null = null;
@@ -43,6 +46,12 @@ export class GameCycle {
 
   constructor(io: SocketIOServer) {
     this.io = io;
+    this.payload = new Object() as GameUpdatePayload;
+    this.payload.data = {};
+    this.payload.state = 'intermission';
+    this.payload.timeRemaining = 1000;
+    this.payload.timestamp = Date.now();
+    this.test = TestEnum.INTERMISSION;
   }
 
   start(): void {
