@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
-    "@my-site/shared": "file:./shared",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-proxy-middleware": "^3.0.5",
@@ -13,6 +12,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@types/http-proxy-middleware": "^0.19.3"
+    "@types/http-proxy-middleware": "^0.19.3",
+    "@types/express": "^5.0.3"
   }
 }

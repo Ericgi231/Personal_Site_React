@@ -4,12 +4,11 @@
     "rootDir": "./src",
     "module": "commonjs",
     "target": "esnext",
-    "moduleResolution": "node",
     "types": ["node"],
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "shared"]
+  "include": ["src/**/*.ts"]
 }

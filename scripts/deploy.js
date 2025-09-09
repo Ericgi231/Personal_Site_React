@@ -30,12 +30,32 @@ async function uploadDir(localDir, remoteDir, exclude = []) {
   const files = fs.readdirSync(localDir);
   for (const file of files) {
     if (exclude.includes(file)) continue;
+    
     const localPath = path.join(localDir, file);
     const remotePath = path.posix.join(remoteDir, file);
+    
     if (fs.statSync(localPath).isDirectory()) {
-      await ensureRemoteDir(remotePath);
+      try {
+        await sftp.mkdir(remotePath, true); // recursive = true
+      } catch (err) {
+        if (err.code !== 4) { // Ignore "directory exists" errors
+          console.error(`Failed to create directory ${remotePath}:`, err.message);
+          throw err;
+        }
+      }
+      
       await uploadDir(localPath, remotePath, exclude);
     } else {
+      const parentDir = path.posix.dirname(remotePath);
+      try {
+        await sftp.mkdir(parentDir, true);
+      } catch (err) {
+        if (err.code !== 4) { // Ignore "directory exists" errors
+          console.error(`Failed to create parent directory ${parentDir}:`, err.message);
+          throw err;
+        }
+      }
+      
       try {
         await sftp.put(localPath, remotePath);
         console.log(`Uploaded: ${localPath} -> ${remotePath}`);
@@ -43,20 +63,6 @@ async function uploadDir(localDir, remoteDir, exclude = []) {
         console.error(`Failed to upload ${localPath}:`, err.message);
         throw err;
       }
-    }
-  }
-}
-
-async function ensureRemoteDir(remotePath) {
-  const parts = remotePath.split('/').filter(Boolean);
-  let currentPath = '';
-  
-  for (const part of parts) {
-    currentPath += '/' + part;
-    try {
-      await sftp.mkdir(currentPath);
-    } catch (err) {
-      console.log(`Directory exists or error: ${currentPath}`);
     }
   }
 }

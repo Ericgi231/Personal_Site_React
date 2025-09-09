@@ -1,54 +1,39 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
+    // Directory
     "rootDir": "./src",
     "outDir": "./dist/html",
-
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
+    // Modules
     "module": "esnext",
     "target": "esnext",
+    "moduleResolution": "node",
+    // Vite
     "types": ["vite/client"],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-
-    // Other Outputs
+    "isolatedModules": true,
+    // Build Output
     "sourceMap": false,
     "declaration": false,
     "declarationMap": false,
+    // Path resolution
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"],
       "@styles/*": ["styles/*"],
-      "@pages/*": ["pages/*"],
-      "@constants/*": ["constants/*"]
+      "@pages/*": ["pages/*"]
     },
-
-    // Stricter Typechecking Options
+    // React integration
+    "jsx": "react-jsx",
+    // Type safety
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
     "strict": true,
-    "jsx": "react-jsx",
+    // Module Options
     "verbatimModuleSyntax": false,
-    "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
