@@ -19,7 +19,8 @@
     "copy:shared": "copyfiles -u 2 \"shared/dist/**/*\" dist/node-api/shared/dist && copyfiles -f shared/package.json dist/node-api/shared",
     "copy:php": "copyfiles -u 1 \"php-api/**/*\" dist/php-api",
 
-    "clean": "rimraf dist",
+    "shared": "rimraf ./shared/dist && tsc -p shared/tsconfig.json",
+    "clean": "rimraf dist ./shared/dist",
     "deploy": "npm run build && node scripts/deploy.js",
     "lint": "eslint . -c config/eslint.config.js",
     "lint:frontend": "eslint src -c config/eslint.config.js",

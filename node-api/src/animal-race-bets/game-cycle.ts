@@ -3,18 +3,17 @@ import { generateIntermissionData, INTERMISSION_DURATION } from './states/interm
 import { generateBettingData, BETTING_DURATION } from './states/betting';
 import { generateRaceData, RACE_DURATION } from './states/race';
 import { generateResultsData, RESULTS_DURATION } from './states/results';
-import { GameState, GameUpdatePayload, TestEnum } from '@my-site/shared';
+import { GameStateEnum } from '@my-site/shared/animal-race-bets';
 
 interface StateConfig {
-  name: GameState;
+  name: GameStateEnum;
   duration: number;
   generateData: () => any;
 }
 
 export class GameCycle {
   //temp
-  private payload: GameUpdatePayload | null = null;
-  private test: TestEnum | null = null;
+  private GameStateEnum = GameStateEnum.Betting;
 
   private io: SocketIOServer;
   private currentStateIndex = 0;
@@ -23,22 +22,22 @@ export class GameCycle {
   
   private states: StateConfig[] = [
     {
-      name: 'intermission',
+      name: GameStateEnum.Intermission,
       duration: INTERMISSION_DURATION,
       generateData: generateIntermissionData
     },
     {
-      name: 'betting', 
+      name: GameStateEnum.Betting, 
       duration: BETTING_DURATION,
       generateData: generateBettingData
     },
     {
-      name: 'race',
+      name: GameStateEnum.Race,
       duration: RACE_DURATION,
       generateData: generateRaceData
     },
     {
-      name: 'results',
+      name: GameStateEnum.Results,
       duration: RESULTS_DURATION,
       generateData: generateResultsData
     }
@@ -46,12 +45,6 @@ export class GameCycle {
 
   constructor(io: SocketIOServer) {
     this.io = io;
-    this.payload = new Object() as GameUpdatePayload;
-    this.payload.data = {};
-    this.payload.state = 'intermission';
-    this.payload.timeRemaining = 1000;
-    this.payload.timestamp = Date.now();
-    this.test = TestEnum.INTERMISSION;
   }
 
   start(): void {
@@ -64,9 +57,6 @@ export class GameCycle {
     this.clearTimers();
   }
 
-  getCurrentState(): GameState {
-    return this.states[this.currentStateIndex].name;
-  }
 
   getCurrentData(): any {
     return this.states[this.currentStateIndex].generateData();
@@ -80,18 +70,16 @@ export class GameCycle {
 
   // Send current state to newly connected user
   sendStateToUser(socketId: string): void {
-    const currentState = this.getCurrentState();
     const currentData = this.getCurrentData();
     const timeRemaining = this.getTimeRemaining();
 
     this.io.to(socketId).emit('game_state', {
-      state: currentState,
       data: currentData,
       timeRemaining,
       timestamp: Date.now()
     });
 
-    console.log(`📤 Sent current state '${currentState}' to user ${socketId} (${timeRemaining}s remaining)`);
+    console.log(`📤 Sent current state  to user ${socketId} (${timeRemaining}s remaining)`);
   }
 
   private transitionToState(): void {

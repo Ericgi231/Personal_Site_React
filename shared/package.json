@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./animal-race-bets": "./dist/animal-race-bets/index.js"
+  },
   "devDependencies": {
     "typescript": "^5.0.0"
   }

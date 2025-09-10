@@ -6,8 +6,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 
 export default [
   js.configs.recommended,
-  
-  // Frontend: src/**/*.tsx only
   {
     name: 'frontend-react',
     files: ['src/**/*.tsx'],
@@ -50,15 +48,13 @@ export default [
       },
     },
   },
-
-  // Backend: node-api/**/*.ts only
   {
     name: 'backend-node',
-    files: ['node-api/**/*.ts'],
+    files: ['node-api/src/**/*.ts'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: './node-api/tsconfig.json',
         ecmaVersion: 2022,
         sourceType: 'script',
       },
@@ -84,8 +80,38 @@ export default [
       'no-unused-vars': 'off',
     },
   },
-
-  // Global ignores
+    {
+    name: 'shared-node',
+    files: ['shared/src/**/*.ts'],
+    languageOptions: {
+      parser: tsparser,
+      parserOptions: {
+        project: './shared/tsconfig.json',
+        ecmaVersion: 2022,
+        sourceType: 'script',
+      },
+      globals: {
+        global: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        exports: 'writable',
+        module: 'writable',
+        require: 'readonly',
+        console: 'readonly',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-undef': 'off',
+      'no-unused-vars': 'off',
+    },
+  },
   {
     name: 'global-ignores',
     ignores: [
