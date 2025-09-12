@@ -10,7 +10,6 @@
     "dev:node-races": "nodemon --config config/nodemon/races.json",
     "dev:php": "php -S localhost:8000",
     "dev:react": "wait-on tcp:3001 && vite",
-
     "build": "npm run clean && npm run build:frontend && npm run build:backend && npm run copy:php",
     "build:frontend": "vite build",
     "build:backend": "npm run build:shared && npm run copy:shared && tsc -p node-api/tsconfig.json && npm run copy:backend",
@@ -18,7 +17,6 @@
     "build:shared": "tsc -p shared/tsconfig.json",
     "copy:shared": "copyfiles -u 2 \"shared/dist/**/*\" dist/node-api/shared/dist && copyfiles -f shared/package.json dist/node-api/shared",
     "copy:php": "copyfiles -u 1 \"php-api/**/*\" dist/php-api",
-
     "shared": "rimraf ./shared/dist && tsc -p shared/tsconfig.json",
     "clean": "rimraf dist ./shared/dist",
     "deploy": "npm run build && node scripts/deploy.js",
@@ -37,6 +35,7 @@
     "dotenv": "^17.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-ga4": "^2.1.0",
     "react-router-dom": "7.7.1",
     "socket.io-client": "^4.8.1",
     "ssh2": "^1.17.0",
