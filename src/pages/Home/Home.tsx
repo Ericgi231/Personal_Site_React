@@ -24,10 +24,6 @@ const Home = () => (
   <>
     <HomeContainer>
       <Name>Eric Grant</Name>
-      <Description>
-        Full-stack engineer (Java, React, TypeScript, AWS) showcasing projects, experiments, and web apps.<br/>
-        A space to explore new technologies and share what I build.
-      </Description>
       <SocialLinks>
           <SocialIcon href="https://github.com/Ericgi231" target="_blank" rel="noopener noreferrer">
           <i className="fab fa-github"></i>

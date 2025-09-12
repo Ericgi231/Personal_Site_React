@@ -7,13 +7,14 @@ export const HomeContainer = styled.div`
   justify-content: top;
   min-height: calc(100vh - 120px);
   padding: ${props => props.theme.spacing.xl};
-  gap: ${props => props.theme.spacing.lg};
+  gap: ${props => props.theme.spacing.sm};
 `
 
 export const Name = styled.h1`
   font-size: ${props => props.theme.fontSizes['5xl']};
   font-weight: ${props => props.theme.fontWeights.bold};
   color: ${props => props.theme.colors.text};
+  margin-bottom: 0px;
   text-align: center;
 `
 
@@ -28,7 +29,7 @@ export const Description = styled.p`
 export const SocialLinks = styled.div`
   display: flex;
   gap: ${props => props.theme.spacing.lg};
-  margin: ${props => props.theme.spacing.md} 0;
+  margin: ${props => props.theme.spacing.sm} 0;
 `
 
 export const SocialIcon = styled.a`
