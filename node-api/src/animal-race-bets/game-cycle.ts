@@ -1,20 +1,17 @@
 import { Server as SocketIOServer } from 'socket.io';
-import { generateIntermissionData, INTERMISSION_DURATION } from './states/intermission';
-import { generateBettingData, BETTING_DURATION } from './states/betting';
-import { generateRaceData, RACE_DURATION } from './states/race';
-import { generateResultsData, RESULTS_DURATION } from './states/results';
-import { GameStateEnum } from '@my-site/shared/animal-race-bets';
+import { generateIntermissionData, INTERMISSION_DURATION } from './phases/intermission';
+import { generateBettingData, BETTING_DURATION } from './phases/betting';
+import { generateRaceData } from './phases/race';
+import { generateResultsData, RESULTS_DURATION } from './phases/results';
+import { GamePhase } from '@my-site/shared/animal-race-bets';
 
 interface StateConfig {
-  name: GameStateEnum;
+  name: GamePhase;
   duration: number;
   generateData: () => any;
 }
 
 export class GameCycle {
-  //temp
-  private GameStateEnum = GameStateEnum.Betting;
-
   private io: SocketIOServer;
   private currentStateIndex = 0;
   private stateTimer: NodeJS.Timeout | null = null;
@@ -22,22 +19,22 @@ export class GameCycle {
   
   private states: StateConfig[] = [
     {
-      name: GameStateEnum.Intermission,
+      name: GamePhase.Intermission,
       duration: INTERMISSION_DURATION,
       generateData: generateIntermissionData
     },
     {
-      name: GameStateEnum.Betting, 
+      name: GamePhase.Betting, 
       duration: BETTING_DURATION,
       generateData: generateBettingData
     },
     {
-      name: GameStateEnum.Race,
-      duration: RACE_DURATION,
+      name: GamePhase.Race,
+      duration: 1000,
       generateData: generateRaceData
     },
     {
-      name: GameStateEnum.Results,
+      name: GamePhase.Results,
       duration: RESULTS_DURATION,
       generateData: generateResultsData
     }
