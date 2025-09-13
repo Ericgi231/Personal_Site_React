@@ -20,7 +20,8 @@
     "paths": {
       "@/*": ["*"],
       "@styles/*": ["styles/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@shared/*": ["../shared/dist/*"],
     },
     // React integration
     "jsx": "react-jsx",

@@ -1,13 +1,28 @@
 {
   "name": "@my-site/shared",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c"
+  },
   "exports": {
-    ".": "./dist/index.js",
-    "./animal-race-bets": "./dist/animal-race-bets/index.js"
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./animal-race-bets": {
+      "require": "./dist/animal-race-bets.cjs",
+      "import": "./dist/animal-race-bets.js",
+      "types": "./dist/types/animal-race-bets.d.ts"
+    }
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "@rollup/plugin-typescript": "^12.1.4",
+    "rollup": "^4.50.1",
+    "rollup-plugin-dts": "^6.2.3",
+    "typescript": "^5.9.2"
   }
 }

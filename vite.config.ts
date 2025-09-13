@@ -18,6 +18,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@pages': path.resolve(__dirname, 'src/pages'),
+      '@shared': path.resolve(__dirname, 'shared/dist'),
     },
   },
   server: {
