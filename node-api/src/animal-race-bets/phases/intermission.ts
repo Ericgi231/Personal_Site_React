@@ -1,27 +1,16 @@
-export interface IntermissionData {
-  loadingScreen: 'sunset' | 'forest' | 'stadium' | 'desert';
-  racer1Id: string;
-  racer2Id: string;
-}
+import { GameData } from "@my-site/shared/animal-race-bets";
 
-export function generateIntermissionData(): IntermissionData {
+export function generateIntermissionData(gameData: GameData): void {
   const loadingScreens = ['sunset', 'forest', 'stadium', 'desert'] as const;
   const racerIds = [
-    'lightning-bolt', 'thunder-strike', 'wind-runner', 
+    'lightning-bolt', 'thunder-strike', 'wind-runner',
     'storm-chaser', 'fire-dash', 'ice-bolt'
   ];
 
-  // Pick random loading screen
   const loadingScreen = loadingScreens[Math.floor(Math.random() * loadingScreens.length)];
-  
-  // Pick two random unique racers
   const shuffled = [...racerIds].sort(() => Math.random() - 0.5);
-  
-  return {
-    loadingScreen,
-    racer1Id: shuffled[0],
-    racer2Id: shuffled[1]
-  };
-}
 
-export const INTERMISSION_DURATION = 15000; // 15 seconds
+  gameData.loadingSceneId = loadingScreen as any; // adjust type if needed
+  gameData.loadingAnimalIds = [shuffled[0], shuffled[1]] as any; // adjust type if needed
+  // Clear phase-specific fields if needed
+}

@@ -1,11 +1,6 @@
-export interface ResultsData {
-  randomNumber: number;
-}
+import { GameData } from "@my-site/shared/animal-race-bets";
 
-export function generateResultsData(): ResultsData {
-  return {
-    randomNumber: Math.floor(Math.random() * 1000)
-  };
+export function generateResultsData(gameData: GameData): void {
+  // Example: gameData.randomNumber = Math.floor(Math.random() * 1000);
+  // Add any other results-specific updates here
 }
-
-export const RESULTS_DURATION = 10000; // 10 seconds

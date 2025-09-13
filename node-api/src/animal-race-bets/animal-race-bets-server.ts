@@ -19,26 +19,11 @@ const io = new SocketIOServer(server, {
 
 const gameCycle = new GameCycle(io);
 
-app.get('/health', (_, res) => {
-  res.json({ 
-    status: 'ok',
-    game: 'AnimalRaceBets',
-    uptime: process.uptime(),
-    timestamp: Date.now()
-  });
-});
-
 io.on('connection', (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
   
   gameCycle.sendStateToUser(socket.id);
   
-  socket.emit('connection_status', {
-    status: 'connected',
-    socketId: socket.id,
-    timestamp: Date.now()
-  });
-
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);
   });
@@ -56,6 +41,15 @@ process.on('SIGTERM', () => {
   server.close(() => {
     console.log('AnimalRaceBets server closed');
     process.exit(0);
+  });
+});
+
+app.get('/health', (_, res) => {
+  res.json({ 
+    status: 'ok',
+    game: 'AnimalRaceBets',
+    uptime: process.uptime(),
+    timestamp: Date.now()
   });
 });
 
