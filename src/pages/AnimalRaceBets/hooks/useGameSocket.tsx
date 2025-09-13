@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useGameStore } from '../stores/gameStore';
-import { ConnectionInfo, ConnectionStatus } from '../types';
+import { GameState, useGameStore } from '../stores';
+import { createGameSocket, handleConnectionInfo } from '../services';
+import { ConnectionStatus } from '../types';
 
 const WS_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3001"
@@ -22,17 +23,8 @@ export const useGameSocket = () => {
       rememberUpgrade: false,
     });
 
-    const socket = socketRef.current;
-    const store = useGameStore.getState();
-
-    const updateConnectionInfo = (status: ConnectionStatus, error: string | null) => {
-      store.setConnectionInfo({
-        status,
-        error,
-        socketId: socket.id,
-        timestamp: Date.now(),
-      });
-    }
+    const socket: Socket = socketRef.current;
+    const store: GameState = useGameStore.getState();
 
     socket.on('game_state', ({ gameData }) => {
       console.log('Received game state:', gameData);
@@ -44,18 +36,18 @@ export const useGameSocket = () => {
       console.log('Connected via path:', socket.io.opts.path);
       console.log('Full Socket.IO URL:', `${WS_URL}/node-api/animal-race-bets/socket.io/`);
       console.log('Transport:', socket.io.engine.transport.name);
-      updateConnectionInfo(ConnectionStatus.Connected, null);
+      handleConnectionInfo(store, socket, ConnectionStatus.Connected, null);
     });
 
     socket.on('disconnect', (reason) => {
       console.log('Disconnected from AnimalRaceBets server. Reason:', reason);
-      updateConnectionInfo(ConnectionStatus.Disconnected, reason);
+      handleConnectionInfo(store, socket, ConnectionStatus.Disconnected, reason);
     });
 
     socket.on('connect_error', (error) => {
       console.error('Connection failed for path:', `${WS_URL}/node-api/animal-race-bets/socket.io/`);
       console.error('Error:', error);
-      updateConnectionInfo(ConnectionStatus.Disconnected, error?.message || 'Unknown error');
+      handleConnectionInfo(store, socket, ConnectionStatus.Disconnected, error?.message || 'Unknown error');
     });
 
     return () => {

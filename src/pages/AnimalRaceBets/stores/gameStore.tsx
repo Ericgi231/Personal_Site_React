@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { GameData, GamePhase } from '@shared/animal-race-bets';
+import { GameData } from '@shared/animal-race-bets';
 import { ConnectionInfo, ConnectionStatus } from '../types';
 
-interface GameState {
+export interface GameState {
   gameData: GameData | null;
   setGameData: (data: GameData) => void;
   connectionInfo: ConnectionInfo | null;

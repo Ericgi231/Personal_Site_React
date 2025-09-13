@@ -6,7 +6,7 @@ export const ChatSidebarContainer = styled.aside`
   background: ${({ theme }) => theme.colors.card};
   color: ${({ theme }) => theme.colors.text};
   border-left: 2px solid ${({ theme }) => theme.colors.border};
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;

@@ -15,7 +15,7 @@ export interface GameData {
   // Always present
   startTime: Date;
   duration: number;
-  currentPhase?: GamePhase;
+  currentPhase: GamePhase;
 
   // Intermission
   loadingSceneId?: number;

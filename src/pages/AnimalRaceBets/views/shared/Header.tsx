@@ -1,13 +1,19 @@
-import React from 'react';
+import { GamePhase } from '@shared/animal-race-bets';
 import { useGameStore } from '../../stores';
-import { HeaderContainer } from './Header.styles';
+import { HeaderContainer, HeaderText } from './Header.styles';
 
-const Header = () => {
+const PHASE_HEADER_MESSAGES: Record<GamePhase, string> = {
+  [GamePhase.Intermission]: "Intermission",
+  [GamePhase.Betting]: "Place your bets",
+  [GamePhase.Race]: "And they're off",
+  [GamePhase.Results]: "The winner is..."
+};
+
+const Header: React.FC = () => {
   const { gameData } = useGameStore();
   return (
     <HeaderContainer>
-      <h2>Animal Race Bets</h2>
-      {gameData && <span style={{ marginLeft: 24 }}>Current Phase: {gameData.currentPhase}</span>}
+      <HeaderText>{gameData && gameData.currentPhase && PHASE_HEADER_MESSAGES[gameData.currentPhase]}</HeaderText>
     </HeaderContainer>
   );
 };

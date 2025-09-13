@@ -25,12 +25,12 @@ export class GameCycle {
     this.phaseConfigs = [
       {
         name: GamePhase.Intermission,
-        duration: 10000,
+        duration: 120000,
         update: (gd) => generateIntermissionData(gd)
       },
       {
         name: GamePhase.Betting,
-        duration: 15000,
+        duration: 5000,
         update: (gd) => generateBettingData(gd)
       },
       {
@@ -40,7 +40,7 @@ export class GameCycle {
       },
       {
         name: GamePhase.Results,
-        duration: 8000,
+        duration: 5000,
         update: (gd) => generateResultsData(gd)
       }
     ];

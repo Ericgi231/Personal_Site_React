@@ -33,16 +33,13 @@ export const CenterBox = styled.div`
 
 // Timer: visually attached below header, square top, rounded bottom
 export const Timer = styled.div`
-  margin-top: -8px;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  align-self: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 12px 6px 12px;
   background: ${({ theme }) => theme.colors.warning};
   color: ${({ theme }) => theme.colors.text};
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: ${({ theme }) => theme.borderRadius.lg};
-  border-bottom-right-radius: ${({ theme }) => theme.borderRadius.lg};
+  border-radius: 0 0  ${({ theme }) => theme.borderRadius.lg} ${({ theme }) => theme.borderRadius.lg};
   font-size: ${({ theme }) => theme.fontSizes.lg};
   box-shadow: ${({ theme }) => theme.shadows.sm};
   z-index: 500;
