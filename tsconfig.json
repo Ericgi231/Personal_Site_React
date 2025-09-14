@@ -21,7 +21,7 @@
       "@/*": ["*"],
       "@styles/*": ["styles/*"],
       "@pages/*": ["pages/*"],
-      "@shared/*": ["../shared/dist/*"],
+      "@my-site/shared/*": ["../shared/dist/*"],
     },
     // React integration
     "jsx": "react-jsx",

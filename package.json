@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "https://ericgi231.me",
   "scripts": {
-    "dev": "concurrently --names \"ROUTER,RACES,PHP,REACT\" \"npm run dev:node-router\" \"npm run dev:node-races\" \"npm run dev:php\" \"npm run dev:react\"",
+    "dev": "npm run clean && npm run build:shared && concurrently --names \"ROUTER,RACES,PHP,REACT\" \"npm run dev:node-router\" \"npm run dev:node-races\" \"npm run dev:php\" \"npm run dev:react\"",
     "dev:node-router": "nodemon --config config/nodemon/router.json",
     "dev:node-races": "nodemon --config config/nodemon/races.json",
     "dev:php": "php -S localhost:8000",

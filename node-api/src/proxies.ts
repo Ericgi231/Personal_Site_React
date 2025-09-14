@@ -11,6 +11,7 @@ const createAppProxyMiddleware = (route: string, port: number): RequestHandler =
     },
   });
 
+// Add more proxies here for each new app
 const routeProxyMap: Array<{ route: string; port: number }> = [
   { route: "/node-api/animal-race-bets", port: 3002 },
 ];
