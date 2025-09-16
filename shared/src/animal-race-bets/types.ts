@@ -20,17 +20,16 @@ export interface Bet {
 
 export interface GameData {
   // Always present
-  startTime: Date;
-  duration: number;
   currentPhase: GamePhase;
+  startTime: Date;
 
   // Intermission
-  loadingSceneId?: string;
-  loadingAnimalIds?: string[];
+  intermissionId?: string;
 
   // Betting & Race
   trackId?: string;
   animalIds?: string[];
+  raceSeed?: number;
   bets?: Bet[];
 
   // Race & Results
@@ -42,4 +41,15 @@ export interface UserData {
   type: AccountType;
   name: string;
   balance: number;
+}
+
+export interface AnimalInfo {
+  filePath: string;
+  positionInfo: PositionInfo;
+}
+
+export interface PositionInfo {
+  position: {x: number, y:number};
+  flipped: boolean;
+  size: number;
 }

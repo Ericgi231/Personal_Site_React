@@ -14,6 +14,7 @@ export const Layout = styled.div`
 export const Main = styled.div`
   display: flex;
   flex: 1;
+  min-height: 0;
   width: 100%;
   position: relative;
 `;
@@ -21,19 +22,20 @@ export const Main = styled.div`
 // CenterBox: center content, relative for Timer
 export const CenterBox = styled.div`
   flex: 1;
+  min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   position: relative;
-  min-width: 0;
-  min-height: 0;
   background: ${({ theme }) => theme.colors.background};
 `;
 
 // Timer: visually attached below header, square top, rounded bottom
 export const Timer = styled.div`
   position: absolute;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   padding: 2px 12px 6px 12px;

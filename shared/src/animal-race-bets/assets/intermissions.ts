@@ -1,13 +1,24 @@
+import { PositionInfo } from "../types";
+
 export interface IntermissionData {
   id: string;
-  animalPositions: { x: number; y: number }[];
+  animalPositions: PositionInfo[];
 }
 
-export const intermissionMap: Record<string, IntermissionData> = {
-  'tea-time1': {
-    id: 'tea-time1',
+export const INTERMISSION_MAP: Record<string, IntermissionData> = {
+  'tea-time': {
+    id: 'tea-time',
     animalPositions: [
-      { x: 100, y: 200 },
-    ],
+      {
+        position: { x: 490, y: 960 },
+        flipped: false,
+        size: 3,
+      },
+      {
+        position: { x: 1460, y: 950 },
+        flipped: true,
+        size: 3,
+      },
+    ]
   },
 };

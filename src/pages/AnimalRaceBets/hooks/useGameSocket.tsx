@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { GameState, useGameStore } from '../stores';
-import { createGameSocket, handleConnectionInfo } from '../services';
+import { AppState, useGameStore } from '../stores';
+import { handleConnectionInfo } from '../services';
 import { ConnectionStatus } from '../types';
+import { GameData, UserData } from '@my-site/shared/animal-race-bets';
 
 const WS_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3001"
@@ -24,11 +25,16 @@ export const useGameSocket = () => {
     });
 
     const socket: Socket = socketRef.current;
-    const store: GameState = useGameStore.getState();
+    const store: AppState = useGameStore.getState();
 
-    socket.on('game_state', ({ gameData }) => {
-      console.log('Received game state:', gameData);
+    socket.on('game_data', ( gameData: GameData ) => {
+      console.log('Received game data:', gameData);
       store.setGameData(gameData);
+    });
+
+    socket.on('user_data', ( userData: UserData ) => {
+      console.log('Received user data:', userData);
+      store.setUserData(userData);
     });
 
     socket.on('connect', () => {

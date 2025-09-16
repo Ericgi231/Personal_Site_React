@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { mobile } from '@styles/Mixins';
+
 export const BetsSidebarContainer = styled.aside`
   width: 15%;
   min-width: 180px;
@@ -11,4 +13,8 @@ export const BetsSidebarContainer = styled.aside`
   flex-direction: column;
   align-items: flex-start;
   height: 100vh;
+
+  ${mobile`
+    display: none;
+  `}
 `;

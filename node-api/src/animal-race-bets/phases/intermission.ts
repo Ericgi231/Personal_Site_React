@@ -1,16 +1,21 @@
-import { GameData } from "@my-site/shared/animal-race-bets";
+import { ANIMAL_MAP, GameData, INTERMISSION_MAP } from "@my-site/shared/animal-race-bets";
+import { selectRandomKeysFromMap } from "../helper/helper";
 
-export function generateIntermissionData(gameData: GameData): void {
-  const loadingScreens = ['sunset', 'forest', 'stadium', 'desert'] as const;
-  const racerIds = [
-    'lightning-bolt', 'thunder-strike', 'wind-runner',
-    'storm-chaser', 'fire-dash', 'ice-bolt'
-  ];
+/**
+ * Updates the game data for the intermission phase. 
+ * Updates: intermissionId, intermissionAnimalIds, bets
+ * @param gameData The current game data to update for the intermission phase.
+ */
+export async function generateIntermissionData(gameData: GameData): Promise<GameData> {
+  const intermissionId: string = selectRandomKeysFromMap(INTERMISSION_MAP)[0];
+  const animalCount: number = INTERMISSION_MAP[intermissionId].animalPositions.length;
 
-  const loadingScreen = loadingScreens[Math.floor(Math.random() * loadingScreens.length)];
-  const shuffled = [...racerIds].sort(() => Math.random() - 0.5);
+  const animalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, animalCount);
 
-  gameData.loadingSceneId = loadingScreen as any; // adjust type if needed
-  gameData.loadingAnimalIds = [shuffled[0], shuffled[1]] as any; // adjust type if needed
-  // Clear phase-specific fields if needed
+  return {
+    ...gameData,
+    intermissionId,
+    animalIds,
+    bets: []
+  }
 }

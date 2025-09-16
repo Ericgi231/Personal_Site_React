@@ -12,6 +12,8 @@ export interface AppState {
 }
 
 const savedGameData = sessionStorage.getItem('animalRaceBetsGameData');
+const savedConnectionInfo = sessionStorage.getItem('animalRaceBetsConnectionInfo');
+const savedUserData = sessionStorage.getItem('animalRaceBetsUserData');
 
 export const useGameStore = create<AppState>((set) => ({
   gameData: savedGameData ? JSON.parse(savedGameData) : {
@@ -20,14 +22,14 @@ export const useGameStore = create<AppState>((set) => ({
     currentPhase: GamePhase.Loading
   },
   setGameData: (data) => set({ gameData: data }),
-  connectionInfo: {
+  connectionInfo: savedConnectionInfo ? JSON.parse(savedConnectionInfo) : {
     status: ConnectionStatus.Connecting,
     socketId: undefined,
     error: null,
     timestamp: Date.now(),
   },
   setConnectionInfo: (data) => set({ connectionInfo: data }),
-  userData: {
+  userData: savedUserData ? JSON.parse(savedUserData) : {
     id: 0,
     type: AccountType.Invalid,
     name: '',

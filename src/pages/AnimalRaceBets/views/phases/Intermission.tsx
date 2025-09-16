@@ -1,7 +1,28 @@
-import React from 'react';
-const Intermission: React.FC = () => (
-  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <h2>Intermission Phase</h2>
-  </div>
-);
+import React, { useRef } from 'react';
+
+import { useGameStore } from '../../stores';
+import { IntermissionContainer, IntermissionCanvas } from './Intermission.styles';
+import { useResponsiveCanvasSize } from '../../hooks/useResponsiveCanvasSize';
+import { useIntermissionCanvasDraw } from '../../hooks';
+
+const Intermission: React.FC = () => {
+  const { intermissionId, animalIds } = useGameStore().gameData;
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasSize = useResponsiveCanvasSize(canvasRef.current);
+  useIntermissionCanvasDraw(canvasRef.current!, canvasSize, intermissionId!, animalIds!);
+
+  return (
+    <IntermissionContainer>
+      <IntermissionCanvas
+        ref={canvasRef}
+        style={{
+          width: canvasSize,
+          height: canvasSize,
+        }}
+      />
+    </IntermissionContainer>
+  );
+};
+
 export default Intermission;

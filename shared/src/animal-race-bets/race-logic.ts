@@ -1,4 +1,6 @@
-export enum ExampleEnum {
-  Test1 = 'test1',
-  Test2 = 'test2'
+export interface AnimalState {
+  id: string;
+  x: number;
+  y: number;
+  angle: number; // direction in radians
 }

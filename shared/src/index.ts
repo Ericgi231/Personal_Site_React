@@ -1,1 +1,1 @@
-export * from './animal-race-bets';
+export * from './animal-race-bets/index';

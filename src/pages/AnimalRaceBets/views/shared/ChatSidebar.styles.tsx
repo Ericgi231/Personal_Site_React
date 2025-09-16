@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { mobile } from '@styles/Mixins';
+
 export const ChatSidebarContainer = styled.aside`
   width: 15%;
   min-width: 180px;
@@ -11,4 +13,8 @@ export const ChatSidebarContainer = styled.aside`
   flex-direction: column;
   align-items: flex-end;
   height: 100vh;
+
+  ${mobile`
+    display: none;
+  `}
 `;

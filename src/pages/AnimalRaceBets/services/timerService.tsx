@@ -1,9 +1,5 @@
-export function getTimeRemaining(startTime?: Date, duration?: number): number {
-  if (!startTime || !duration) return 0;
-  const start = new Date(startTime).getTime();
-  const now = Date.now();
-  const remaining = Math.max(0, duration - (now - start));
-  return Math.ceil(remaining / 1000);
+export function getTimeRemaining(startTime: Date, duration: number): number {
+  return Math.max(0, Math.ceil((duration - (Date.now() - new Date(startTime).getTime())) / 1000));
 }
 
 export function formatTimeMSS(seconds: number): string {

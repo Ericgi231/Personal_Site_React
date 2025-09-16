@@ -1,112 +1,85 @@
 
 import { Server as SocketIOServer } from 'socket.io';
-import { generateIntermissionData } from './phases/intermission';
-import { generateBettingData } from './phases/betting';
-import { generateRaceData } from './phases/race';
-import { generateResultsData } from './phases/results';
-import { GamePhase, GameData } from '@my-site/shared/animal-race-bets';
+import { generateIntermissionData, generateBettingData, generateRaceData, generateResultsData } from './phases';
+import { GamePhase, GameData, PHASE_DURATION_MAP, DEFAULT_PHASE_DURATION_MS } from '@my-site/shared/animal-race-bets';
 
-type PhaseConfig = {
-  name: GamePhase;
-  duration: number;
-  update: (gameData: GameData) => void;
-};
+interface PhaseInfo {
+  gamePhase: GamePhase;
+  updateMethod: (gd: GameData) => Promise<GameData>;
+}
 
 export class GameCycle {
   private io: SocketIOServer;
   private currentPhaseIndex = 0;
   private phaseTimer: NodeJS.Timeout | null = null;
-  private phaseStartTime = 0;
   private gameData: GameData;
-  private phaseConfigs: PhaseConfig[];
+  private phases: PhaseInfo[];
 
   constructor(io: SocketIOServer) {
     this.io = io;
-    this.phaseConfigs = [
+    this.phases = [
       {
-        name: GamePhase.Intermission,
-        duration: 120000,
-        update: (gd) => generateIntermissionData(gd)
+        gamePhase: GamePhase.Intermission,
+        updateMethod: (gd) => generateIntermissionData(gd)
       },
       {
-        name: GamePhase.Betting,
-        duration: 5000,
-        update: (gd) => generateBettingData(gd)
+        gamePhase: GamePhase.Betting,
+        updateMethod: (gd) => generateBettingData(gd)
       },
       {
-        name: GamePhase.Race,
-        duration: 5000,
-        update: (gd) => generateRaceData(gd)
+        gamePhase: GamePhase.Race,
+        updateMethod: (gd) => generateRaceData(gd)
       },
       {
-        name: GamePhase.Results,
-        duration: 5000,
-        update: (gd) => generateResultsData(gd)
-      }
+        gamePhase: GamePhase.Results,
+        updateMethod: (gd) => generateResultsData(gd)
+      },
     ];
 
     this.gameData = {
       startTime: new Date(),
-      duration: this.phaseConfigs[0].duration,
-      currentPhase: this.phaseConfigs[0].name
+      currentPhase: GamePhase.Intermission
     };
   }
 
-  start(): void {
+  /**
+   * Starts the game cycle, initiating phase transitions.
+   */
+  public start(): void {
     console.log('Starting AnimalRaceBets game cycle');
     this.transitionToPhase();
   }
 
-  stop(): void {
+  /**
+   * Stops the game cycle, clearing any active timers.
+   */
+  public stop(): void {
     console.log('Stopping AnimalRaceBets game cycle');
     this.clearTimer();
   }
 
-  getCurrentGameData(): GameData {
+  /**
+   * Returns the current game data.
+   * @returns A copy of the current GameData object.
+   */
+  public getCurrentGameData(): GameData {
     return { ...this.gameData };
   }
 
-  getTimeRemaining(): number {
-    const elapsed = Date.now() - this.phaseStartTime;
-    const remaining = Math.max(0, this.phaseConfigs[this.currentPhaseIndex].duration - elapsed);
-    return Math.ceil(remaining / 1000);
-  }
+  private async transitionToPhase(): Promise<void> {
+    const phase = this.phases[this.currentPhaseIndex];
+    this.gameData = await phase.updateMethod({...this.gameData, currentPhase: phase.gamePhase, startTime: new Date()});
+    console.log(`Transitioning to: ${this.gameData.currentPhase}`);
 
-  // Send current state to newly connected user
-  public sendStateToUser(socketId: string): void {
-    this.io.to(socketId).emit('game_state', {
-      gameData: this.getCurrentGameData(),
-      timeRemaining: this.getTimeRemaining(),
-      timestamp: Date.now()
-    });
-    console.log(`Sent current state to user ${socketId} (${this.getTimeRemaining()}s remaining)`);
-  }
+    this.io.emit('game_data', this.getCurrentGameData());
 
-  private transitionToPhase(): void {
-    const phase = this.phaseConfigs[this.currentPhaseIndex];
-    this.phaseStartTime = Date.now();
-    this.gameData.currentPhase = phase.name;
-    this.gameData.duration = phase.duration;
-    this.gameData.startTime = new Date();
-    phase.update(this.gameData);
-
-    console.log(`Transitioning to: ${phase.name} (${phase.duration / 1000}s)`);
-
-    // Broadcast updated gameData to all users
-    this.io.emit('game_state', {
-      gameData: this.getCurrentGameData(),
-      timeRemaining: Math.ceil(phase.duration / 1000),
-      timestamp: this.phaseStartTime
-    });
-
-    // Schedule next phase transition
     this.phaseTimer = setTimeout(() => {
       this.nextPhase();
-    }, phase.duration);
+    }, PHASE_DURATION_MAP[this.gameData.currentPhase] || DEFAULT_PHASE_DURATION_MS);
   }
 
   private nextPhase(): void {
-    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.phaseConfigs.length;
+    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.phases.length;
     this.transitionToPhase();
   }
 
