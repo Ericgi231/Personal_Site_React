@@ -26,6 +26,9 @@ export default defineConfig({
     proxy: {
       '/php-api': 'http://localhost:8000',
       '/node-api': 'http://localhost:3001'
+    },
+    watch: {
+      ignored: ['!**/shared/dist/**']
     }
   }
 })
