@@ -7,13 +7,13 @@ import { animalRaceBetsTheme } from './styles';
 import { Layout, Main, CenterBox, Timer } from './AnimalRaceBets.styles';
 import { ConnectionStatus } from './types';
 import { formatTimeMSS } from './services';
-import { PHASE_DURATION_MAP } from '@my-site/shared/animal-race-bets';
+import { GamePhase } from '@my-site/shared/animal-race-bets';
 
 const AnimalRaceBets: React.FC = () => {
   useGameSocket();
   const { gameData, connectionInfo } = useGameStore();
-  const phase = gameData.currentPhase;
-  const localTimeRemaining = usePhaseTimer(gameData.startTime, PHASE_DURATION_MAP[phase] || 10000);
+  const phase: GamePhase = gameData.phase.name;
+  const localTimeRemaining: number = usePhaseTimer(gameData.phase.startTime, gameData.phase.durationMs);
 
   useEffect(() => {
     if (gameData) {
@@ -45,7 +45,7 @@ const AnimalRaceBets: React.FC = () => {
           </CenterBox>
           <Chat />
         </Main>
-        {connectionInfo?.status !== ConnectionStatus.Connected && <ConnectionModal status={connectionInfo?.status!} />}
+        {connectionInfo.status !== ConnectionStatus.Connected && <ConnectionModal status={connectionInfo.status} />}
       </Layout>
     </ThemeProvider>
   );

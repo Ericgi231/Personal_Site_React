@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getTimeRemaining } from '../services/timerService';
+import { getTimeRemainingSeconds } from '../services/timerService';
 
 export function usePhaseTimer(startTime: Date, duration: number) {
-  const [remaining, setRemaining] = useState(getTimeRemaining(startTime, duration));
+  const [remaining, setRemaining] = useState(getTimeRemainingSeconds(startTime, duration, new Date()));
   useEffect(() => {
-    setRemaining(getTimeRemaining(startTime, duration));
+    setRemaining(getTimeRemainingSeconds(startTime, duration, new Date()));
     const interval = setInterval(() => {
-      setRemaining(getTimeRemaining(startTime, duration));
+      setRemaining(getTimeRemainingSeconds(startTime, duration, new Date()));
     }, 1000);
     return () => clearInterval(interval);
   }, [startTime, duration]);

@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { AppState, useGameStore } from '../stores';
 import { handleConnectionInfo } from '../services';
 import { ConnectionStatus } from '../types';
-import { GameData, UserData } from '@my-site/shared/animal-race-bets';
+import { GameData, PhaseInfo, SOCKET_EVENT_GAME_DATA, SOCKET_EVENT_PHASE_INFO, SOCKET_EVENT_USER_DATA, SOCKET_EVENT_WINNERID, UserData } from '@my-site/shared/animal-race-bets';
 
 const WS_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3001"
@@ -27,12 +27,22 @@ export const useGameSocket = () => {
     const socket: Socket = socketRef.current;
     const store: AppState = useGameStore.getState();
 
-    socket.on('game_data', ( gameData: GameData ) => {
+    socket.on(SOCKET_EVENT_GAME_DATA, ( gameData: GameData ) => {
       console.log('Received game data:', gameData);
       store.setGameData(gameData);
     });
 
-    socket.on('user_data', ( userData: UserData ) => {
+    socket.on(SOCKET_EVENT_PHASE_INFO, ( phaseInfo: PhaseInfo ) => {
+      console.log('Received new phase info:', phaseInfo);
+      store.setPhaseInfo(phaseInfo);
+    });
+
+    socket.on(SOCKET_EVENT_WINNERID, ( winner: string ) => {
+      console.log('Received race winner:', winner);
+      store.setWinner(winner);
+    });
+
+    socket.on(SOCKET_EVENT_USER_DATA, ( userData: UserData ) => {
       console.log('Received user data:', userData);
       store.setUserData(userData);
     });

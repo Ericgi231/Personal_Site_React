@@ -21,5 +21,5 @@ export function useIntermissionCanvasDraw(canvas: HTMLCanvasElement, canvasSize:
         dpr,
         backgroundPath,
         animalInfo);
-  }, [intermissionId, animalIds, canvasSize]);
+  }, [intermissionId, animalIds, canvasSize, canvas]);
 }

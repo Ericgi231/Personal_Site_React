@@ -1,45 +1,53 @@
 
-import { Server as SocketIOServer } from 'socket.io';
-import { generateIntermissionData, generateBettingData, generateRaceData, generateResultsData } from './phases';
-import { GamePhase, GameData, PHASE_DURATION_MAP, DEFAULT_PHASE_DURATION_MS } from '@my-site/shared/animal-race-bets';
-
-interface PhaseInfo {
-  gamePhase: GamePhase;
-  updateMethod: (gd: GameData) => Promise<GameData>;
-}
+import { Server } from 'socket.io';
+import { GameData, GamePhase } from '@my-site/shared/animal-race-bets';
+import { PHASE_DURATION_MAP, PHASE_ORDER } from './data/phase-data';
+import { AppData } from './types/app-types';
+import { generateEmptyAppData } from './services/data-generation-service';
+import { handleBettingPhase, handleIntermissionPhase, handleLoadingPhase, handleRacePhase, handleResultsPhase } from './services/phase-service';
 
 export class GameCycle {
-  private io: SocketIOServer;
-  private currentPhaseIndex = 0;
+  private io: Server;
+  private appData: AppData;
   private phaseTimer: NodeJS.Timeout | null = null;
-  private gameData: GameData;
-  private phases: PhaseInfo[];
+  private phaseHandlers: Record<GamePhase, (io: Server, appData: AppData) => Promise<AppData>>;
 
-  constructor(io: SocketIOServer) {
+  constructor(io: Server) {
     this.io = io;
-    this.phases = [
-      {
-        gamePhase: GamePhase.Intermission,
-        updateMethod: (gd) => generateIntermissionData(gd)
-      },
-      {
-        gamePhase: GamePhase.Betting,
-        updateMethod: (gd) => generateBettingData(gd)
-      },
-      {
-        gamePhase: GamePhase.Race,
-        updateMethod: (gd) => generateRaceData(gd)
-      },
-      {
-        gamePhase: GamePhase.Results,
-        updateMethod: (gd) => generateResultsData(gd)
-      },
-    ];
-
-    this.gameData = {
-      startTime: new Date(),
-      currentPhase: GamePhase.Intermission
+    this.appData = generateEmptyAppData();
+    this.phaseHandlers = {
+      intermission: (io, appData) => handleIntermissionPhase(io, appData),
+      betting: (io, appData) => handleBettingPhase(io, appData),
+      race: (io, appData) => handleRacePhase(io, appData),
+      results: (io, appData) => handleResultsPhase(io, appData),
+      loading: (io, appData) => handleLoadingPhase(io, appData),
     };
+  }
+
+  private nextPhase(): void {
+    const newPhase = PHASE_ORDER[(PHASE_ORDER.indexOf(this.appData.gameData.phase.name) + 1) % PHASE_ORDER.length];
+    this.appData.gameData.phase = {
+      startTime: new Date(),
+      name: newPhase,
+      durationMs: newPhase === GamePhase.Race
+        ? this.appData.backendData.raceDurationMs
+        : PHASE_DURATION_MAP[newPhase],
+    };
+    this.processGamePhase();
+  }
+
+  private async processGamePhase(): Promise<void> {
+    this.appData = await this.phaseHandlers[this.appData.gameData.phase.name](this.io, this.appData);
+    this.phaseTimer = setTimeout(() => {
+      this.nextPhase();
+    }, this.appData.gameData.phase.durationMs);
+  }
+
+  private clearTimer(): void {
+    if (this.phaseTimer) {
+      clearTimeout(this.phaseTimer);
+      this.phaseTimer = null;
+    }
   }
 
   /**
@@ -47,7 +55,7 @@ export class GameCycle {
    */
   public start(): void {
     console.log('Starting AnimalRaceBets game cycle');
-    this.transitionToPhase();
+    this.processGamePhase();
   }
 
   /**
@@ -63,30 +71,6 @@ export class GameCycle {
    * @returns A copy of the current GameData object.
    */
   public getCurrentGameData(): GameData {
-    return { ...this.gameData };
-  }
-
-  private async transitionToPhase(): Promise<void> {
-    const phase = this.phases[this.currentPhaseIndex];
-    this.gameData = await phase.updateMethod({...this.gameData, currentPhase: phase.gamePhase, startTime: new Date()});
-    console.log(`Transitioning to: ${this.gameData.currentPhase}`);
-
-    this.io.emit('game_data', this.getCurrentGameData());
-
-    this.phaseTimer = setTimeout(() => {
-      this.nextPhase();
-    }, PHASE_DURATION_MAP[this.gameData.currentPhase] || DEFAULT_PHASE_DURATION_MS);
-  }
-
-  private nextPhase(): void {
-    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.phases.length;
-    this.transitionToPhase();
-  }
-
-  private clearTimer(): void {
-    if (this.phaseTimer) {
-      clearTimeout(this.phaseTimer);
-      this.phaseTimer = null;
-    }
+    return { ...this.appData.gameData };
   }
 }

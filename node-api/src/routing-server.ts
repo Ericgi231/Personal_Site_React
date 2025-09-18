@@ -1,4 +1,5 @@
-import express, { type Express } from "express";
+import express, { Express } from "express";
+import type { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import cors from "cors";
 import http, { type Server } from "http";
 import { registerProxies } from "./proxies";
@@ -13,7 +14,7 @@ app.use(express.json());
 
 registerProxies(app);
 
-app.get('/node-api/health', (_: any, res: any) => res.json({
+app.get('/node-api/health', (_req: ExpressRequest, res: ExpressResponse) => res.json({
   status: 'ok',
   router: 'online',
   timestamp: Date.now()

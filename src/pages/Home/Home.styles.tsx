@@ -18,14 +18,6 @@ export const Name = styled.h1`
   text-align: center;
 `
 
-export const Description = styled.p`
-  font-size: ${props => props.theme.fontSizes.xl};
-  color: ${props => props.theme.colors.textLight};
-  max-width: 80%;
-  text-align: center;
-  margin: 0;
-`
-
 export const SocialLinks = styled.div`
   display: flex;
   gap: ${props => props.theme.spacing.lg};

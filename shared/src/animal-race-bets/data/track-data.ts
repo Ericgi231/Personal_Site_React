@@ -4,6 +4,9 @@ export interface TrackData {
   goalPosition: { x: number; y: number };
 }
 
+/**
+ * Map of track IDs to their data.
+ */
 export const TRACK_MAP: Record<string, TrackData> = {
   'forest1': {
     id: 'forest1',

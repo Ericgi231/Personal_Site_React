@@ -1,7 +1,6 @@
 import { 
   HomeContainer, 
   Name, 
-  Description, 
   SocialLinks, 
   SocialIcon, 
   NavigationGrid, 

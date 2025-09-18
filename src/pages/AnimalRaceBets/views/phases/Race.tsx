@@ -58,7 +58,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 const Race: React.FC = () => {
-  const { trackId, animalIds } = useGameStore().gameData;
+  const { trackId, animalIds } = useGameStore().gameData.race;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasSize = useResponsiveCanvasSize(canvasRef.current); // This will be used for CSS only
   const trackData: TrackData = TRACK_MAP[trackId!]!;

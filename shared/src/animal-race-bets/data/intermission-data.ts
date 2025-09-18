@@ -1,10 +1,13 @@
-import { PositionInfo } from "../types";
+import { PositionInfo } from "../types/canvas-types";
 
 export interface IntermissionData {
   id: string;
   animalPositions: PositionInfo[];
 }
 
+/**
+ * Map of intermission scene IDs to their data.
+ */
 export const INTERMISSION_MAP: Record<string, IntermissionData> = {
   'tea-time': {
     id: 'tea-time',

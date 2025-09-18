@@ -1,10 +1,12 @@
 import { create } from 'zustand';
-import { GameData, UserData, GamePhase, AccountType } from '@my-site/shared/animal-race-bets';
+import { GameData, UserData, GamePhase, AccountType, PhaseInfo } from '@my-site/shared/animal-race-bets';
 import { ConnectionInfo, ConnectionStatus } from '../types';
 
 export interface AppState {
   gameData: GameData;
   setGameData: (data: GameData) => void;
+  setPhaseInfo: (data: PhaseInfo) => void;
+  setWinner: (winner: string) => void;
   connectionInfo: ConnectionInfo;
   setConnectionInfo: (data: ConnectionInfo) => void;
   userData: UserData;
@@ -17,11 +19,38 @@ const savedUserData = sessionStorage.getItem('animalRaceBetsUserData');
 
 export const useGameStore = create<AppState>((set) => ({
   gameData: savedGameData ? JSON.parse(savedGameData) : {
-    startTime: new Date(),
-    duration: 60000,
-    currentPhase: GamePhase.Loading
+    phase: {
+      startTime: new Date(0),
+      name: GamePhase.Loading,
+      durationMs: 0,
+    },
+    intermission: {
+      id: '',
+      animalIds: [],
+    },
+    race: {
+      trackId: '',
+      animalIds: [],
+      raceSeed: 0,
+    },
+    bets: [],
   },
   setGameData: (data) => set({ gameData: data }),
+  setPhaseInfo: (data) => set((state) => ({
+    gameData: {
+      ...state.gameData,
+      phase: data
+    }
+  })),
+  setWinner: (winner: string) => set((state) => ({
+    gameData: {
+      ...state.gameData,
+      race: {
+        ...state.gameData.race,
+        winnerId: winner
+      }
+    }
+  })),
   connectionInfo: savedConnectionInfo ? JSON.parse(savedConnectionInfo) : {
     status: ConnectionStatus.Connecting,
     socketId: undefined,

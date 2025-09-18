@@ -6,11 +6,11 @@ import { useResponsiveCanvasSize } from '../../hooks/useResponsiveCanvasSize';
 import { useIntermissionCanvasDraw } from '../../hooks';
 
 const Intermission: React.FC = () => {
-  const { intermissionId, animalIds } = useGameStore().gameData;
+  const { id, animalIds } = useGameStore().gameData.intermission;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasSize = useResponsiveCanvasSize(canvasRef.current);
-  useIntermissionCanvasDraw(canvasRef.current!, canvasSize, intermissionId!, animalIds!);
+  useIntermissionCanvasDraw(canvasRef.current!, canvasSize, id, animalIds);
 
   return (
     <IntermissionContainer>

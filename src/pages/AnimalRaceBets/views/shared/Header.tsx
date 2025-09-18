@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   const { gameData } = useGameStore();
   return (
     <HeaderContainer>
-      <HeaderText>{gameData && gameData.currentPhase && PHASE_HEADER_MESSAGES[gameData.currentPhase]}</HeaderText>
+      <HeaderText>{gameData && PHASE_HEADER_MESSAGES[gameData.phase.name]}</HeaderText>
     </HeaderContainer>
   );
 };

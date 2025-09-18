@@ -1,9 +1,10 @@
 import express, { Express } from "express";
+import type { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import cors from "cors";
 import http, { Server } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { GameCycle } from "./game-cycle";
-import { sendGameDataToUser, sendUserDataToUser } from "./user-service";
+import { emitGameDataToIndividual, emitUserDataToIndividual } from "./services/socket-service";
 
 const app: Express = express();
 const port: number = 3002;
@@ -23,8 +24,8 @@ const gameCycle = new GameCycle(io);
 io.on('connection', (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
   
-  sendGameDataToUser(io, socket.id, () => gameCycle.getCurrentGameData());
-  sendUserDataToUser(io, socket.id);
+  emitGameDataToIndividual(io, socket.id, gameCycle.getCurrentGameData());
+  emitUserDataToIndividual(io, socket.id);
   
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);
@@ -46,7 +47,7 @@ process.on('SIGTERM', () => {
   });
 });
 
-app.get('/health', (_, res) => {
+app.get('/health', (_req: ExpressRequest, res: ExpressResponse) => {
   res.json({ 
     status: 'ok',
     game: 'AnimalRaceBets',

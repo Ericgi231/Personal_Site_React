@@ -7,17 +7,16 @@ export interface AnimalData {
   friendIds?: string[];
 }
 
-// Name rules:
-// 1. No puns
-// 2. No alliteration
-// 3. Do not reference the animal's species
+/**
+ * Map of animal IDs to their data.
+ */
 export const ANIMAL_MAP: Record<string, AnimalData> = {
-  // snail1: { 
-  //   id: 'snail1', 
-  //   name: 'Oktoberfest Road Rage', 
-  //   tag: 'ORG',
-  //   species: 'Snail', 
-  //   color: '#A3C1AD' },
+  snail1: { 
+    id: 'snail1', 
+    name: 'Oktoberfest Road Rage', 
+    tag: 'ORG',
+    species: 'Snail', 
+    color: '#A3C1AD' },
   cow1: { 
     id: 'cow1', 
     name: 'Merciless Harvest', 
