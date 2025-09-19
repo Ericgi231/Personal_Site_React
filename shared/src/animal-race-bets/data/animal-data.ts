@@ -5,6 +5,8 @@ export interface AnimalData {
   species: string;
   color: string;
   friendIds?: string[];
+  description?: string;
+  status?: string;
 }
 
 /**

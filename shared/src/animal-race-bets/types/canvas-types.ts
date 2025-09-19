@@ -1,10 +1,10 @@
-export interface AnimalInfo {
-  filePath: string;
-  positionInfo: PositionInfo;
+export interface SpriteData {
+  img: HTMLImageElement;
+  transform: TransformInfo;
 }
 
-export interface PositionInfo {
-  position: {x: number, y:number};
-  flipped: boolean;
-  size: number;
+export interface TransformInfo {
+  pos: {x: number, y:number};
+  size: {w: number, h: number};
+  flipped?: boolean;
 }

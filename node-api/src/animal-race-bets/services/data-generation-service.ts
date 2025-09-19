@@ -41,9 +41,9 @@ export function generateEmptyAppData(): AppData {
 
 export async function generateNewAppData(): Promise<AppData> {
   const intermissionId: string = selectRandomKeysFromMap(INTERMISSION_MAP)[0];
-  const intermissionAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, INTERMISSION_MAP[intermissionId].animalPositions.length);
+  const intermissionAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, INTERMISSION_MAP[intermissionId].animals.length);
   const trackId: string = selectRandomKeysFromMap(TRACK_MAP)[0];
-  const raceAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animalPositions.length);
+  const raceAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animals.length);
   return {
     gameData: {
       phase: {
@@ -63,7 +63,7 @@ export async function generateNewAppData(): Promise<AppData> {
       bets: [],
     },
     backendData: {
-      winnerId: 'test-winner', // TODO: set actual winner
+      winnerId: 'rat1', // TODO: set actual winner
       raceDurationMs: 5000,
     }, // TODO: set actual backend data for race
   }

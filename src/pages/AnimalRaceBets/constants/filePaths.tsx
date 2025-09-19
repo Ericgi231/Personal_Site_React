@@ -4,12 +4,13 @@ const TRACK_RESULTS_FILE = "results.png";
 const TRACK_BASE_PATH = "/assets/animal-race-bets/tracks/";
 
 const ANIMAL_SPRITE_FILE = "sprite.png";
-const ANIMAL_VICTORY_FILE = "victory.png";
+const ANIMAL_WINNER_FILE = "winner.png";
 const ANIMAL_BASE_PATH = "/assets/animal-race-bets/animals/";
 
 const INTERMISSION_BASE_PATH = "/assets/animal-race-bets/intermissions/";
 
 const OBJECT_BASE_PATH = "/assets/animal-race-bets/objects/";
+const GOALID = "goal1";
 
 /**
  * @param intermissionId ID of the intermission
@@ -28,6 +29,13 @@ export function getObjectPath(objectId: string) {
 }
 
 /**
+ * @returns Full path to goal image
+ */
+export function getGoalPath() {
+  return `${OBJECT_BASE_PATH}${GOALID}.png`;
+}
+
+/**
  * @param animalId ID of the animal
  * @returns Full path to animals racing sprite
  */
@@ -39,8 +47,8 @@ export function getAnimalSpritePath(animalId: string) {
  * @param animalId ID of the animal
  * @returns Full path to animals victory image
  */
-export function getAnimalVictoryPath(animalId: string) {
-  return `${ANIMAL_BASE_PATH}${animalId}/${ANIMAL_VICTORY_FILE}`;
+export function getAnimalWinnerPath(animalId: string) {
+  return `${ANIMAL_BASE_PATH}${animalId}/${ANIMAL_WINNER_FILE}`;
 }
 
 /**

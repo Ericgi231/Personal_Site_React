@@ -1,8 +1,9 @@
-import { PositionInfo } from "../types/canvas-types";
+import { ANIMAL_SIZE } from "../constants/canvas-constants";
+import { TransformInfo } from "../types/canvas-types";
 
 export interface IntermissionData {
   id: string;
-  animalPositions: PositionInfo[];
+  animals: TransformInfo[];
 }
 
 /**
@@ -11,16 +12,16 @@ export interface IntermissionData {
 export const INTERMISSION_MAP: Record<string, IntermissionData> = {
   'tea-time': {
     id: 'tea-time',
-    animalPositions: [
+    animals: [
       {
-        position: { x: 490, y: 960 },
+        pos: { x: 490, y: 960 },
+        size: { w: ANIMAL_SIZE*3, h: ANIMAL_SIZE*3 },
         flipped: false,
-        size: 3,
       },
       {
-        position: { x: 1460, y: 950 },
+        pos: { x: 1460, y: 950 },
+        size: { w: ANIMAL_SIZE*3, h: ANIMAL_SIZE*3 },
         flipped: true,
-        size: 3,
       },
     ]
   },

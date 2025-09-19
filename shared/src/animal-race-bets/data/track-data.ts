@@ -1,7 +1,10 @@
+import { ANIMAL_SIZE, GOAL_SIZE } from "../constants/canvas-constants";
+import { TransformInfo } from "../types/canvas-types";
+
 export interface TrackData {
   id: string;
-  animalPositions: { x: number; y: number }[];
-  goalPosition: { x: number; y: number };
+  animals: TransformInfo[];
+  goal: TransformInfo;
 }
 
 /**
@@ -10,34 +13,70 @@ export interface TrackData {
 export const TRACK_MAP: Record<string, TrackData> = {
   'forest1': {
     id: 'forest1',
-    animalPositions: [
-      { x: 200, y: 300 },
-      { x: 200, y: 500 },
+    animals: [
+      {
+        pos: { x: 200, y: 200 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
+      {
+        pos: { x: 200, y: 300 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
     ],
-    goalPosition: { x: 1000, y: 1000 },
-  },
-  'club1': {
-    id: 'club1',
-    animalPositions: [
-      { x: 200, y: 300 },
-      { x: 200, y: 500 },
-    ],
-    goalPosition: { x: 1000, y: 1000 },
+    goal: {
+      pos: { x: 1000, y: 1000 },
+      size: { w: GOAL_SIZE, h: GOAL_SIZE },
+    },
   },
   'forest2': {
     id: 'forest2',
-    animalPositions: [
-      { x: 200, y: 300 },
-      { x: 200, y: 500 },
+    animals: [
+      {
+        pos: { x: 200, y: 200 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
+      {
+        pos: { x: 200, y: 300 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
     ],
-    goalPosition: { x: 1000, y: 1000 },
+    goal: {
+      pos: { x: 1000, y: 1000 },
+      size: { w: GOAL_SIZE, h: GOAL_SIZE },
+    },
+  },
+  'club1': {
+    id: 'club1',
+    animals: [
+      {
+        pos: { x: 200, y: 200 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
+      {
+        pos: { x: 200, y: 300 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
+    ],
+    goal: {
+      pos: { x: 1000, y: 1000 },
+      size: { w: GOAL_SIZE, h: GOAL_SIZE },
+    },
   },
   'club2': {
     id: 'club2',
-    animalPositions: [
-      { x: 200, y: 300 },
-      { x: 200, y: 500 },
+    animals: [
+      {
+        pos: { x: 200, y: 200 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
+      {
+        pos: { x: 200, y: 300 },
+        size: { w: ANIMAL_SIZE, h: ANIMAL_SIZE },
+      },
     ],
-    goalPosition: { x: 1000, y: 1000 },
+    goal: {
+      pos: { x: 1000, y: 1000 },
+      size: { w: GOAL_SIZE, h: GOAL_SIZE },
+    },
   },
 };
