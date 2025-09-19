@@ -64,7 +64,7 @@ export async function generateNewAppData(): Promise<AppData> {
     },
     backendData: {
       winnerId: 'rat1', // TODO: set actual winner
-      raceDurationMs: 5000,
+      raceDurationMs: 30000,
     }, // TODO: set actual backend data for race
   }
 }

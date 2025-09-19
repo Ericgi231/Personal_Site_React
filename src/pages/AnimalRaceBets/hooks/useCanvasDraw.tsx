@@ -10,7 +10,6 @@ export function useCanvasDraw(canvasRef: React.RefObject<HTMLCanvasElement | nul
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    phaseRenderers[gameData.phase.name](ctx, gameData);
-  }, [gameData]);
+    return phaseRenderers[gameData.phase.name](ctx, gameData);
+  }, [gameData, canvasRef]);
 }

@@ -1,6 +1,6 @@
 import { useRef, FC, RefObject } from 'react';
 import { useResponsiveCanvasSize } from '../hooks';
-import { GameCanvas, GameCanvasContainer } from './CanvasRenderer.styles';
+import { GameCanvas } from './CanvasRenderer.styles';
 import { useCanvasDraw } from '../hooks/useCanvasDraw';
 
 const CanvasRenderer: FC = () => {
@@ -9,14 +9,12 @@ const CanvasRenderer: FC = () => {
   useCanvasDraw(canvasRef);
 
   return (
-    <GameCanvasContainer>
-      <GameCanvas 
-        ref={canvasRef} 
-        style={{
-          width: canvasSize,
-          height: canvasSize,
-        }}/>
-    </GameCanvasContainer>
+    <GameCanvas 
+      ref={canvasRef} 
+      style={{
+        width: canvasSize,
+        height: canvasSize,
+      }}/>
   )
 };
 
