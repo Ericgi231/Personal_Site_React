@@ -1,0 +1,7 @@
+{
+  "id": "tea-time",
+  "animalPositions": [
+    { "coordinates": {"x": 490, "y": 960}, "size": {"w": 288, "h": 288}},
+    { "coordinates": {"x": 1460, "y": 950}, "size": {"w": 288, "h": 288}, "flipped": true}
+  ]
+}

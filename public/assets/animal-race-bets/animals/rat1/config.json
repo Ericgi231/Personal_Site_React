@@ -1,0 +1,11 @@
+{
+  "id": "rat1",
+  "name": "Raphael Cortez Alexander III",
+  "tag": "III",
+  "species": "Frog",
+  "color": "#FFFFFF",
+  "description": "",
+  "friendIds": [],
+  "rivalIds": [],
+  "status": "Alive"
+}
