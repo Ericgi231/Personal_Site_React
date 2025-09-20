@@ -1,0 +1,11 @@
+{
+  "id": "cow1",
+  "name": "Merciless Harvest",
+  "tag": "MEH",
+  "species": "Cow",
+  "color": "#FFFFFF",
+  "description": "",
+  "friendIds": [],
+  "rivalIds": [],
+  "status": "Alive"
+}

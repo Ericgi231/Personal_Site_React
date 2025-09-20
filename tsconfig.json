@@ -8,6 +8,7 @@
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     // Vite
     "types": ["vite/client"],
     "isolatedModules": true,
