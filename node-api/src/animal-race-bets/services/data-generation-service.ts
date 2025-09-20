@@ -44,6 +44,27 @@ export async function generateNewAppData(): Promise<AppData> {
   const intermissionAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, INTERMISSION_MAP[intermissionId].animals.length);
   const trackId: string = selectRandomKeysFromMap(TRACK_MAP)[0];
   const raceAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animals.length);
+  const raceSeed = Math.floor(Math.random() * 100000);
+
+  // Simulate the race using the deterministic seed
+  // This requires a deterministic simulation function, e.g. simulateRace()
+  // For now, we'll stub this out and you can wire up shared/src/animal-race-bets/services/race-service.ts
+  let winnerId = '';
+  let raceDurationMs = 0;
+  if (typeof simulateRace === 'function') {
+    const result = await simulateRace({
+      trackId,
+      animalIds: raceAnimalIds,
+      seed: raceSeed
+    });
+    winnerId = result.winnerId;
+    raceDurationMs = result.durationMs;
+  } else {
+    // Fallback stub
+    winnerId = raceAnimalIds[0] || '';
+    raceDurationMs = 30000;
+  }
+
   return {
     gameData: {
       phase: {
@@ -58,13 +79,13 @@ export async function generateNewAppData(): Promise<AppData> {
       race: {
         trackId: trackId,
         animalIds: raceAnimalIds,
-        raceSeed: Math.floor(Math.random() * 100000),
+        raceSeed: raceSeed,
       },
       bets: [],
     },
     backendData: {
-      winnerId: 'rat1', // TODO: set actual winner
-      raceDurationMs: 30000,
-    }, // TODO: set actual backend data for race
+      winnerId,
+      raceDurationMs,
+    }
   }
 }

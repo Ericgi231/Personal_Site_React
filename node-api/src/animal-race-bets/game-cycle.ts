@@ -16,11 +16,11 @@ export class GameCycle {
     this.io = io;
     this.appData = generateEmptyAppData();
     this.phaseHandlers = {
-      intermission: (io, appData) => handleIntermissionPhase(io, appData),
-      betting: (io, appData) => handleBettingPhase(io, appData),
-      race: (io, appData) => handleRacePhase(io, appData),
-      results: (io, appData) => handleResultsPhase(io, appData),
-      loading: (io, appData) => handleLoadingPhase(io, appData),
+      intermission: handleIntermissionPhase,
+      betting: handleBettingPhase,
+      race: handleRacePhase,
+      results: handleResultsPhase,
+      loading: handleLoadingPhase,
     };
   }
 

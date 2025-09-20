@@ -1,5 +1,5 @@
 import { useState, useEffect, RefObject } from 'react';
-export function useResponsiveCanvasSize(canvasRef: RefObject<HTMLCanvasElement | null> ) {
+export function useResponsiveCanvasSize(canvasRef: RefObject<HTMLCanvasElement | null> ): number {
   const [canvasSize, setCanvasSize] = useState(0);
   useEffect(() => {
     function handleResize() {

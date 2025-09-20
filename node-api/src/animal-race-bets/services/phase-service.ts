@@ -28,6 +28,7 @@ export async function handleResultsPhase(io: Server, appData: AppData): Promise<
       winnerId,
     }
   };
+  //TODO possible race condition, frontend needs winnerId before phase change
   emitWinnerId(io, winnerId);
   emitPhaseInfo(io, updatedGameData.phase);
   return {
