@@ -1,23 +1,23 @@
 const TRACK_BACKGROUND_FILE = "background.png";
-const TRACK_LAYOUT_FILE = "layout.png";
-const TRACK_RESULTS_FILE = "results.png";
+const TRACK_LAYOUT_FILE = "sprite.png";
+const TRACK_RESULTS_FILE = "photo.png";
 const TRACK_BASE_PATH = "/assets/animal-race-bets/tracks/";
 
 const ANIMAL_SPRITE_FILE = "sprite.png";
-const ANIMAL_WINNER_FILE = "winner.png";
+const ANIMAL_WINNER_FILE = "photo.png";
 const ANIMAL_BASE_PATH = "/assets/animal-race-bets/animals/";
 
 const INTERMISSION_BASE_PATH = "/assets/animal-race-bets/intermissions/";
 
 const OBJECT_BASE_PATH = "/assets/animal-race-bets/objects/";
-const GOALID = "goal1";
+const GOALID = "goal";
 
 /**
  * @param intermissionId ID of the intermission
  * @returns Full path to intermission background image
  */
 export function getIntermissionPath(intermissionId: string) {
-  return `${INTERMISSION_BASE_PATH}${intermissionId}.png`;
+  return `${INTERMISSION_BASE_PATH}${intermissionId}/background.png`;
 }
 
 /**
@@ -25,14 +25,14 @@ export function getIntermissionPath(intermissionId: string) {
  * @returns Full path to object image
  */
 export function getObjectPath(objectId: string) {
-  return `${OBJECT_BASE_PATH}${objectId}.png`;
+  return `${OBJECT_BASE_PATH}${objectId}/sprite.png`;
 }
 
 /**
  * @returns Full path to goal image
  */
 export function getGoalPath() {
-  return `${OBJECT_BASE_PATH}${GOALID}.png`;
+  return `${OBJECT_BASE_PATH}${GOALID}/sprite.png`;
 }
 
 /**

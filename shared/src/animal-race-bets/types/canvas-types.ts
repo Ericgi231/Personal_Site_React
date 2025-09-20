@@ -4,7 +4,7 @@ export interface SpriteData {
 }
 
 export interface TransformInfo {
-  pos: {x: number, y:number};
-  size: {w: number, h: number};
+  coordinates: {x: number, y:number};
+  size?: {w: number, h: number};
   flipped?: boolean;
 }

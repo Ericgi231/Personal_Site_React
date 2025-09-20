@@ -1,13 +1,13 @@
 import { BACKGROUND_SIZE } from "../constants/canvas-constants";
-import { SpriteData } from "../types/canvas-types";
+import { MaskData } from "../types";
+import { TransformInfo } from "../types/canvas-types";
 
 const BASE_SPEED = 2.5;
 const SIM_STEP_MS = 16.67; // fixed simulation step
 
 export interface AnimalGameData {
-  id: string;
   mask: CollisionMask;
-  pos: { x: number; y: number };
+  coordinates: { x: number; y: number };
   angle: number;
   speed: number;
 }
@@ -27,6 +27,17 @@ export class CollisionMask {
         this.mask[y * this.width + x] = imageData.data[idx] && imageData.data[idx] > alphaThreshold ? 1 : 0;
       }
     }
+  }
+  static fromJSON(json: { width: number; height: number; mask: string }): CollisionMask {
+    const maskArr = new Uint8Array(json.width * json.height);
+    for (let i = 0; i < json.mask.length; ++i) {
+      maskArr[i] = json.mask[i] === '1' ? 1 : 0;
+    }
+    const obj = Object.create(CollisionMask.prototype) as CollisionMask;
+    obj.width = json.width;
+    obj.height = json.height;
+    obj.mask = maskArr;
+    return obj;
   }
   isSolid(x: number, y: number): boolean {
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) return false;
@@ -86,7 +97,7 @@ const ANIMAL_SIZE = 96;
 export function step(layoutMask: CollisionMask, animals: AnimalGameData[]) : Array<{x: number, y:number}> {
   for (let i = 0; i < animals.length; ++i) {
     const mask = animals[i]!.mask;
-    const cords = animals[i]!.pos;
+    const cords = animals[i]!.coordinates;
     const angle = animals[i]!.angle;
     const speed = animals[i]!.speed;
 
@@ -111,5 +122,41 @@ export function step(layoutMask: CollisionMask, animals: AnimalGameData[]) : Arr
       cords.y += velocity.dy;
     }
   }
-  return animals.map(a => a.pos);
+  return animals.map(a => a.coordinates);
+}
+
+export function simulateRace(trackMask: { width: number; height: number; mask: string }, animalMasks: { width: number; height: number; mask: string }[], seed: number): {winnerIndex: number, durationMs: number, frames: Array<TransformInfo[]>} {
+  // Read masks from precomputed JSON
+  const layoutMask = CollisionMask.fromJSON(trackMask);
+
+  // Initialize animal states
+  // For now, use size from maskData or default to 96
+  let animalStates: AnimalGameData[] = animalMasks.map((json, idx) => {
+    const mask = CollisionMask.fromJSON(json);
+    // Initial positions: for now, just spread out
+    const pos = { x: 200 + idx * 100, y: 200 };
+    return {
+      mask,
+      coordinates: pos,
+      angle: Math.random() * Math.PI * 2,
+      speed: 200
+    };
+  });
+
+  const durationMs = 120000;
+  const winnerIndex = 0;
+  const frames: Array<TransformInfo[]> = [];
+  let simTime = 0;
+  while (simTime < durationMs) {
+    // Advance simulation
+    const positions = step(layoutMask, animalStates);
+    // Save positions for this frame
+    const frame: TransformInfo[] = animalStates.map((animal, idx) => ({
+      coordinates: { x: positions[idx].x, y: positions[idx].y },
+      size: { w: animal.mask.width, h: animal.mask.height }
+    }));
+    frames.push(frame);
+    simTime += SIM_STEP_MS;
+  }
+  return { winnerIndex, durationMs, frames };
 }

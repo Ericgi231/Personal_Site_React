@@ -1,4 +1,4 @@
-import { AnimalGameData, CollisionMask, GameData, GamePhase, getDatafromImage, INTERMISSION_MAP, SpriteData, step, TRACK_MAP } from "@my-site/shared/animal-race-bets";
+import { GameData, GamePhase, INTERMISSION_MAP, SpriteData, simulateRace, TRACK_MAP } from "@my-site/shared/animal-race-bets";
 import { getAnimalSpritePath, getAnimalWinnerPath, getGoalPath, getIntermissionPath, getTrackBackgroundPath, getTrackLayoutPath, getTrackResultsPath } from "../constants";
 import { buildBackgroundSprite, buildSprite } from "./drawingService";
 
@@ -15,7 +15,7 @@ async function* intermissionFrameGenerator(gameData: GameData): AsyncGenerator<S
   const bgSprite: SpriteData = await buildBackgroundSprite(getIntermissionPath(gameData.intermission.id));
   const animalSprites: SpriteData[] = await Promise.all(
     gameData.intermission.animalIds.map((id, idx) =>
-      buildSprite(getAnimalSpritePath(id), INTERMISSION_MAP[gameData.intermission.id]!.animals[idx]!)
+      buildSprite(getAnimalSpritePath(id), INTERMISSION_MAP[gameData.intermission.id]!.animalPositions[idx]!)
     )
   );
   yield [bgSprite, ...animalSprites];
@@ -24,10 +24,10 @@ async function* intermissionFrameGenerator(gameData: GameData): AsyncGenerator<S
 async function* bettingFrameGenerator(gameData: GameData): AsyncGenerator<SpriteData[]> {
   const bgSprite: SpriteData = await buildBackgroundSprite(getTrackBackgroundPath(gameData.race.trackId));
   const layoutSprite: SpriteData = await buildBackgroundSprite(getTrackLayoutPath(gameData.race.trackId));
-  const goalSprite: SpriteData = await buildSprite(getGoalPath(), TRACK_MAP[gameData.race.trackId]!.goal);
+  const goalSprite: SpriteData = await buildSprite(getGoalPath(), TRACK_MAP[gameData.race.trackId]!.goalPosition);
   const animalSprites: SpriteData[] = await Promise.all(
     gameData.race.animalIds.map((id, idx) =>
-      buildSprite(getAnimalSpritePath(id), TRACK_MAP[gameData.race.trackId]!.animals[idx]!)
+      buildSprite(getAnimalSpritePath(id), TRACK_MAP[gameData.race.trackId]!.animalPositions[idx]!)
     )
   );
   yield [bgSprite, layoutSprite, goalSprite, ...animalSprites];
@@ -36,62 +36,48 @@ async function* bettingFrameGenerator(gameData: GameData): AsyncGenerator<Sprite
 const SIM_STEP_MS = 1000 / 60; // 16.666...ms
 
 async function* raceFrameGenerator(gameData: GameData): AsyncGenerator<SpriteData[]> {
-  // Load static sprites
-  const bgSprite: SpriteData = await buildBackgroundSprite(getTrackBackgroundPath(gameData.race.trackId));
-  const layoutSprite: SpriteData = await buildBackgroundSprite(getTrackLayoutPath(gameData.race.trackId));
-  const goalSprite: SpriteData = await buildSprite(getGoalPath(), TRACK_MAP[gameData.race.trackId]!.goal);
+  try {
+    // Load static sprites
+    const bgSprite: SpriteData = await buildBackgroundSprite(getTrackBackgroundPath(gameData.race.trackId));
+    const layoutSprite: SpriteData = await buildBackgroundSprite(getTrackLayoutPath(gameData.race.trackId));
+    const goalSprite: SpriteData = await buildSprite(getGoalPath(), TRACK_MAP[gameData.race.trackId]!.goalPosition);
 
-  const layoutData: ImageData = getDatafromImage(layoutSprite.img, layoutSprite.transform.size.w);
-  const layoutMask = new CollisionMask(layoutData, 128);
+    // Load track mask from mask.json
+    const trackMaskUrl = `/assets/animal-race-bets/tracks/${gameData.race.trackId}/mask.json`;
+    const trackMaskRes = await fetch(trackMaskUrl);
+    if (!trackMaskRes.ok) throw new Error(`Failed to fetch track mask: ${trackMaskUrl}`);
+    const trackMaskJson = await trackMaskRes.json();
 
-  // Initialize animal states as AnimalGameData
-  let animalStates: AnimalGameData[] = await Promise.all(
-    TRACK_MAP[gameData.race.trackId]!.animals.map(async (pos, idx) => {
-      const sprite = await buildSprite(getAnimalSpritePath(gameData.race.animalIds[idx]!), {
-        pos: { x: pos.pos.x, y: pos.pos.y },
-        size: { w: 96, h: 96 }
-      });
-      // Build mask for animal
-      const animalData: ImageData = getDatafromImage(sprite.img, sprite.transform.size.w);
-      const mask = new CollisionMask(animalData, 5);
-      return {
-        id: gameData.race.animalIds[idx]!,
-        mask,
-        pos: { x: pos.pos.x, y: pos.pos.y },
-        angle: Math.random() * Math.PI * 2,
-        speed: 200 // pixels per second
-      };
-    })
-  );
-
-  let simTime = 0;
-  let prevStates = animalStates.map(a => ({ ...a, pos: { ...a.pos } }));
-  while (simTime < gameData.phase.durationMs) {
-    // Advance simulation by fixed time step using step from race-service
-    const positions = step(layoutMask, animalStates);
-    // Save previous states for interpolation
-    const currStates = animalStates.map((animal, idx) => ({
-      ...animal,
-      pos: { x: positions[idx]!.x, y: positions[idx]!.y }
-    }));
-    // Build animal sprites for this frame, including prevPos for interpolation
-    const animalSprites: SpriteData[] = await Promise.all(
-      currStates.map(async (animal, idx) => {
-        const sprite = await buildSprite(getAnimalSpritePath(animal.id), {
-          pos: { x: animal.pos.x, y: animal.pos.y },
-          size: { w: 96, h: 96 }
-        });
-        // Attach prevPos for interpolation
-        (sprite as any).prevPos = prevStates[idx] ? { x: prevStates[idx].pos.x, y: prevStates[idx].pos.y } : { x: animal.pos.x, y: animal.pos.y };
-        return sprite;
+    // Load animal masks from mask.json
+    const animalMaskJsons = await Promise.all(
+      gameData.race.animalIds.map(async (animalId) => {
+        const maskUrl = `/assets/animal-race-bets/animals/${animalId}/mask.json`;
+        const maskRes = await fetch(maskUrl);
+        if (!maskRes.ok) throw new Error(`Failed to fetch animal mask: ${maskUrl}`);
+        const maskJson = await maskRes.json();
+        return { id: animalId, ...maskJson };
       })
     );
-    // Yield the frame
-    yield [bgSprite, layoutSprite, ...animalSprites, goalSprite];
-    // Prepare for next step
-    animalStates = currStates;
-    prevStates = currStates.map(a => ({ ...a, pos: { ...a.pos } }));
-    simTime += SIM_STEP_MS;
+
+    // Call simulateRace to get precomputed frames
+    const { winnerIndex, durationMs, frames} = simulateRace(trackMaskJson, animalMaskJsons, gameData.race.raceSeed);
+
+    // For each frame, yield SpriteData[]
+    for (let frame of frames) {
+      const animalSprites: SpriteData[] = await Promise.all(
+        frame.map(async (animal, idx) => {
+          const sprite = await buildSprite(getAnimalSpritePath(gameData.race.animalIds[idx]!), {
+            coordinates: { x: animal.coordinates.x, y: animal.coordinates.y },
+            size: { w: 96, h: 96 }
+          });
+          return sprite;
+        })
+      );
+      yield [bgSprite, layoutSprite, ...animalSprites, goalSprite];
+    }
+  } catch (err) {
+    console.error('Error in raceFrameGenerator:', err);
+    throw err;
   }
 }
 

@@ -85,8 +85,8 @@ export function useFrameGenerator() : SpriteData[] {
           const prev = prevFrame[idx] as any;
           if ((sprite as any).prevPos && prev.transform && sprite.transform) {
             const interpPos = {
-              x: prev.transform.pos.x + ((sprite.transform.pos.x - prev.transform.pos.x) * alpha),
-              y: prev.transform.pos.y + ((sprite.transform.pos.y - prev.transform.pos.y) * alpha)
+              x: prev.transform.pos.x + ((sprite.transform.coordinates.x - prev.transform.coordinates.x) * alpha),
+              y: prev.transform.pos.y + ((sprite.transform.coordinates.y - prev.transform.coordinates.y) * alpha)
             };
             return { ...sprite, transform: { ...sprite.transform, pos: interpPos } };
           }

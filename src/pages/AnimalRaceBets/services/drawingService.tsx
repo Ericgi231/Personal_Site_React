@@ -11,6 +11,9 @@ function scaleCanvasDevicePixelRatio(ctx: CanvasRenderingContext2D) {
 
 export async function buildSprite(filePath: string, transform: TransformInfo) : Promise<SpriteData> 
 {
+  if (!transform.size) {
+    transform.size = {w:96, h:96};
+  }
   return {
     img: await getCachedImage(filePath),
     transform
@@ -19,18 +22,18 @@ export async function buildSprite(filePath: string, transform: TransformInfo) : 
 
 export function buildBackgroundSprite(filePath: string): Promise<SpriteData> {
   return buildSprite(filePath, {
-    pos: {x:BACKGROUND_SIZE/2, y:BACKGROUND_SIZE/2},
+    coordinates: {x:BACKGROUND_SIZE/2, y:BACKGROUND_SIZE/2},
     size: {w:BACKGROUND_SIZE, h:BACKGROUND_SIZE}
   });
 }
 
 function drawSprite(ctx: CanvasRenderingContext2D, sprite: SpriteData) {
   const { img, transform } = sprite;
-  const { pos, size, flipped } = transform;
+  const { coordinates, size, flipped } = transform;
   ctx.save();
-  ctx.translate(pos.x, pos.y);
+  ctx.translate(coordinates.x, coordinates.y);
   if (flipped) ctx.scale(-1, 1);
-  ctx.drawImage(img, -size.w / 2, -size.h / 2, size.w, size.h);
+  ctx.drawImage(img, -size!.w / 2, -size!.h / 2, size!.w, size!.h);
   ctx.restore();
 }
 
