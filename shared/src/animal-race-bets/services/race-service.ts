@@ -2,8 +2,20 @@ import { BACKGROUND_SIZE } from "../constants/canvas-constants";
 import { MaskData } from "../types";
 import { TransformInfo } from "../types/canvas-types";
 
+
 const BASE_SPEED = 2.5;
 const SIM_STEP_MS = 16.67; // fixed simulation step
+
+// Deterministic PRNG (Mulberry32)
+function createSeededRNG(seed: number) {
+  let t = seed;
+  return function() {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ t >>> 15, 1 | t);
+    r ^= r + Math.imul(r ^ r >>> 7, 61 | r);
+    return ((r ^ r >>> 14) >>> 0) / 4294967296;
+  };
+}
 
 export interface AnimalGameData {
   mask: CollisionMask;
@@ -72,14 +84,15 @@ function calcVelocity(angle: number, speed: number): {dx: number, dy: number} {
   };
 }
 
-function getRandomVelocity(dx: number, dy: number): [number, number] {
-  const angle = Math.random() * Math.PI * 2;
+
+function getRandomVelocity(dx: number, dy: number, rng: () => number): [number, number] {
+  const angle = rng() * Math.PI * 2;
   const speed = Math.sqrt(dx * dx + dy * dy);
   return [Math.cos(angle) * speed, Math.sin(angle) * speed];
 }
 
-function getRandomAngle(): number {
-  return Math.random() * Math.PI * 2;
+function getRandomAngle(rng: () => number): number {
+  return rng() * Math.PI * 2;
 }
 
 export function getDatafromImage(img: HTMLImageElement, size: number): ImageData {
@@ -94,7 +107,7 @@ export function getDatafromImage(img: HTMLImageElement, size: number): ImageData
 
 const ANIMAL_SIZE = 96;
 
-export function step(layoutMask: CollisionMask, animals: AnimalGameData[]) : Array<{x: number, y:number}> {
+export function step(layoutMask: CollisionMask, animals: AnimalGameData[], rng : () => number) : Array<{x: number, y:number}> {
   for (let i = 0; i < animals.length; ++i) {
     const mask = animals[i]!.mask;
     const cords = animals[i]!.coordinates;
@@ -104,19 +117,19 @@ export function step(layoutMask: CollisionMask, animals: AnimalGameData[]) : Arr
     let bounced = false;
     const velocity = calcVelocity(angle, speed);
     if (detectCollision(mask, layoutMask, cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle();
+      animals[i]!.angle = getRandomAngle(rng);
       bounced = true;
     } else if (detectCollision(mask, layoutMask, cords.x + velocity.dx, cords.y, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle();
+      animals[i]!.angle = getRandomAngle(rng);
       bounced = true;
     } else if (detectCollision(mask, layoutMask, cords.x, cords.y + velocity.dy, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle();
+      animals[i]!.angle = getRandomAngle(rng);
       bounced = true;
     }
-    if (cords.x < 0) { cords.x = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy); bounced = true; }
-    if (cords.y < 0) { cords.y = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy); bounced = true; }
-    if (cords.x + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.x = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy); bounced = true; }
-    if (cords.y + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.y = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy); bounced = true; }
+    if (cords.x < 0) { cords.x = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
+    if (cords.y < 0) { cords.y = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
+    if (cords.x + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.x = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
+    if (cords.y + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.y = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
     if (!bounced) {
       cords.x += velocity.dx;
       cords.y += velocity.dy;
@@ -129,8 +142,10 @@ export function simulateRace(trackMask: { width: number; height: number; mask: s
   // Read masks from precomputed JSON
   const layoutMask = CollisionMask.fromJSON(trackMask);
 
+  // Create deterministic RNG
+  const rng = createSeededRNG(seed);
+
   // Initialize animal states
-  // For now, use size from maskData or default to 96
   let animalStates: AnimalGameData[] = animalMasks.map((json, idx) => {
     const mask = CollisionMask.fromJSON(json);
     // Initial positions: for now, just spread out
@@ -138,7 +153,7 @@ export function simulateRace(trackMask: { width: number; height: number; mask: s
     return {
       mask,
       coordinates: pos,
-      angle: Math.random() * Math.PI * 2,
+      angle: getRandomAngle(rng),
       speed: 200
     };
   });
@@ -149,7 +164,7 @@ export function simulateRace(trackMask: { width: number; height: number; mask: s
   let simTime = 0;
   while (simTime < durationMs) {
     // Advance simulation
-    const positions = step(layoutMask, animalStates);
+    const positions = step(layoutMask, animalStates, rng);
     // Save positions for this frame
     const frame: TransformInfo[] = animalStates.map((animal, idx) => ({
       coordinates: { x: positions[idx].x, y: positions[idx].y },
