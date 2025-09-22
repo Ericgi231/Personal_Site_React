@@ -13,7 +13,7 @@ const AnimalRaceBets: React.FC = () => {
   useGameSocket();
 
   const { gameData, connectionInfo } = useGameStore();
-  useSaveState(gameData, connectionInfo);
+  //useSaveState(gameData, connectionInfo);
 
   const localTimeRemaining: number = usePhaseTimer(gameData.phase.startTime, gameData.phase.durationMs);
 
@@ -35,7 +35,7 @@ const AnimalRaceBets: React.FC = () => {
           </CenterBox>
           <Chat />
         </Main>
-        {connectionInfo.status !== ConnectionStatus.Connected && <ConnectionModal status={connectionInfo.status} />}
+        {connectionInfo.status == ConnectionStatus.Disconnected && <ConnectionModal status={connectionInfo.status} />}
       </Layout>
     </ThemeProvider>
   );

@@ -21,6 +21,7 @@ export class GameCycle {
       race: handleRacePhase,
       results: handleResultsPhase,
       loading: handleLoadingPhase,
+      connecting: handleLoadingPhase,
     };
   }
 

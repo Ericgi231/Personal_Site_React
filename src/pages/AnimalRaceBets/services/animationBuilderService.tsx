@@ -1,17 +1,6 @@
-import { AnimationFrame, CanvasAnimation, GameData, GamePhase, INTERMISSION_MAP, simulateRace, SpriteData, TRACK_MAP, TransformInfo } from "@my-site/shared/animal-race-bets";
+import { AnimationFrame, CanvasAnimation, INTERMISSION_MAP, SpriteData, TRACK_MAP, TransformInfo } from "@my-site/shared/animal-race-bets";
 import { getAnimalSpritePath, getAnimalWinnerPath, getGoalPath, getIntermissionPath, getTrackBackgroundPath, getTrackLayoutPath, getTrackResultsPath } from "../constants";
 import { buildBackgroundSprite, buildSprite } from "./canvasFrameDrawService";
-
-//TODO: replace gameData with a phase specific data structure
-// export const phaseFrameGenerators: Record<GamePhase,
-//   ((gameData: GameData, ...args: any[]) => AsyncGenerator<SpriteData[]>)
-// > = {
-//   intermission: (gameData: GameData) => intermissionFrameGenerator(gameData),
-//   betting: (gameData: GameData) => bettingFrameGenerator(gameData),
-//   race: (gameData: GameData, animalTransforms: TransformInfo[][]) => raceFrameGenerator(gameData, animalTransforms),
-//   results: (gameData: GameData) => resultsFrameGenerator(gameData),
-//   loading: (gameData: GameData) => loadingFrameGenerator(gameData),
-// };
 
 export async function intermissionAnimationBuilder(intermissionId: string, animalIds: string[]): Promise<CanvasAnimation> {
   const bgSprite: SpriteData = await buildBackgroundSprite(getIntermissionPath(intermissionId));
@@ -74,5 +63,10 @@ export async function resultsAnimationBuilder(trackId: string, winnerId: string)
 
 export async function loadingAnimationBuilder(): Promise<CanvasAnimation> {
   const bgSprite: SpriteData = await buildBackgroundSprite("/assets/animal-race-bets/loading.png");
+  return { frames: [{ sprites: [bgSprite] }] };
+}
+
+export async function connectingAnimationBuilder(): Promise<CanvasAnimation> {
+  const bgSprite: SpriteData = await buildBackgroundSprite("/assets/animal-race-bets/connecting.png");
   return { frames: [{ sprites: [bgSprite] }] };
 }

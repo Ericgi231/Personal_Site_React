@@ -3,7 +3,8 @@ export enum GamePhase {
   Betting = 'betting',
   Race = 'race',
   Results = 'results',
-  Loading = 'loading'
+  Loading = 'loading',
+  Connecting = 'connecting',
 }
 
 export interface BetInfo {

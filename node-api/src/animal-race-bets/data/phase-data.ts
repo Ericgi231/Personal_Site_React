@@ -9,6 +9,7 @@ export const PHASE_DURATION_MAP: Record<GamePhase, number> = {
     [GamePhase.Race]: 30000,
     [GamePhase.Results]: 5000,
     [GamePhase.Loading]: 100,
+    [GamePhase.Connecting]: 100,
 };
 
 /**

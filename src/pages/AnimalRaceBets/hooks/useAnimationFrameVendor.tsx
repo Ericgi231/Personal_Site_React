@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGameStore } from "../stores";
-import { AnimationFrame, CanvasAnimation, GamePhase } from "@my-site/shared/animal-race-bets";
+import { AnimationFrame, CanvasAnimation } from "@my-site/shared/animal-race-bets";
 import {  } from "../services/animationBuilderService";
 
 export function useAnimationFrameVendor(animation: CanvasAnimation | undefined): AnimationFrame {
@@ -14,7 +14,6 @@ export function useAnimationFrameVendor(animation: CanvasAnimation | undefined):
     }
     let running = true;
     const SIM_STEP_MS = 1000 / 60;
-    let lastStepTime = performance.now();
 
     // Calculate the correct frame index for current time
     function getFrameIndex() {
