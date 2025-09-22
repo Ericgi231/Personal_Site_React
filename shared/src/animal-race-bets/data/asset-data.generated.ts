@@ -77,8 +77,8 @@ export const TRACK_MAP: Record<string, TrackData> = {
     ],
     "goalPosition": {
       "coordinates": {
-        "x": 1000,
-        "y": 1000
+        "x": 1200,
+        "y": 300
       }
     }
   },
@@ -100,8 +100,8 @@ export const TRACK_MAP: Record<string, TrackData> = {
     ],
     "goalPosition": {
       "coordinates": {
-        "x": 1000,
-        "y": 1000
+        "x": 1200,
+        "y": 800
       }
     }
   },
@@ -123,8 +123,8 @@ export const TRACK_MAP: Record<string, TrackData> = {
     ],
     "goalPosition": {
       "coordinates": {
-        "x": 1000,
-        "y": 1000
+        "x": 1400,
+        "y": 1550
       }
     }
   },
@@ -146,8 +146,8 @@ export const TRACK_MAP: Record<string, TrackData> = {
     ],
     "goalPosition": {
       "coordinates": {
-        "x": 1000,
-        "y": 1000
+        "x": 300,
+        "y": 1500
       }
     }
   }

@@ -39,8 +39,9 @@ export async function raceAnimationBuilder(trackId: string, animalIds: string[],
     for (let transform of animalTransforms) {
       const animalSprites: SpriteData[] = await Promise.all(
         transform.map(async (animal, idx) => {
+          const coords = { x: animal.coordinates.x, y: animal.coordinates.y };
           const sprite = await buildSprite(getAnimalSpritePath(animalIds[idx]!), {
-            coordinates: { x: animal.coordinates.x, y: animal.coordinates.y },
+            coordinates: { ...coords },
             size: { w: 96, h: 96 }
           });
           return sprite;

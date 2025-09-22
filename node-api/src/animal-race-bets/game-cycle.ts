@@ -30,18 +30,17 @@ export class GameCycle {
     this.appData.gameData.phase = {
       startTime: new Date(),
       name: newPhase,
-      durationMs: newPhase === GamePhase.Race
-        ? this.appData.backendData.raceDurationMs
-        : PHASE_DURATION_MAP[newPhase],
+      durationMs: PHASE_DURATION_MAP[newPhase],
     };
     this.processGamePhase();
   }
 
   private async processGamePhase(): Promise<void> {
     this.appData = await this.phaseHandlers[this.appData.gameData.phase.name](this.io, this.appData);
+    const timerMs = this.appData.gameData.phase.name == GamePhase.Race? this.appData.backendData.raceDurationMs : this.appData.gameData.phase.durationMs;
     this.phaseTimer = setTimeout(() => {
       this.nextPhase();
-    }, this.appData.gameData.phase.durationMs);
+    }, timerMs);
   }
 
   private clearTimer(): void {

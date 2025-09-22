@@ -4,7 +4,7 @@ import { emitGameData, emitPhaseInfo, emitWinnerId } from "./socket-service";
 import { generateNewAppData } from "./data-generation-service";
 
 export async function handleIntermissionPhase(io: Server, _appData: AppData): Promise<AppData> {
-  const newAppData = await generateNewAppData();
+  const newAppData = await generateNewAppData(); //TODO split up data generation across phases to better spread out loading
   emitGameData(io, newAppData.gameData);
   return newAppData;
 }

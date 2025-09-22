@@ -6,7 +6,7 @@ import { GamePhase } from '@my-site/shared/animal-race-bets';
 export const PHASE_DURATION_MAP: Record<GamePhase, number> = {
     [GamePhase.Intermission]: 10000,
     [GamePhase.Betting]: 10000,
-    [GamePhase.Race]: 30000,
+    [GamePhase.Race]: 300000, // Max 5 minutes, actual duration set dynamically
     [GamePhase.Results]: 5000,
     [GamePhase.Loading]: 100,
     [GamePhase.Connecting]: 100,

@@ -3,6 +3,7 @@
   "ext": "ts,js,json",
   "exec": "ts-node --project node-api/tsconfig.json node-api/src/animal-race-bets/animal-race-bets-server.ts",
   "env": {
+    "ASSET_PATH": "C:/Users/ericg/React/my-site/public/assets/",
     "NODE_ENV": "development",
     "PORT": "3002",
     "DEBUG": "true"

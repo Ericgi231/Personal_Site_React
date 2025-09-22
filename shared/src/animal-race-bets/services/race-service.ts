@@ -2,10 +2,6 @@ import { BACKGROUND_SIZE } from "../constants/canvas-constants";
 import { MaskData } from "../types";
 import { TransformInfo } from "../types/canvas-types";
 
-
-const BASE_SPEED = 2.5;
-const SIM_STEP_MS = 16.67; // fixed simulation step
-
 // Deterministic PRNG (Mulberry32)
 function createSeededRNG(seed: number) {
   let t = seed;
@@ -24,6 +20,12 @@ export interface AnimalGameData {
   speed: number;
 }
 
+export interface JsonMaskData {
+  width: number;
+  height: number;
+  mask: string;
+}
+
 export class CollisionMask {
   width: number;
   height: number;
@@ -40,7 +42,7 @@ export class CollisionMask {
       }
     }
   }
-  static fromJSON(json: { width: number; height: number; mask: string }): CollisionMask {
+  static fromJSON(json: JsonMaskData): CollisionMask {
     const maskArr = new Uint8Array(json.width * json.height);
     for (let i = 0; i < json.mask.length; ++i) {
       maskArr[i] = json.mask[i] === '1' ? 1 : 0;
@@ -57,17 +59,38 @@ export class CollisionMask {
   }
 }
 
-function detectCollision(mask1: CollisionMask, mask2: CollisionMask, nx: number, ny: number, size: number): boolean {
-  // nx, ny are now the center of the sprite; adjust to top-left
-  const left = nx - size / 2;
-  const top = ny - size / 2;
-  for (let cy = 0; cy < size; ++cy) {
-    for (let cx = 0; cx < size; ++cx) {
-      const px = Math.floor(left + cx);
-      const py = Math.floor(top + cy);
-      if (px < 0 || px >= BACKGROUND_SIZE || py < 0 || py >= BACKGROUND_SIZE) continue;
-      if (!mask1.isSolid(cx, cy)) continue;
-      if (mask2.isSolid(px, py)) {
+function detectCollision(
+  maskA: CollisionMask,
+  maskB: CollisionMask,
+  ax: number,
+  ay: number,
+  aSize: number,
+  bx: number,
+  by: number,
+  bSize: number
+): boolean {
+  // Bounding box overlap check first for speed
+  const leftA = ax - aSize / 2;
+  const topA = ay - aSize / 2;
+  const leftB = bx - bSize / 2;
+  const topB = by - bSize / 2;
+  if (
+    leftA + aSize < leftB || leftA > leftB + bSize ||
+    topA + aSize < topB || topA > topB + bSize
+  ) {
+    return false;
+  }
+  // Pixel-perfect overlap
+  for (let cy = 0; cy < aSize; ++cy) {
+    for (let cx = 0; cx < aSize; ++cx) {
+      const pxA = Math.floor(leftA + cx);
+      const pyA = Math.floor(topA + cy);
+      if (!maskA.isSolid(cx, cy)) continue;
+      // Map A's pixel to B's coordinate space
+      const pxB = pxA - leftB;
+      const pyB = pyA - topB;
+      if (pxB < 0 || pxB >= bSize || pyB < 0 || pyB >= bSize) continue;
+      if (maskB.isSolid(pxB, pyB)) {
         return true;
       }
     }
@@ -75,9 +98,8 @@ function detectCollision(mask1: CollisionMask, mask2: CollisionMask, nx: number,
   return false;
 }
 
-function calcVelocity(angle: number, speed: number): {dx: number, dy: number} {
-  // speed is pixels per second; scale by SIM_STEP_MS
-  const dt = SIM_STEP_MS / 1000;
+function calcVelocity(angle: number, speed: number, simStep: number): {dx: number, dy: number} {
+  const dt = simStep / 1000;
   return {
     dx: Math.cos(angle) * speed * dt,
     dy: Math.sin(angle) * speed * dt,
@@ -107,71 +129,126 @@ export function getDatafromImage(img: HTMLImageElement, size: number): ImageData
 
 const ANIMAL_SIZE = 96;
 
-export function step(layoutMask: CollisionMask, animals: AnimalGameData[], rng : () => number) : Array<{x: number, y:number}> {
-  for (let i = 0; i < animals.length; ++i) {
-    const mask = animals[i]!.mask;
-    const cords = animals[i]!.coordinates;
-    const angle = animals[i]!.angle;
-    const speed = animals[i]!.speed;
+export class RaceSimulator {
+  private readonly SIM_STEP_MS = 16.67;
+  private readonly MAX_RACE_DURATION_MS = 500000; // 5 minutes
+  private readonly BASE_SPEED = 400;
 
-    let bounced = false;
-    const velocity = calcVelocity(angle, speed);
-    if (detectCollision(mask, layoutMask, cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle(rng);
-      bounced = true;
-    } else if (detectCollision(mask, layoutMask, cords.x + velocity.dx, cords.y, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle(rng);
-      bounced = true;
-    } else if (detectCollision(mask, layoutMask, cords.x, cords.y + velocity.dy, ANIMAL_SIZE)) {
-      animals[i]!.angle = getRandomAngle(rng);
-      bounced = true;
-    }
-    if (cords.x < 0) { cords.x = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
-    if (cords.y < 0) { cords.y = 0; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
-    if (cords.x + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.x = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
-    if (cords.y + ANIMAL_SIZE > BACKGROUND_SIZE) { cords.y = BACKGROUND_SIZE - ANIMAL_SIZE; [velocity.dx, velocity.dy] = getRandomVelocity(velocity.dx, velocity.dy, rng); bounced = true; }
-    if (!bounced) {
-      cords.x += velocity.dx;
-      cords.y += velocity.dy;
-    }
+  private trackMask: CollisionMask;
+  private goalMask: CollisionMask;
+  private goalPosition: { x: number; y: number };
+  private animals:  AnimalGameData[];
+  private rng: () => number;
+
+  private transforms: Array<TransformInfo[]> = [];
+  private elapsedMs: number = 0;
+  private winnerIndex: number | null = null;
+
+  public constructor(
+      trackMaskJson: JsonMaskData, 
+      goalMaskJson: JsonMaskData, 
+      goalPosition: { x: number; y: number },
+      animalMasksJson: JsonMaskData[], 
+      animalStartPositions: { x: number; y: number }[],
+      seed: number) 
+  {
+    this.rng = createSeededRNG(seed);
+    this.trackMask = CollisionMask.fromJSON(trackMaskJson);
+    this.goalMask = CollisionMask.fromJSON(goalMaskJson);
+    this.goalPosition = goalPosition;
+    this.animals = animalMasksJson.map((json, idx) => {
+      const start = animalStartPositions[idx];
+      return {
+        mask: CollisionMask.fromJSON(json),
+        coordinates: { x: start.x, y: start.y }, // deep copy
+        angle: getRandomAngle(this.rng),
+        speed: this.BASE_SPEED
+      };
+    });
   }
-  return animals.map(a => a.coordinates);
-}
 
-export function simulateRace(trackMask: { width: number; height: number; mask: string }, animalMasks: { width: number; height: number; mask: string }[], seed: number): {winnerIndex: number, durationMs: number, frames: Array<TransformInfo[]>} {
-  // Read masks from precomputed JSON
-  const layoutMask = CollisionMask.fromJSON(trackMask);
-
-  // Create deterministic RNG
-  const rng = createSeededRNG(seed);
-
-  // Initialize animal states
-  let animalStates: AnimalGameData[] = animalMasks.map((json, idx) => {
-    const mask = CollisionMask.fromJSON(json);
-    // Initial positions: for now, just spread out
-    const pos = { x: 200 + idx * 100, y: 200 };
-    return {
-      mask,
-      coordinates: pos,
-      angle: getRandomAngle(rng),
-      speed: 200
-    };
-  });
-
-  const durationMs = 120000;
-  const winnerIndex = 0;
-  const frames: Array<TransformInfo[]> = [];
-  let simTime = 0;
-  while (simTime < durationMs) {
-    // Advance simulation
-    const positions = step(layoutMask, animalStates, rng);
-    // Save positions for this frame
-    const frame: TransformInfo[] = animalStates.map((animal, idx) => ({
-      coordinates: { x: positions[idx].x, y: positions[idx].y },
-      size: { w: animal.mask.width, h: animal.mask.height }
-    }));
-    frames.push(frame);
-    simTime += SIM_STEP_MS;
+  public simulateRace(): {winnerIndex: number | null, durationMs: number, transforms: Array<TransformInfo[]>} {
+    let simTime = 0;
+    while (simTime < this.MAX_RACE_DURATION_MS) {
+      const positions = this.step();
+      if (this.winnerIndex !== null) break;
+      const transform: TransformInfo[] = this.animals.map((animal, idx) => ({
+        coordinates: { x: positions[idx].x, y: positions[idx].y },
+        size: { w: animal.mask.width, h: animal.mask.height }
+      }));
+      this.transforms.push(transform);
+      simTime += this.SIM_STEP_MS;
+    }
+    return { winnerIndex: this.winnerIndex, durationMs: this.elapsedMs, transforms: this.transforms };
   }
-  return { winnerIndex, durationMs, frames };
+
+  private step(): {x: number, y: number}[] {
+    for (let i = 0; i < this.animals.length; ++i) {
+      const mask = this.animals[i]!.mask;
+      const cords = this.animals[i]!.coordinates;
+      const angle = this.animals[i]!.angle;
+      const speed = this.animals[i]!.speed;
+      const velocity = calcVelocity(angle, speed, this.SIM_STEP_MS);
+
+      let won = false;
+      if (detectCollision(
+        mask, this.goalMask,
+        cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE,
+        this.goalPosition.x, this.goalPosition.y, ANIMAL_SIZE
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        won = true;
+      } else if (detectCollision(
+        mask, this.goalMask,
+        cords.x + velocity.dx, cords.y, ANIMAL_SIZE,
+        this.goalPosition.x, this.goalPosition.y, ANIMAL_SIZE
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        won = true;
+      } else if (detectCollision(
+        mask, this.goalMask,
+        cords.x, cords.y + velocity.dy, ANIMAL_SIZE,
+        this.goalPosition.x, this.goalPosition.y, ANIMAL_SIZE
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        won = true;
+      }
+
+      if (won) {
+        this.winnerIndex = i;
+        this.elapsedMs = (this.transforms.length+1) * this.SIM_STEP_MS;
+        return this.animals.map(a => a.coordinates);
+      }
+
+      let bounced = false;
+      if (detectCollision(
+        mask, this.trackMask,
+        cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE,
+        this.trackMask.width / 2, this.trackMask.height / 2, this.trackMask.width
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        bounced = true;
+      } else if (detectCollision(
+        mask, this.trackMask,
+        cords.x + velocity.dx, cords.y, ANIMAL_SIZE,
+        this.trackMask.width / 2, this.trackMask.height / 2, this.trackMask.width
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        bounced = true;
+      } else if (detectCollision(
+        mask, this.trackMask,
+        cords.x, cords.y + velocity.dy, ANIMAL_SIZE,
+        this.trackMask.width / 2, this.trackMask.height / 2, this.trackMask.width
+      )) {
+        this.animals[i]!.angle = getRandomAngle(this.rng);
+        bounced = true;
+      }
+
+      if (!bounced) {
+        cords.x += velocity.dx;
+        cords.y += velocity.dy;
+      } 
+    }
+    return this.animals.map(a => a.coordinates);
+  }
 }

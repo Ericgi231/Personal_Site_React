@@ -1,6 +1,7 @@
 import { ANIMAL_MAP, GamePhase, INTERMISSION_MAP, TRACK_MAP } from "@my-site/shared/animal-race-bets";
 import { PHASE_DURATION_MAP, PHASE_ORDER } from "../data/phase-data";
 import { AppData } from "../types/app-types";
+import { getRaceTransforms } from "./race-simulation-service";
 
 const selectRandomKeysFromMap = <T>(map: Record<string, T>, num: number = 1): string[] => {
   const ids: string[] = Object.keys(map);
@@ -46,6 +47,9 @@ export async function generateNewAppData(): Promise<AppData> {
   const raceAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animalPositions.length);
   const raceSeed = Math.floor(Math.random() * 100000);
 
+  //TODO create a RaceSimulator 
+  const raceResults = getRaceTransforms(trackId, raceAnimalIds, raceSeed);
+
   return {
     gameData: {
       phase: {
@@ -65,8 +69,8 @@ export async function generateNewAppData(): Promise<AppData> {
       bets: [],
     },
     backendData: {
-      winnerId: "rat1",
-      raceDurationMs: 120000, // default 2 minutes
+      winnerId: raceResults.winnerId,
+      raceDurationMs: raceResults.durationMs,
     }
   }
 }

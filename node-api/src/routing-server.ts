@@ -6,7 +6,7 @@ import { registerProxies } from "./proxies";
   
 const app: Express = express();
 const port: number = 3001;
-const address: string = '127.0.0.1';
+const address: string = '0.0.0.0';
 const server: Server = http.createServer(app);
 
 app.use(cors());

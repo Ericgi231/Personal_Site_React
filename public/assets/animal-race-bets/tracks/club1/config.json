@@ -4,5 +4,5 @@
     { "coordinates": {"x": 200, "y": 200}},
     { "coordinates": {"x": 200, "y": 300}}
   ],
-  "goalPosition": { "coordinates": {"x": 1000, "y": 1000}}
+  "goalPosition": { "coordinates": {"x": 1200, "y": 300}}
 }

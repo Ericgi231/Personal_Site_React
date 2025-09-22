@@ -56,6 +56,6 @@ app.get('/health', (_req: ExpressRequest, res: ExpressResponse) => {
   });
 });
 
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`AnimalRaceBets Server running at http://localhost:${port}`);
 });
