@@ -1,5 +1,5 @@
 
-import { BACKGROUND_SIZE, SpriteData, TransformInfo } from '@my-site/shared/animal-race-bets';
+import { AnimationFrame, BACKGROUND_SIZE, SpriteData, TransformInfo } from '@my-site/shared/animal-race-bets';
 import { getCachedImage } from './imageLoadingService';
 
 function scaleCanvasDevicePixelRatio(ctx: CanvasRenderingContext2D) {
@@ -37,10 +37,10 @@ function drawSprite(ctx: CanvasRenderingContext2D, sprite: SpriteData) {
   ctx.restore();
 }
 
-export function drawFrame(ctx: CanvasRenderingContext2D, frame: SpriteData[]) {
+export function drawFrame(ctx: CanvasRenderingContext2D, frame: AnimationFrame) {
   scaleCanvasDevicePixelRatio(ctx);
   ctx.clearRect(0, 0, BACKGROUND_SIZE, BACKGROUND_SIZE);
-  for (const sprite of frame) {
+  for (const sprite of frame.sprites) {
     drawSprite(ctx, sprite);
   }
 }

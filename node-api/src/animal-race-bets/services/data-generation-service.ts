@@ -65,7 +65,7 @@ export async function generateNewAppData(): Promise<AppData> {
       bets: [],
     },
     backendData: {
-      winnerId: "",
+      winnerId: "rat1",
       raceDurationMs: 120000, // default 2 minutes
     }
   }

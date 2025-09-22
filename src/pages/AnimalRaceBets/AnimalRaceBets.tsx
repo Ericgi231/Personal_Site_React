@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSaveState } from './hooks/useSaveState';
 import { ThemeProvider } from 'styled-components';
 import { useGameSocket, usePhaseTimer } from './hooks';
 import { useGameStore } from './stores';
@@ -10,20 +11,11 @@ import { formatTimeMSS } from './services';
 
 const AnimalRaceBets: React.FC = () => {
   useGameSocket();
+
   const { gameData, connectionInfo } = useGameStore();
+  useSaveState(gameData, connectionInfo);
+
   const localTimeRemaining: number = usePhaseTimer(gameData.phase.startTime, gameData.phase.durationMs);
-
-  useEffect(() => {
-    if (gameData) {
-      sessionStorage.setItem('animalRaceBetsGameData', JSON.stringify(gameData));
-    }
-  }, [gameData]);
-
-  useEffect(() => {
-    if (connectionInfo) {
-      sessionStorage.setItem('animalRaceBetsConnectionInfo', JSON.stringify(connectionInfo));
-    }
-  }, [connectionInfo]);
 
   // let PhaseComponent = <div>Loading...</div>;
   // if (phase === 'intermission') PhaseComponent = <Intermission />;
