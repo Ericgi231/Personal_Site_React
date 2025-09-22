@@ -29,7 +29,7 @@ export default defineConfig({
       cert: fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem')),
     },
     proxy: {
-      '/php-api': 'https://localhost:8000',
+      '/php-api': 'http://localhost:8000',
       '/node-api': 'https://localhost:3001'
     },
     watch: {

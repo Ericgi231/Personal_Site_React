@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 // Get the base URL dynamically
 $frontendHost = isset($_SERVER['HTTP_X_FRONTEND_HOST']) ? $_SERVER['HTTP_X_FRONTEND_HOST'] : $_SERVER['HTTP_HOST'];
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-$baseUrl = $scheme . "://" . $frontendHost;
+$baseUrl = "https://" . $frontendHost;
 
 // Get arguments
 $start = $_GET['start'] ?? $DEFAULT_START;
