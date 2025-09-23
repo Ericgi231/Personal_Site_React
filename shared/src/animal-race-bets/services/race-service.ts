@@ -131,7 +131,7 @@ const ANIMAL_SIZE = 96;
 
 export class RaceSimulator {
   private readonly SIM_STEP_MS = 16.67;
-  private readonly MAX_RACE_DURATION_MS = 500000; // 5 minutes
+  private readonly MAX_RACE_DURATION_MS = 300000; // 5 minutes
   private readonly BASE_SPEED = 400;
 
   private trackMask: CollisionMask;
@@ -168,8 +168,7 @@ export class RaceSimulator {
   }
 
   public simulateRace(): {winnerIndex: number | null, durationMs: number, transforms: Array<TransformInfo[]>} {
-    let simTime = 0;
-    while (simTime < this.MAX_RACE_DURATION_MS) {
+    while (this.elapsedMs < this.MAX_RACE_DURATION_MS) {
       const positions = this.step();
       if (this.winnerIndex !== null) break;
       const transform: TransformInfo[] = this.animals.map((animal, idx) => ({
@@ -177,7 +176,7 @@ export class RaceSimulator {
         size: { w: animal.mask.width, h: animal.mask.height }
       }));
       this.transforms.push(transform);
-      simTime += this.SIM_STEP_MS;
+      this.elapsedMs += this.SIM_STEP_MS;
     }
     return { winnerIndex: this.winnerIndex, durationMs: this.elapsedMs, transforms: this.transforms };
   }
@@ -191,6 +190,7 @@ export class RaceSimulator {
       const velocity = calcVelocity(angle, speed, this.SIM_STEP_MS);
 
       let won = false;
+      // hit trophy
       if (detectCollision(
         mask, this.goalMask,
         cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE,
@@ -221,6 +221,7 @@ export class RaceSimulator {
       }
 
       let bounced = false;
+      // hit wall
       if (detectCollision(
         mask, this.trackMask,
         cords.x + velocity.dx, cords.y + velocity.dy, ANIMAL_SIZE,
@@ -243,6 +244,8 @@ export class RaceSimulator {
         this.animals[i]!.angle = getRandomAngle(this.rng);
         bounced = true;
       }
+
+      //TODO handle animal-animal collisions better
 
       if (!bounced) {
         cords.x += velocity.dx;
