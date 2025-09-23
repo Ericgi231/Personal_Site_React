@@ -20,6 +20,7 @@ const io = new SocketIOServer(server, {
 });
 
 const gameCycle = new GameCycle(io);
+gameCycle.start();
 
 io.on('connection', (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -35,8 +36,6 @@ io.on('connection', (socket: Socket) => {
     socket.emit('pong', { timestamp: Date.now() });
   });
 });
-
-gameCycle.start();
 
 process.on('SIGTERM', () => {
   console.log('Shutting down AnimalRaceBets server...');

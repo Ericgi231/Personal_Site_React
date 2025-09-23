@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { AppState, useGameStore } from '../stores';
 import { handleConnectionInfo } from '../services';
 import { ConnectionStatus } from '../types';
-import { GameData, PhaseInfo, SOCKET_EVENT_GAME_DATA, SOCKET_EVENT_PHASE_INFO, SOCKET_EVENT_USER_DATA, SOCKET_EVENT_WINNERID, UserData } from '@my-site/shared/animal-race-bets';
+import { IntermissionUpdatePayload, GameData, PhaseInfo, SOCKET_EVENT_BETTING_UPDATE, SOCKET_EVENT_FULL_UPDATE, SOCKET_EVENT_INTERMISSION_UPDATE, SOCKET_EVENT_PHASE_UPDATE, SOCKET_EVENT_RACE_UPDATE, SOCKET_EVENT_USER_UPDATE, UserData, RaceUpdatePayload, BettingUpdatePayload, PhaseUpdatePayload, UserUpdatePayload, FullUpdatePayload } from '@my-site/shared/animal-race-bets';
 
 const WS_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3001"
@@ -27,24 +27,40 @@ export const useGameSocket = () => {
     const socket: Socket = socketRef.current;
     const store: AppState = useGameStore.getState();
 
-    socket.on(SOCKET_EVENT_GAME_DATA, ( gameData: GameData ) => {
-      console.log('Received game data:', gameData);
-      store.setGameData(gameData);
+    socket.on(SOCKET_EVENT_FULL_UPDATE, ( payload: FullUpdatePayload ) => {
+      console.log('Received game data:', payload.gameData);
+      store.setGameData(payload.gameData);
     });
 
-    socket.on(SOCKET_EVENT_PHASE_INFO, ( phaseInfo: PhaseInfo ) => {
-      console.log('Received new phase info:', phaseInfo);
-      store.setPhaseInfo(phaseInfo);
+    socket.on(SOCKET_EVENT_INTERMISSION_UPDATE, ( payload: IntermissionUpdatePayload ) => {
+      console.log('Received new phase info:', payload.phaseInfo);
+      console.log('Received new race info:', payload.raceInfo);
+      store.setRaceInfo(payload.raceInfo);
+      store.setPhaseInfo(payload.phaseInfo);
     });
 
-    socket.on(SOCKET_EVENT_WINNERID, ( winner: string ) => {
-      console.log('Received race winner:', winner);
-      store.setWinner(winner);
+    socket.on(SOCKET_EVENT_BETTING_UPDATE, ( payload: BettingUpdatePayload ) => {
+      console.log('Received new phase info:', payload.phaseInfo);
+      console.log('Received new intermission info:', payload.intermissionInfo);
+      store.setIntermissionInfo(payload.intermissionInfo);
+      store.setPhaseInfo(payload.phaseInfo);
     });
 
-    socket.on(SOCKET_EVENT_USER_DATA, ( userData: UserData ) => {
-      console.log('Received user data:', userData);
-      store.setUserData(userData);
+    socket.on(SOCKET_EVENT_RACE_UPDATE, ( payload: RaceUpdatePayload ) => {
+      console.log('Received new phase info:', payload.phaseInfo);
+      console.log('Received new winnerid:', payload.winnerId);
+      store.setWinner(payload.winnerId);
+      store.setPhaseInfo(payload.phaseInfo);
+    });
+
+    socket.on(SOCKET_EVENT_PHASE_UPDATE, ( payload: PhaseUpdatePayload ) => {
+      console.log('Received new phase info:', payload.phaseInfo);
+      store.setPhaseInfo(payload.phaseInfo);
+    });
+
+    socket.on(SOCKET_EVENT_USER_UPDATE, ( payload: UserUpdatePayload ) => {
+      console.log('Received user data:', payload.userData);
+      store.setUserData(payload.userData);
     });
 
     socket.on('connect', () => {

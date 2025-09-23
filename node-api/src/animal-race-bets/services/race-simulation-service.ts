@@ -2,7 +2,7 @@ import { RaceSimulator, TRACK_MAP } from "@my-site/shared/animal-race-bets";
 import path from "path";
 import fs from "fs";
 
-export function getRaceTransforms(trackId: string, animalIds: string[], seed: number): {winnerId: string, durationMs: number} {
+export function getRaceResults(trackId: string, animalIds: string[], seed: number): {winnerId: string, durationMs: number} {
 	// Use ASSET_PATH env variable for asset base path
 	const ASSET_PATH = process.env.ASSET_PATH || path.resolve(__dirname, '../../../../public/assets/');
 

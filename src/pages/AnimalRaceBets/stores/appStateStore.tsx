@@ -1,11 +1,13 @@
 import { create } from 'zustand';
-import { GameData, UserData, GamePhase, AccountType, PhaseInfo } from '@my-site/shared/animal-race-bets';
+import { GameData, UserData, GamePhase, AccountType, PhaseInfo, RaceInfo, IntermissionInfo } from '@my-site/shared/animal-race-bets';
 import { ConnectionInfo, ConnectionStatus } from '../types';
 
 export interface AppState {
   gameData: GameData;
   setGameData: (data: GameData) => void;
   setPhaseInfo: (data: PhaseInfo) => void;
+  setIntermissionInfo: (data: IntermissionInfo) => void;
+  setRaceInfo: (data: RaceInfo) => void;
   setWinner: (winner: string) => void;
   connectionInfo: ConnectionInfo;
   setConnectionInfo: (data: ConnectionInfo) => void;
@@ -13,8 +15,6 @@ export interface AppState {
   setUserData: (data: UserData) => void;
 }
 
-// const savedGameData = sessionStorage.getItem('animalRaceBetsGameData');
-// const savedConnectionInfo = sessionStorage.getItem('animalRaceBetsConnectionInfo');
 const savedUserData = sessionStorage.getItem('animalRaceBetsUserData');
 
 export const useGameStore = create<AppState>((set) => ({
@@ -40,6 +40,18 @@ export const useGameStore = create<AppState>((set) => ({
     gameData: {
       ...state.gameData,
       phase: data
+    }
+  })),
+  setIntermissionInfo: (data) => set((state) => ({
+    gameData: {
+      ...state.gameData,
+      intermission: data
+    }
+  })),
+  setRaceInfo: (data) => set((state) => ({
+    gameData: {
+      ...state.gameData,
+      race: data
     }
   })),
   setWinner: (winner: string) => set((state) => ({

@@ -1,16 +1,18 @@
 
 import { Server } from 'socket.io';
 import { GameData, GamePhase } from '@my-site/shared/animal-race-bets';
-import { PHASE_DURATION_MAP, PHASE_ORDER } from './data/phase-data';
+import { PHASE_ORDER } from './data/phase-data';
 import { AppData } from './types/app-types';
-import { generateEmptyAppData } from './services/data-generation-service';
+import { generateEmptyAppData, generateNewAppData } from './services/data-generation-service';
 import { handleBettingPhase, handleIntermissionPhase, handleLoadingPhase, handleRacePhase, handleResultsPhase } from './services/phase-service';
+import { emitBettingStart, emitIntermissionStart, emitPhaseInfo, emitRaceStart } from './services/socket-service';
 
 export class GameCycle {
   private io: Server;
   private appData: AppData;
   private phaseTimer: NodeJS.Timeout | null = null;
-  private phaseHandlers: Record<GamePhase, (io: Server, appData: AppData) => Promise<AppData>>;
+  private phaseHandlers: Record<GamePhase, (appData: AppData) => AppData>;
+  private phaseEmits: Record<GamePhase, () => void>;
 
   constructor(io: Server) {
     this.io = io;
@@ -23,23 +25,22 @@ export class GameCycle {
       loading: handleLoadingPhase,
       connecting: handleLoadingPhase,
     };
-  }
-
-  private nextPhase(): void {
-    const newPhase = PHASE_ORDER[(PHASE_ORDER.indexOf(this.appData.gameData.phase.name) + 1) % PHASE_ORDER.length];
-    this.appData.gameData.phase = {
-      startTime: new Date(),
-      name: newPhase,
-      durationMs: PHASE_DURATION_MAP[newPhase],
+    this.phaseEmits = {
+      intermission: () => emitIntermissionStart(this.io, this.appData.gameData.phase, this.appData.gameData.race),
+      betting: () => emitBettingStart(this.io, this.appData.gameData.phase, this.appData.gameData.intermission),
+      race: () => emitRaceStart(this.io, this.appData.gameData.phase, this.appData.gameData.race.winnerId!),
+      results: () => emitPhaseInfo(this.io, this.appData.gameData.phase),
+      loading: () => {},
+      connecting: () => {},
     };
-    this.processGamePhase();
   }
 
-  private async processGamePhase(): Promise<void> {
-    this.appData = await this.phaseHandlers[this.appData.gameData.phase.name](this.io, this.appData);
-    const timerMs = this.appData.gameData.phase.name == GamePhase.Race? this.appData.backendData.raceDurationMs : this.appData.gameData.phase.durationMs;
+  private async processGamePhase(phase: GamePhase): Promise<void> {
+    this.appData = this.phaseHandlers[phase](this.appData);
+    this.phaseEmits[phase]();
+    const timerMs = phase == GamePhase.Race? this.appData.backendData.raceDurationMs : this.appData.gameData.phase.durationMs;
     this.phaseTimer = setTimeout(() => {
-      this.nextPhase();
+      this.processGamePhase(PHASE_ORDER[(PHASE_ORDER.indexOf(phase) + 1) % PHASE_ORDER.length]);
     }, timerMs);
   }
 
@@ -55,7 +56,8 @@ export class GameCycle {
    */
   public start(): void {
     console.log('Starting AnimalRaceBets game cycle');
-    this.processGamePhase();
+    this.appData = generateNewAppData();
+    this.processGamePhase(this.appData.gameData.phase.name);
   }
 
   /**

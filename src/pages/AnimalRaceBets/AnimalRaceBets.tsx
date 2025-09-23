@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useSaveState } from './hooks/useSaveState';
 import { ThemeProvider } from 'styled-components';
 import { useGameSocket, usePhaseTimer } from './hooks';
 import { useGameStore } from './stores';
@@ -11,9 +9,7 @@ import { formatTimeMSS } from './services';
 
 const AnimalRaceBets: React.FC = () => {
   useGameSocket();
-
   const { gameData, connectionInfo } = useGameStore();
-  //useSaveState(gameData, connectionInfo);
 
   const localTimeRemaining: number = usePhaseTimer(gameData.phase.startTime, gameData.phase.durationMs);
 

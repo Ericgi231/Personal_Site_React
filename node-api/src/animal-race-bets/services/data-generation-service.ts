@@ -1,7 +1,7 @@
-import { ANIMAL_MAP, GamePhase, INTERMISSION_MAP, TRACK_MAP } from "@my-site/shared/animal-race-bets";
+import { ANIMAL_MAP, GamePhase, INTERMISSION_MAP, IntermissionInfo, PhaseInfo, RaceInfo, TRACK_MAP } from "@my-site/shared/animal-race-bets";
 import { PHASE_DURATION_MAP, PHASE_ORDER } from "../data/phase-data";
 import { AppData } from "../types/app-types";
-import { getRaceTransforms } from "./race-simulation-service";
+import { getRaceResults } from "./race-simulation-service";
 
 const selectRandomKeysFromMap = <T>(map: Record<string, T>, num: number = 1): string[] => {
   const ids: string[] = Object.keys(map);
@@ -40,37 +40,48 @@ export function generateEmptyAppData(): AppData {
   }
 }
 
-export async function generateNewAppData(): Promise<AppData> {
-  const intermissionId: string = selectRandomKeysFromMap(INTERMISSION_MAP)[0];
-  const intermissionAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, INTERMISSION_MAP[intermissionId].animalPositions.length);
-  const trackId: string = selectRandomKeysFromMap(TRACK_MAP)[0];
-  const raceAnimalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animalPositions.length);
-  const raceSeed = Math.floor(Math.random() * 100000);
-
-  //TODO create a RaceSimulator 
-  const raceResults = getRaceTransforms(trackId, raceAnimalIds, raceSeed);
+export function generateNewAppData(): AppData {
+  const race = generateRaceInfo();
+  const raceResults = getRaceResults(race.trackId, race.animalIds, race.raceSeed);
 
   return {
     gameData: {
-      phase: {
-        startTime: new Date(),
-        name: PHASE_ORDER[0],
-        durationMs: PHASE_DURATION_MAP[PHASE_ORDER[0]],
-      },
-      intermission: {
-        id: intermissionId,
-        animalIds: intermissionAnimalIds
-      },
-      race: {
-        trackId: trackId,
-        animalIds: raceAnimalIds,
-        raceSeed: raceSeed,
-      },
+      phase: generatePhaseInfo(PHASE_ORDER[0]),
+      intermission: generateIntermissionInfo(),
+      race,
       bets: [],
     },
     backendData: {
       winnerId: raceResults.winnerId,
       raceDurationMs: raceResults.durationMs,
     }
+  }
+}
+
+export function generatePhaseInfo(phase: GamePhase): PhaseInfo {
+  return {
+    startTime: new Date(),
+    name: phase,
+    durationMs: PHASE_DURATION_MAP[phase]
+  }
+}
+
+export function generateIntermissionInfo(): IntermissionInfo {
+  const id: string = selectRandomKeysFromMap(INTERMISSION_MAP)[0];
+  const animalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, INTERMISSION_MAP[id].animalPositions.length);
+  return {
+    id,
+    animalIds
+  }
+}
+
+export function generateRaceInfo(): RaceInfo {
+  const trackId: string = selectRandomKeysFromMap(TRACK_MAP)[0];
+  const animalIds: string[] = selectRandomKeysFromMap(ANIMAL_MAP, TRACK_MAP[trackId].animalPositions.length);
+  const raceSeed = Math.floor(Math.random() * 100000);
+  return {
+    trackId,
+    animalIds,
+    raceSeed,
   }
 }
